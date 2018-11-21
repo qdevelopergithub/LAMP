@@ -571,7 +571,7 @@
                     "uri": "[concat(variables('lampCommon').baseTemplateUrl, 'redis.json', parameters('_artifactsLocationSasToken'))]"
                 }
             }
-        }
+        },
         {
             "condition": "[equals(parameters('fileServerType'),'gluster')]",
             "type": "Microsoft.Resources/deployments",
