@@ -48,7 +48,6 @@
                 "storageAccountKey": "[parameters('storageAccountKey')]",
                 "redisDns": "[parameters('lampCommon').redisDns]",
                 "redisKey": "[parameters('redisKey')]",
-                "elasticVm1IP": "[parameters('lampCommon').elasticVm1IP]",
                 "installO365pluginsSwitch": "[parameters('lampCommon').installO365pluginsSwitch]",
                 "installObjectFsSwitch": "[parameters('lampCommon').installObjectFsSwitch]",
                 "installGdprPluginsSwitch": "[parameters('lampCommon').installGdprPluginsSwitch]",
