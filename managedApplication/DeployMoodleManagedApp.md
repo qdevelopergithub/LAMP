@@ -1,18 +1,18 @@
-# Deploy a Moodle Based Managed Application into a Customer's Subscription
+# Deploy a Lamp Based Managed Application into a Customer's Subscription
 
 In this tutorial we'll demonstrate how your customers will deploy an
-instance of your Moodle Based Managed Application in their
+instance of your Lamp Based Managed Application in their
 subscription.
 
 ## Prerequisites
 
 In order for the following steps to work you must first have
-[published a Moodle Based Managed Application](PublishMoodleManagedApplication.md)
+[published a Lamp Based Managed Application](PublishLampManagedApplication.md)
 into your service catalog.
 
 ## Consume the Managed Application
 
-Once the Moodle on Azure Managed Application is published to your
+Once the Lamp on Azure Managed Application is published to your
 service catalog you can now depoloy it from within the portal or using
 the CLI. In the following commands we'll see how to do this in the CLI.
 
@@ -24,24 +24,24 @@ However, we'll use the CLI to retrieve it and record it into a
 variable:
 
 ``` bash
-MOODLE_MANAGED_APP_ID=$(az managedapp definition show --name $MOODLE_MANAGED_APP_NAME --resource-group $MOODLE_SERVICE_CATALOG_RG_NAME --query id --output tsv)
+Lamp_MANAGED_APP_ID=$(az managedapp definition show --name $Lamp_MANAGED_APP_NAME --resource-group $Lamp_SERVICE_CATALOG_RG_NAME --query id --output tsv)
 ```
 
 Create the application resource group, this is the group in which the
 customer will see the managed application.
 
 ``` bash
-az group create --name $MOODLE_DEPLOYMENT_RG_NAME --location=$MOODLE_DEPLOYMENT_LOCATION
+az group create --name $Lamp_DEPLOYMENT_RG_NAME --location=$Lamp_DEPLOYMENT_LOCATION
 ```
 
 Results:
 
 ``` json
 {
-    "id": "/subscriptions/325e7c34-99fb-4190-aa87-1df746c67705/resourceGroups/MoodleManagedApp",
+    "id": "/subscriptions/325e7c34-99fb-4190-aa87-1df746c67705/resourceGroups/LampManagedApp",
     "location": "southcentralus",
     "managedBy": null,
-    "name": "MoodleManagedApp",
+    "name": "LampManagedApp",
     "properties": {
         "provisioningState": "Succeeded"
     },
@@ -79,7 +79,7 @@ definition for the paramters, e.g.
         }
     }
 
-The Moodle template provides sensible defaults for almost every
+The Lamp template provides sensible defaults for almost every
 parameter, the one exception to this is the SSH Public Key, used to
 provide secure access to the VMs. For this example we will use the
 defaults for all parameters, but we still need to create a parameters
@@ -90,9 +90,9 @@ testing puporses (this is created as part of the envrionment setup in
 the prerequisites):
 
 ``` bash
-ssh_pub_key=`cat $MOODLE_SSH_KEY_FILENAME.pub`
+ssh_pub_key=`cat $Lamp_SSH_KEY_FILENAME.pub`
 echo $ssh_pub_key
-sed "s|GEN-SSH-PUB-KEY|$ssh_pub_key|g" parameters-template.json > $MOODLE_MANAGED_APP_WORKSPACE/$MOODLE_DEPLOYMENT_NAME/parameters.json
+sed "s|GEN-SSH-PUB-KEY|$ssh_pub_key|g" parameters-template.json > $Lamp_MANAGED_APP_WORKSPACE/$Lamp_DEPLOYMENT_NAME/parameters.json
 ```
 
 If you want to have more control over the deployment configuration
@@ -104,5 +104,5 @@ parameter files for specific deployments.
 Deploy the managed application and corresponding infrastructure.
 
 ``` bash
-az managedapp create --name $MOODLE_DEPLOYMENT_NAME --location $MOODLE_DEPLOYMENT_LOCATION --kind ServiceCatalog --resource-group $MOODLE_DEPLOYMENT_RG_NAME --managedapp-definition-id $MOODLE_MANAGED_APP_ID --managed-rg-id $MOODLE_MANAGED_RG_ID --parameters @$MOODLE_MANAGED_APP_WORKSPACE/$MOODLE_DEPLOYMENT_NAME/parameters.json
+az managedapp create --name $Lamp_DEPLOYMENT_NAME --location $Lamp_DEPLOYMENT_LOCATION --kind ServiceCatalog --resource-group $Lamp_DEPLOYMENT_RG_NAME --managedapp-definition-id $Lamp_MANAGED_APP_ID --managed-rg-id $Lamp_MANAGED_RG_ID --parameters @$Lamp_MANAGED_APP_WORKSPACE/$Lamp_DEPLOYMENT_NAME/parameters.json
 ```

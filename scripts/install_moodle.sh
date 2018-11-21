@@ -24,28 +24,28 @@ set -ex
 
 #parameters 
 {
-    moodle_on_azure_configs_json_path=${1}
+    Lamp_on_azure_configs_json_path=${1}
 
     . ./helper_functions.sh
 
-    get_setup_params_from_configs_json $moodle_on_azure_configs_json_path || exit 99
+    get_setup_params_from_configs_json $Lamp_on_azure_configs_json_path || exit 99
 
-    echo $moodleVersion        >> /tmp/vars.txt
+    echo $LampVersion        >> /tmp/vars.txt
     echo $glusterNode          >> /tmp/vars.txt
     echo $glusterVolume        >> /tmp/vars.txt
     echo $siteFQDN             >> /tmp/vars.txt
     echo $httpsTermination     >> /tmp/vars.txt
     echo $dbIP                 >> /tmp/vars.txt
-    echo $moodledbname         >> /tmp/vars.txt
-    echo $moodledbuser         >> /tmp/vars.txt
-    echo $moodledbpass         >> /tmp/vars.txt
+    echo $Lampdbname         >> /tmp/vars.txt
+    echo $Lampdbuser         >> /tmp/vars.txt
+    echo $Lampdbpass         >> /tmp/vars.txt
     echo $adminpass            >> /tmp/vars.txt
     echo $dbadminlogin         >> /tmp/vars.txt
     echo $dbadminloginazure    >> /tmp/vars.txt
     echo $dbadminpass          >> /tmp/vars.txt
     echo $storageAccountName   >> /tmp/vars.txt
     echo $storageAccountKey    >> /tmp/vars.txt
-    echo $azuremoodledbuser    >> /tmp/vars.txt
+    echo $azureLampdbuser    >> /tmp/vars.txt
     echo $redisDns             >> /tmp/vars.txt
     echo $redisAuth            >> /tmp/vars.txt
     echo $elasticVm1IP         >> /tmp/vars.txt
@@ -188,7 +188,7 @@ set -ex
 
     update_php_config_on_controller
 
-    # Remove the default site. Moodle is the only site we want
+    # Remove the default site. Lamp is the only site we want
     rm -f /etc/nginx/sites-enabled/default
 
     # restart Nginx
@@ -211,18 +211,18 @@ set -ex
     service varnishlog stop
 
     if [ $fileServerType = "azurefiles" ]; then
-        # Delayed copy of moodle installation to the Azure Files share
+        # Delayed copy of Lamp installation to the Azure Files share
 
         # First rename azlamp directory to something else
         mv /azlamp /azlamp_old_delete_me
-        # Then create the moodle share
+        # Then create the Lamp share
         echo -e '\n\rCreating an Azure Files share for azlamp'
         create_azure_files_share azlamp $storageAccountName $storageAccountKey /tmp/wabs.log
         # Set up and mount Azure Files share. Must be done after nginx is installed because of www-data user/group
         echo -e '\n\rSetting up and mounting Azure Files share on //'$storageAccountName'.file.core.windows.net/azlamp on /azlamp\n\r'
         setup_and_mount_azure_files_share azlamp $storageAccountName $storageAccountKey
         # Move the local installation over to the Azure Files
-        echo -e '\n\rMoving locally installed moodle over to Azure Files'
+        echo -e '\n\rMoving locally installed Lamp over to Azure Files'
         cp -a /azlamp_old_delete_me/* /azlamp || true # Ignore case sensitive directory copy failure
         # rm -rf /azlamp_old_delete_me || true # Keep the files just in case
     fi

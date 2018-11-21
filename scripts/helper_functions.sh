@@ -4,7 +4,7 @@
 
 function get_setup_params_from_configs_json
 {
-    local configs_json_path=${1}    # E.g., /var/lib/cloud/instance/moodle_on_azure_configs.json
+    local configs_json_path=${1}    # E.g., /var/lib/cloud/instance/Lamp_on_azure_configs.json
 
     (dpkg -l jq &> /dev/null) || (apt -y update; apt -y install jq)
 
@@ -20,42 +20,42 @@ function get_setup_params_from_configs_json
     done
 
     local json=$(cat $configs_json_path)
-    export moodleVersion=$(echo $json | jq -r .moodleProfile.version)
+    export LampVersion=$(echo $json | jq -r .LampProfile.version)
     export glusterNode=$(echo $json | jq -r .fileServerProfile.glusterVmName)
     export glusterVolume=$(echo $json | jq -r .fileServerProfile.glusterVolName)
     export siteFQDN=$(echo $json | jq -r .siteProfile.siteURL)
     export httpsTermination=$(echo $json | jq -r .siteProfile.httpsTermination)
     export dbIP=$(echo $json | jq -r .dbServerProfile.fqdn)
-    export moodledbname=$(echo $json | jq -r .moodleProfile.dbName)
-    export moodledbuser=$(echo $json | jq -r .moodleProfile.dbUser)
-    export moodledbpass=$(echo $json | jq -r .moodleProfile.dbPassword)
-    export adminpass=$(echo $json | jq -r .moodleProfile.adminPassword)
+    export Lampdbname=$(echo $json | jq -r .LampProfile.dbName)
+    export Lampdbuser=$(echo $json | jq -r .LampProfile.dbUser)
+    export Lampdbpass=$(echo $json | jq -r .LampProfile.dbPassword)
+    export adminpass=$(echo $json | jq -r .LampProfile.adminPassword)
     export dbadminlogin=$(echo $json | jq -r .dbServerProfile.adminLogin)
     export dbadminloginazure=$(echo $json | jq -r .dbServerProfile.adminLoginAzure)
     export dbadminpass=$(echo $json | jq -r .dbServerProfile.adminPassword)
-    export storageAccountName=$(echo $json | jq -r .moodleProfile.storageAccountName)
-    export storageAccountKey=$(echo $json | jq -r .moodleProfile.storageAccountKey)
-    export azuremoodledbuser=$(echo $json | jq -r .moodleProfile.dbUserAzure)
-    export redisDns=$(echo $json | jq -r .moodleProfile.redisDns)
-    export redisAuth=$(echo $json | jq -r .moodleProfile.redisKey)
-    export elasticVm1IP=$(echo $json | jq -r .moodleProfile.elasticVm1IP)
-    export installO365pluginsSwitch=$(echo $json | jq -r .moodleProfile.installO365pluginsSwitch)
+    export storageAccountName=$(echo $json | jq -r .LampProfile.storageAccountName)
+    export storageAccountKey=$(echo $json | jq -r .LampProfile.storageAccountKey)
+    export azureLampdbuser=$(echo $json | jq -r .LampProfile.dbUserAzure)
+    export redisDns=$(echo $json | jq -r .LampProfile.redisDns)
+    export redisAuth=$(echo $json | jq -r .LampProfile.redisKey)
+    export elasticVm1IP=$(echo $json | jq -r .LampProfile.elasticVm1IP)
+    export installO365pluginsSwitch=$(echo $json | jq -r .LampProfile.installO365pluginsSwitch)
     export dbServerType=$(echo $json | jq -r .dbServerProfile.type)
     export fileServerType=$(echo $json | jq -r .fileServerProfile.type)
     export mssqlDbServiceObjectiveName=$(echo $json | jq -r .dbServerProfile.mssqlDbServiceObjectiveName)
     export mssqlDbEdition=$(echo $json | jq -r .dbServerProfile.mssqlDbEdition)
     export mssqlDbSize=$(echo $json | jq -r .dbServerProfile.mssqlDbSize)
-    export installObjectFsSwitch=$(echo $json | jq -r .moodleProfile.installObjectFsSwitch)
-    export installGdprPluginsSwitch=$(echo $json | jq -r .moodleProfile.installGdprPluginsSwitch)
+    export installObjectFsSwitch=$(echo $json | jq -r .LampProfile.installObjectFsSwitch)
+    export installGdprPluginsSwitch=$(echo $json | jq -r .LampProfile.installGdprPluginsSwitch)
     export thumbprintSslCert=$(echo $json | jq -r .siteProfile.thumbprintSslCert)
     export thumbprintCaCert=$(echo $json | jq -r .siteProfile.thumbprintCaCert)
-    export searchType=$(echo $json | jq -r .moodleProfile.searchType)
-    export azureSearchKey=$(echo $json | jq -r .moodleProfile.azureSearchKey)
-    export azureSearchNameHost=$(echo $json | jq -r .moodleProfile.azureSearchNameHost)
-    export tikaVmIP=$(echo $json | jq -r .moodleProfile.tikaVmIP)
-    export syslogServer=$(echo $json | jq -r .moodleProfile.syslogServer)
-    export webServerType=$(echo $json | jq -r .moodleProfile.webServerType)
-    export htmlLocalCopySwitch=$(echo $json | jq -r .moodleProfile.htmlLocalCopySwitch)
+    export searchType=$(echo $json | jq -r .LampProfile.searchType)
+    export azureSearchKey=$(echo $json | jq -r .LampProfile.azureSearchKey)
+    export azureSearchNameHost=$(echo $json | jq -r .LampProfile.azureSearchNameHost)
+    export tikaVmIP=$(echo $json | jq -r .LampProfile.tikaVmIP)
+    export syslogServer=$(echo $json | jq -r .LampProfile.syslogServer)
+    export webServerType=$(echo $json | jq -r .LampProfile.webServerType)
+    export htmlLocalCopySwitch=$(echo $json | jq -r .LampProfile.htmlLocalCopySwitch)
     export nfsVmName=$(echo $json | jq -r .fileServerProfile.nfsVmName)
     export nfsHaLbIP=$(echo $json | jq -r .fileServerProfile.nfsHaLbIP)
     export nfsHaExportPath=$(echo $json | jq -r .fileServerProfile.nfsHaExportPath)
@@ -357,7 +357,7 @@ if [ -f "$SERVER_TIMESTAMP_FULLPATH" ]; then
     mkdir -p /var/www/html
   fi
   if [ "\$SERVER_TIMESTAMP" != "\$LOCAL_TIMESTAMP" ]; then
-    logger -p local2.notice -t moodle "Server time stamp (\$SERVER_TIMESTAMP) is different from local time stamp (\$LOCAL_TIMESTAMP). Start syncing..."
+    logger -p local2.notice -t Lamp "Server time stamp (\$SERVER_TIMESTAMP) is different from local time stamp (\$LOCAL_TIMESTAMP). Start syncing..."
     if [[ \$(find $SYNC_LOG_FULLPATH -type f -size +20M 2> /dev/null) ]]; then
       truncate -s 0 $SYNC_LOG_FULLPATH
     fi
@@ -389,7 +389,7 @@ LAST_MODIFIED_TIME_UPDATE_SCRIPT_FULLPATH="/usr/local/bin/update_last_modified_t
 
 # Create a script to modify the last modified timestamp file (/azlamp/html/.last_modified_time.azlamp)
 # Should be called by root and only on the controller VM.
-# The moodle admin should run the generated script everytime the /azlamp/html directory content is updated (e.g., moodle upgrade, config change or plugin install/upgrade)
+# The Lamp admin should run the generated script everytime the /azlamp/html directory content is updated (e.g., Lamp upgrade, config change or plugin install/upgrade)
 function create_last_modified_time_update_script {
   if [ "$(whoami)" != "root" ]; then
     echo "${0}: Must be run as root!"
@@ -409,35 +409,35 @@ function run_once_last_modified_time_update_script {
   $LAST_MODIFIED_TIME_UPDATE_SCRIPT_FULLPATH
 }
 
-# O365 plugins are released only for 'MOODLE_xy_STABLE',
-# whereas we want to support the Moodle tagged versions (e.g., 'v3.4.2').
+# O365 plugins are released only for 'Lamp_xy_STABLE',
+# whereas we want to support the Lamp tagged versions (e.g., 'v3.4.2').
 # This function helps getting the stable version # (for O365 plugin ver.)
-# from a Moodle version tag. This utility function recognizes tag names
+# from a Lamp version tag. This utility function recognizes tag names
 # of the form 'vx.y.z' only.
-function get_o365plugin_version_from_moodle_version {
-  local moodleVersion=${1}
-  if [[ "$moodleVersion" =~ v([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
-    echo "MOODLE_${BASH_REMATCH[1]}${BASH_REMATCH[2]}_STABLE"
+function get_o365plugin_version_from_Lamp_version {
+  local LampVersion=${1}
+  if [[ "$LampVersion" =~ v([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
+    echo "Lamp_${BASH_REMATCH[1]}${BASH_REMATCH[2]}_STABLE"
   else
-    echo $moodleVersion
+    echo $LampVersion
   fi
 }
 
-# For Moodle tags (e.g., "v3.4.2"), the unzipped Moodle dir is no longer
-# "moodle-$moodleVersion", because for tags, it's without "v". That is,
-# it's "moodle-3.4.2". Therefore, we need a separate helper function for that...
-function get_moodle_unzip_dir_from_moodle_version {
-  local moodleVersion=${1}
-  if [[ "$moodleVersion" =~ v([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
-    echo "moodle-${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}"
+# For Lamp tags (e.g., "v3.4.2"), the unzipped Lamp dir is no longer
+# "Lamp-$LampVersion", because for tags, it's without "v". That is,
+# it's "Lamp-3.4.2". Therefore, we need a separate helper function for that...
+function get_Lamp_unzip_dir_from_Lamp_version {
+  local LampVersion=${1}
+  if [[ "$LampVersion" =~ v([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
+    echo "Lamp-${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}"
   else
-    echo "moodle-$moodleVersion"
+    echo "Lamp-$LampVersion"
   fi
 }
 
 function config_one_site_on_vmss
 {
-  local siteFQDN=${1}             # E.g., "moodle.univ1.edu". Will be used as the site's HTML subdirectory name in /azlamp/html (as /azlamp/html/$siteFQDN)
+  local siteFQDN=${1}             # E.g., "Lamp.univ1.edu". Will be used as the site's HTML subdirectory name in /azlamp/html (as /azlamp/html/$siteFQDN)
   local htmlLocalCopySwitch=${2}  # "true" or anything else (don't care)
   local httpsTermination=${3}     # "VMSS" or "None"
   local webServerType=${4}        # "apache" or "nginx"
@@ -465,8 +465,8 @@ server {
         ssl_certificate_key ${certsDir}/nginx.key;
 
         # Log to syslog
-        error_log syslog:server=localhost,facility=local1,severity=error,tag=moodle;
-        access_log syslog:server=localhost,facility=local1,severity=notice,tag=moodle moodle_combined;
+        error_log syslog:server=localhost,facility=local1,severity=error,tag=Lamp;
+        access_log syslog:server=localhost,facility=local1,severity=notice,tag=Lamp Lamp_combined;
 
         # Log XFF IP instead of varnish
         set_real_ip_from    10.0.0.0/8;
@@ -503,8 +503,8 @@ server {
 	      index index.php index.html index.htm;
 
         # Log to syslog
-        error_log syslog:server=localhost,facility=local1,severity=error,tag=moodle;
-        access_log syslog:server=localhost,facility=local1,severity=notice,tag=moodle moodle_combined;
+        error_log syslog:server=localhost,facility=local1,severity=error,tag=Lamp;
+        access_log syslog:server=localhost,facility=local1,severity=notice,tag=Lamp Lamp_combined;
 
         # Log XFF IP instead of varnish
         set_real_ip_from    10.0.0.0/8;
@@ -685,7 +685,7 @@ EOF
     fi
 
     cat <<EOF >> /etc/nginx/nginx.conf
-  log_format moodle_combined '\$remote_addr - \$upstream_http_x_moodleuser [\$time_local] '
+  log_format Lamp_combined '\$remote_addr - \$upstream_http_x_Lampuser [\$time_local] '
                              '"\$request" \$status \$body_bytes_sent '
                              '"\$http_referer" "\$http_user_agent"';
 
@@ -707,12 +707,12 @@ function create_per_site_nginx_conf_on_controller
 server {
     listen 81 default;
     server_name ${siteFQDN};
-    root ${moodleHtmlDir};
+    root ${LampHtmlDir};
     index index.php index.html index.htm;
 
     # Log to syslog
-    error_log syslog:server=localhost,facility=local1,severity=error,tag=moodle;
-    access_log syslog:server=localhost,facility=local1,severity=notice,tag=moodle moodle_combined;
+    error_log syslog:server=localhost,facility=local1,severity=error,tag=Lamp;
+    access_log syslog:server=localhost,facility=local1,severity=notice,tag=Lamp Lamp_combined;
 
     # Log XFF IP instead of varnish
     set_real_ip_from    10.0.0.0/8;
@@ -770,8 +770,8 @@ server {
     ssl_certificate_key ${certsDir}/nginx.key;
 
     # Log to syslog
-    error_log syslog:server=localhost,facility=local1,severity=error,tag=moodle;
-    access_log syslog:server=localhost,facility=local1,severity=notice,tag=moodle moodle_combined;
+    error_log syslog:server=localhost,facility=local1,severity=error,tag=Lamp;
+    access_log syslog:server=localhost,facility=local1,severity=notice,tag=Lamp Lamp_combined;
 
     # Log XFF IP instead of varnish
     set_real_ip_from    10.0.0.0/8;
@@ -822,92 +822,92 @@ function create_per_site_nginx_ssl_certs_on_controller
     fi
 }
 
-function download_and_place_per_site_moodle_and_plugins_on_controller
+function download_and_place_per_site_Lamp_and_plugins_on_controller
 {
-    local moodleVersion=${1}
-    local moodleHtmlDir=${2}
+    local LampVersion=${1}
+    local LampHtmlDir=${2}
     local installGdprPluginsSwitch=${3}
     local installO365pluginsSwitch=${4}
     local searchType=${5}
     local installObjectFsSwitch=${6}
 
-    local o365pluginVersion=$(get_o365plugin_version_from_moodle_version $moodleVersion)
-    local moodleStableVersion=$o365pluginVersion  # Need Moodle stable version for GDPR plugins, and o365pluginVersion is just Moodle stable version, so reuse it.
-    local moodleUnzipDir=$(get_moodle_unzip_dir_from_moodle_version $moodleVersion)
+    local o365pluginVersion=$(get_o365plugin_version_from_Lamp_version $LampVersion)
+    local LampStableVersion=$o365pluginVersion  # Need Lamp stable version for GDPR plugins, and o365pluginVersion is just Lamp stable version, so reuse it.
+    local LampUnzipDir=$(get_Lamp_unzip_dir_from_Lamp_version $LampVersion)
 
     mkdir -p /azlamp/tmp
     cd /azlamp/tmp
 
-    if [ ! -d $moodleHtmlDir ]; then
-        # downloading moodle only if $moodleHtmlDir does not exist -- if it exists, user should populate it in advance correctly as below. This is to reduce template deployment time.
-        /usr/bin/curl -k --max-redirs 10 https://github.com/moodle/moodle/archive/$moodleVersion.zip -L -o moodle.zip
-        /usr/bin/unzip -q moodle.zip
-        /bin/mv $moodleUnzipDir $moodleHtmlDir
+    if [ ! -d $LampHtmlDir ]; then
+        # downloading Lamp only if $LampHtmlDir does not exist -- if it exists, user should populate it in advance correctly as below. This is to reduce template deployment time.
+        /usr/bin/curl -k --max-redirs 10 https://github.com/Lamp/Lamp/archive/$LampVersion.zip -L -o Lamp.zip
+        /usr/bin/unzip -q Lamp.zip
+        /bin/mv $LampUnzipDir $LampHtmlDir
     fi
 
     if [ "$installGdprPluginsSwitch" = "true" ]; then
-        # install Moodle GDPR plugins (Note: This is only for Moodle versions 3.4.2+ or 3.3.5+ and will be included in Moodle 3.5, so no need for 3.5)
-        curl -k --max-redirs 10 https://github.com/moodlehq/moodle-tool_policy/archive/$moodleStableVersion.zip -L -o plugin-policy.zip
+        # install Lamp GDPR plugins (Note: This is only for Lamp versions 3.4.2+ or 3.3.5+ and will be included in Lamp 3.5, so no need for 3.5)
+        curl -k --max-redirs 10 https://github.com/Lamphq/Lamp-tool_policy/archive/$LampStableVersion.zip -L -o plugin-policy.zip
         unzip -q plugin-policy.zip
-        mv moodle-tool_policy-$moodleStableVersion $moodleHtmlDir/admin/tool/policy
+        mv Lamp-tool_policy-$LampStableVersion $LampHtmlDir/admin/tool/policy
 
-        curl -k --max-redirs 10 https://github.com/moodlehq/moodle-tool_dataprivacy/archive/$moodleStableVersion.zip -L -o plugin-dataprivacy.zip
+        curl -k --max-redirs 10 https://github.com/Lamphq/Lamp-tool_dataprivacy/archive/$LampStableVersion.zip -L -o plugin-dataprivacy.zip
         unzip -q plugin-dataprivacy.zip
-        mv moodle-tool_dataprivacy-$moodleStableVersion $moodleHtmlDir/admin/tool/dataprivacy
+        mv Lamp-tool_dataprivacy-$LampStableVersion $LampHtmlDir/admin/tool/dataprivacy
     fi
 
     if [ "$installO365pluginsSwitch" = "true" ]; then
         # install Office 365 plugins
-        curl -k --max-redirs 10 https://github.com/Microsoft/o365-moodle/archive/$o365pluginVersion.zip -L -o o365.zip
+        curl -k --max-redirs 10 https://github.com/Microsoft/o365-Lamp/archive/$o365pluginVersion.zip -L -o o365.zip
         unzip -q o365.zip
-        cp -r o365-moodle-$o365pluginVersion/* $moodleHtmlDir
-        rm -rf o365-moodle-$o365pluginVersion
+        cp -r o365-Lamp-$o365pluginVersion/* $LampHtmlDir
+        rm -rf o365-Lamp-$o365pluginVersion
     fi
 
     if [ "$searchType" = "elastic" ]; then
         # Install ElasticSearch plugin
-        /usr/bin/curl -k --max-redirs 10 https://github.com/catalyst/moodle-search_elastic/archive/master.zip -L -o plugin-elastic.zip
+        /usr/bin/curl -k --max-redirs 10 https://github.com/catalyst/Lamp-search_elastic/archive/master.zip -L -o plugin-elastic.zip
         /usr/bin/unzip -q plugin-elastic.zip
-        /bin/mv moodle-search_elastic-master $moodleHtmlDir/search/engine/elastic
+        /bin/mv Lamp-search_elastic-master $LampHtmlDir/search/engine/elastic
 
         # Install ElasticSearch plugin dependency
-        /usr/bin/curl -k --max-redirs 10 https://github.com/catalyst/moodle-local_aws/archive/master.zip -L -o local-aws.zip
+        /usr/bin/curl -k --max-redirs 10 https://github.com/catalyst/Lamp-local_aws/archive/master.zip -L -o local-aws.zip
         /usr/bin/unzip -q local-aws.zip
-        /bin/mv moodle-local_aws-master $moodleHtmlDir/local/aws
+        /bin/mv Lamp-local_aws-master $LampHtmlDir/local/aws
 
     elif [ "$searchType" = "azure" ]; then
         # Install Azure Search service plugin
-        /usr/bin/curl -k --max-redirs 10 https://github.com/catalyst/moodle-search_azure/archive/master.zip -L -o plugin-azure-search.zip
+        /usr/bin/curl -k --max-redirs 10 https://github.com/catalyst/Lamp-search_azure/archive/master.zip -L -o plugin-azure-search.zip
         /usr/bin/unzip -q plugin-azure-search.zip
-        /bin/mv moodle-search_azure-master $moodleHtmlDir/search/engine/azure
+        /bin/mv Lamp-search_azure-master $LampHtmlDir/search/engine/azure
     fi
 
     if [ "$installObjectFsSwitch" = "true" ]; then
         # Install the ObjectFS plugin
-        /usr/bin/curl -k --max-redirs 10 https://github.com/catalyst/moodle-tool_objectfs/archive/master.zip -L -o plugin-objectfs.zip
+        /usr/bin/curl -k --max-redirs 10 https://github.com/catalyst/Lamp-tool_objectfs/archive/master.zip -L -o plugin-objectfs.zip
         /usr/bin/unzip -q plugin-objectfs.zip
-        /bin/mv moodle-tool_objectfs-master $moodleHtmlDir/admin/tool/objectfs
+        /bin/mv Lamp-tool_objectfs-master $LampHtmlDir/admin/tool/objectfs
 
         # Install the ObjectFS Azure library
-        /usr/bin/curl -k --max-redirs 10 https://github.com/catalyst/moodle-local_azure_storage/archive/master.zip -L -o plugin-azurelibrary.zip
+        /usr/bin/curl -k --max-redirs 10 https://github.com/catalyst/Lamp-local_azure_storage/archive/master.zip -L -o plugin-azurelibrary.zip
         /usr/bin/unzip -q plugin-azurelibrary.zip
-        /bin/mv moodle-local_azure_storage-master $moodleHtmlDir/local/azure_storage
+        /bin/mv Lamp-local_azure_storage-master $LampHtmlDir/local/azure_storage
     fi
     cd /azlamp
     rm -rf /azlamp/tmp
 }
 
-function setup_and_config_per_site_moodle_on_controller
+function setup_and_config_per_site_Lamp_on_controller
 {
     local httpsTermination=${1}
     local siteFQDN=${2}
     local dbServerType=${3}
-    local moodleHtmlDir=${4}
-    local moodleDataDir=${5}
+    local LampHtmlDir=${4}
+    local LampDataDir=${5}
     local dbIP=${6}
-    local moodledbname=${7}
-    local azuremoodledbuser=${8}
-    local moodledbpass=${9}
+    local Lampdbname=${7}
+    local azureLampdbuser=${8}
+    local Lampdbpass=${9}
     local adminpass=${10}
 
     if [ "$httpsTermination" = "None" ]; then
@@ -922,46 +922,46 @@ function setup_and_config_per_site_moodle_on_controller
     else # $dbServerType = "postgres"
         local dbtype="pgsql"
     fi
-    cd /tmp; /usr/bin/php $moodleHtmlDir/admin/cli/install.php --chmod=770 --lang=en_us --wwwroot=$siteProtocol://$siteFQDN   --dataroot=$moodleDataDir --dbhost=$dbIP   --dbname=$moodledbname   --dbuser=$azuremoodledbuser   --dbpass=$moodledbpass   --dbtype=$dbtype --fullname='Moodle LMS' --shortname='Moodle' --adminuser=admin --adminpass=$adminpass   --adminemail=admin@$siteFQDN   --non-interactive --agree-license --allow-unstable || true
+    cd /tmp; /usr/bin/php $LampHtmlDir/admin/cli/install.php --chmod=770 --lang=en_us --wwwroot=$siteProtocol://$siteFQDN   --dataroot=$LampDataDir --dbhost=$dbIP   --dbname=$Lampdbname   --dbuser=$azureLampdbuser   --dbpass=$Lampdbpass   --dbtype=$dbtype --fullname='Lamp LMS' --shortname='Lamp' --adminuser=admin --adminpass=$adminpass   --adminemail=admin@$siteFQDN   --non-interactive --agree-license --allow-unstable || true
 
     echo -e "\n\rDone! Installation completed!\n\r"
 
-    local configPhpPath="$moodleHtmlDir/config.php"
+    local configPhpPath="$LampHtmlDir/config.php"
 
     if [ "$httpsTermination" != "None" ]; then
-        # We proxy ssl, so moodle needs to know this
+        # We proxy ssl, so Lamp needs to know this
         sed -i "23 a \$CFG->sslproxy  = 'true';" $configPhpPath
     fi
 
     # Make sure the config.php is readable for web server process (www-data). The initial permission might be readable only for creator (root in our case).
     chmod +r $configPhpPath
-    # Also make sure to update moodleDataDir's owner (to be writable for www-data web server process)
-    chown -R www-data.www-data $moodleDataDir
+    # Also make sure to update LampDataDir's owner (to be writable for www-data web server process)
+    chown -R www-data.www-data $LampDataDir
 }
 
-function setup_per_site_moodle_cron_jobs_on_controller
+function setup_per_site_Lamp_cron_jobs_on_controller
 {
-    local moodleHtmlDir=${1}
+    local LampHtmlDir=${1}
     local siteFQDN=${2}
     local dbServerType=${3}
     local dbIP=${4}
-    local moodledbname=${5}
-    local azuremoodledbuser=${6}
-    local moodledbpass=${7}
+    local Lampdbname=${5}
+    local azureLampdbuser=${6}
+    local Lampdbpass=${7}
 
     # create cron entry
     # It is scheduled for once per minute. It can be changed as needed.
-    echo '* * * * * www-data /usr/bin/php '$moodleHtmlDir'/admin/cli/cron.php 2>&1 | /usr/bin/logger -p local2.notice -t moodle' > /etc/cron.d/moodle-cron-$siteFQDN
+    echo '* * * * * www-data /usr/bin/php '$LampHtmlDir'/admin/cli/cron.php 2>&1 | /usr/bin/logger -p local2.notice -t Lamp' > /etc/cron.d/Lamp-cron-$siteFQDN
 
     # Set up cronned sql dump
-    sqlBackupCronDefPath="/etc/cron.d/moodle-sql-backup-$siteFQDN"
+    sqlBackupCronDefPath="/etc/cron.d/Lamp-sql-backup-$siteFQDN"
     if [ "$dbServerType" = "mysql" ]; then
         cat <<EOF > $sqlBackupCronDefPath
-  22 02 * * * root /usr/bin/mysqldump -h $dbIP -u ${azuremoodledbuser} -p'${moodledbpass}' --databases ${moodledbname} | gzip > /azlamp/data/$siteFQDN/db-backup.sql.gz
+  22 02 * * * root /usr/bin/mysqldump -h $dbIP -u ${azureLampdbuser} -p'${Lampdbpass}' --databases ${Lampdbname} | gzip > /azlamp/data/$siteFQDN/db-backup.sql.gz
 EOF
     elif [ "$dbServerType" = "postgres" ]; then
         cat <<EOF > $sqlBackupCronDefPath
-  22 02 * * * root /usr/bin/pg_dump -Fc -h $dbIP -U ${azuremoodledbuser} ${moodledbname} > /azlamp/data/$siteFQDN/db-backup.sql
+  22 02 * * * root /usr/bin/pg_dump -Fc -h $dbIP -U ${azureLampdbuser} ${Lampdbname} > /azlamp/data/$siteFQDN/db-backup.sql
 EOF
     #else # mssql. TODO It's missed earlier! Complete this!
     fi
@@ -1005,11 +1005,11 @@ EOF
 function configure_varnish_on_controller
 {
     # Configure varnish startup for 16.04
-    VARNISHSTART="ExecStart=\/usr\/sbin\/varnishd -j unix,user=vcache -F -a :80 -T localhost:6082 -f \/etc\/varnish\/moodle.vcl -S \/etc\/varnish\/secret -s malloc,1024m -p thread_pool_min=200 -p thread_pool_max=4000 -p thread_pool_add_delay=2 -p timeout_linger=100 -p timeout_idle=30 -p send_timeout=1800 -p thread_pools=4 -p http_max_hdr=512 -p workspace_backend=512k"
+    VARNISHSTART="ExecStart=\/usr\/sbin\/varnishd -j unix,user=vcache -F -a :80 -T localhost:6082 -f \/etc\/varnish\/Lamp.vcl -S \/etc\/varnish\/secret -s malloc,1024m -p thread_pool_min=200 -p thread_pool_max=4000 -p thread_pool_add_delay=2 -p timeout_linger=100 -p timeout_idle=30 -p send_timeout=1800 -p thread_pools=4 -p http_max_hdr=512 -p workspace_backend=512k"
     sed -i "s/^ExecStart.*/${VARNISHSTART}/" /lib/systemd/system/varnish.service
 
-    # Configure varnish VCL for moodle
-    cat <<EOF >> /etc/varnish/moodle.vcl
+    # Configure varnish VCL for Lamp
+    cat <<EOF >> /etc/varnish/Lamp.vcl
 vcl 4.0;
 
 import std;
@@ -1065,8 +1065,8 @@ sub vcl_recv {
       return (pass);
     }
 
-    ### Rules for Moodle and Totara sites ###
-    # Moodle doesn't require Cookie to serve following assets. Remove Cookie header from request, so it will be looked up.
+    ### Rules for Lamp and Totara sites ###
+    # Lamp doesn't require Cookie to serve following assets. Remove Cookie header from request, so it will be looked up.
     if ( req.url ~ "^/altlogin/.+/.+\.(png|jpg|jpeg|gif|css|js|webp)$" ||
          req.url ~ "^/pix/.+\.(png|jpg|jpeg|gif)$" ||
          req.url ~ "^/theme/font.php" ||
@@ -1084,7 +1084,7 @@ sub vcl_recv {
         return(hash);
     }
 
-    # Perform lookup for selected assets that we know are static but Moodle still needs a Cookie
+    # Perform lookup for selected assets that we know are static but Lamp still needs a Cookie
     if(  req.url ~ "^/theme/.+\.(png|jpg|jpeg|gif|css|js|webp)" ||
          req.url ~ "^/lib/.+\.(png|jpg|jpeg|gif|css|js|webp)" ||
          req.url ~ "^/pluginfile.php/[0-9]+/course/overviewfiles/.+\.(?i)(png|jpg)$"
@@ -1096,7 +1096,7 @@ sub vcl_recv {
     }
 
     # Serve requests to SCORM checknet.txt from varnish. Have to remove get parameters. Response body always contains "1"
-    if ( req.url ~ "^/lib/yui/build/moodle-core-checknet/assets/checknet.txt" )
+    if ( req.url ~ "^/lib/yui/build/Lamp-core-checknet/assets/checknet.txt" )
     {
         set req.url = regsub(req.url, "(.*)\?.*", "\1");
         unset req.http.Cookie; # Will go to hash anyway at the end of vcl_recv
@@ -1109,7 +1109,7 @@ sub vcl_recv {
         return (pass);
     }
 
-    # Almost everything in Moodle correctly serves Cache-Control headers, if
+    # Almost everything in Lamp correctly serves Cache-Control headers, if
     # needed, which varnish will honor, but there are some which don't. Rather
     # than explicitly finding them all and listing them here we just fail safe
     # and don't cache unknown urls that get this far.
@@ -1303,48 +1303,48 @@ local2.*   /var/log/sitelogs/azlamp/cron.log
 EOF
 }
 
-# A rudimentary script to add another Moodle site after initial deployment.
-# - No additional Moodle plugins are specify-able (must install separately).
+# A rudimentary script to add another Lamp site after initial deployment.
+# - No additional Lamp plugins are specify-able (must install separately).
 # - MSSQL DB server type not supported.
 # - There must be other restrictions...
-function add_another_moodle_site_on_controller_after_deployment
+function add_another_Lamp_site_on_controller_after_deployment
 {
-    local moodleVersion=${1}  # E.g., "MOODLE_35_STABLE"
-    local siteFQDN=${2}       # E.g., "moodle.site2.edu"
+    local LampVersion=${1}  # E.g., "Lamp_35_STABLE"
+    local siteFQDN=${2}       # E.g., "Lamp.site2.edu"
     local httpsTermination=${3} # E.g., "VMSS" or "None"
     local dbServerType=${4}   # E.g., "mysql" or "postgres"
     local dbIP=${5}           # E.g., "mysql-xyz123.mysql.database.azure.com"
     local dbadminloginazure=${6}  # E.g., "admin@mysql-xyz123"
     local dbadminpass=${7}
-    local moodledbname=${8}   # E.g., "moodle2"
-    local moodledbuser=${9}   # E.g., "moodle2" (no "@mysql-xyz123" suffix)
-    local moodledbpass=${10}
-    local azuremoodledbuser=${11} # E.g., "moodle2@mysql-xyz123" (must be with "@mysql-xyz123" suffix)
-    local adminpass=${12}     # Moodle site admin password (not an SQL DB user password)
+    local Lampdbname=${8}   # E.g., "Lamp2"
+    local Lampdbuser=${9}   # E.g., "Lamp2" (no "@mysql-xyz123" suffix)
+    local Lampdbpass=${10}
+    local azureLampdbuser=${11} # E.g., "Lamp2@mysql-xyz123" (must be with "@mysql-xyz123" suffix)
+    local adminpass=${12}     # Lamp site admin password (not an SQL DB user password)
 
-    local moodleHtmlDir="/azlamp/html/$siteFQDN"
-    local moodleDataDir="/azlamp/data/$siteFQDN/moodledata"
-    local moodleCertsDir="/azlamp/certs/$siteFQDN"
+    local LampHtmlDir="/azlamp/html/$siteFQDN"
+    local LampDataDir="/azlamp/data/$siteFQDN/Lampdata"
+    local LampCertsDir="/azlamp/certs/$siteFQDN"
 
-    mkdir -p $moodleDataDir
-    mkdir -p $moodleCertsDir
+    mkdir -p $LampDataDir
+    mkdir -p $LampCertsDir
 
-    download_and_place_per_site_moodle_and_plugins_on_controller $moodleVersion $moodleHtmlDir false false false
-    create_per_site_nginx_conf_on_controller $siteFQDN $httpsTermination $moodleHtmlDir $moodleCertsDir
-    create_per_site_nginx_ssl_certs_on_controller $siteFQDN $moodleCertsDir $httpsTermination None None
-    create_per_site_sql_db_from_controller $dbServerType $dbIP $dbadminloginazure $dbadminpass $moodledbname $moodledbuser $moodledbpass None None None
-    setup_and_config_per_site_moodle_on_controller $httpsTermination $siteFQDN $dbServerType $moodleHtmlDir $moodleDataDir $dbIP $moodledbname $azuremoodledbuser $moodledbpass $adminpass
-    setup_per_site_moodle_cron_jobs_on_controller $moodleHtmlDir $siteFQDN $dbServerType $dbIP $moodledbname $azuremoodledbuser $moodledbpass
+    download_and_place_per_site_Lamp_and_plugins_on_controller $LampVersion $LampHtmlDir false false false
+    create_per_site_nginx_conf_on_controller $siteFQDN $httpsTermination $LampHtmlDir $LampCertsDir
+    create_per_site_nginx_ssl_certs_on_controller $siteFQDN $LampCertsDir $httpsTermination None None
+    create_per_site_sql_db_from_controller $dbServerType $dbIP $dbadminloginazure $dbadminpass $Lampdbname $Lampdbuser $Lampdbpass None None None
+    setup_and_config_per_site_Lamp_on_controller $httpsTermination $siteFQDN $dbServerType $LampHtmlDir $LampDataDir $dbIP $Lampdbname $azureLampdbuser $Lampdbpass $adminpass
+    setup_per_site_Lamp_cron_jobs_on_controller $LampHtmlDir $siteFQDN $dbServerType $dbIP $Lampdbname $azureLampdbuser $Lampdbpass
 }
 
-# Long Redis cache Moodle config file generation code moved here
-function create_redis_configuration_in_moodledata_muc_config_php
+# Long Redis cache Lamp config file generation code moved here
+function create_redis_configuration_in_Lampdata_muc_config_php
 {
     local mucConfigPhpPath=$1
 
-    # create redis configuration in .../moodledata/muc/config.php
+    # create redis configuration in .../Lampdata/muc/config.php
     cat <<EOF > $mucConfigPhpPath
-<?php defined('MOODLE_INTERNAL') || die();
+<?php defined('Lamp_INTERNAL') || die();
  \$configuration = array (
   'siteidentifier' => '7a142be09ea65699e4a6f6ef91c0773c',
   'stores' => 
@@ -1395,7 +1395,7 @@ function create_redis_configuration_in_moodledata_muc_config_php
       'configuration' => 
       array (
         'server' => '$redisDns',
-        'prefix' => 'moodle_prod',
+        'prefix' => 'Lamp_prod',
         'password' => '$redisAuth',
         'serializer' => '1',
       ),
@@ -1412,7 +1412,7 @@ function create_redis_configuration_in_moodledata_muc_config_php
       'plugin' => 'file',
       'configuration' => 
       array (
-        'path' => '/tmp/muc/moodle_prod',
+        'path' => '/tmp/muc/Lamp_prod',
         'autocreate' => 1,
       ),
       'features' => 30,

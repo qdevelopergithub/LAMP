@@ -2,9 +2,9 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "moodleCommon": {
+        "lampCommon": {
             "metadata": {
-                "description": "Common Moodle values"
+                "description": "Common Lamp values"
             },
             "type": "object"
         },
@@ -19,22 +19,22 @@
         {
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2017-10-01",
-            "location": "[parameters('moodleCommon').location]",
-            "name": "[parameters('moodleCommon').tikaNicName]",
+            "location": "[parameters('lampCommon').location]",
+            "name": "[parameters('lampCommon').tikaNicName]",
             "properties": {
                 "ipConfigurations": [
                     {
                         "name": "ipcfg-tika",
                         "properties": {
                             "privateIPAllocationMethod": "Static",
-                            "privateIPAddress": "[parameters('moodleCommon').tikaVmIP]",
+                            "privateIPAddress": "[parameters('lampCommon').tikaVmIP]",
                             "subnet": {
                                 "id": "[parameters('subnetIdTika')]"
                             }
                         }
                     }
                 ],
-                "enableAcceleratedNetworking": "[parameters('moodleCommon').enableAccelNwForOtherVmsSwitch]"
+                "enableAcceleratedNetworking": "[parameters('lampCommon').enableAccelNwForOtherVmsSwitch]"
             },
             "tags": {
                 "displayName": "Tika NIC"
@@ -44,13 +44,13 @@
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2017-03-30",
             "dependsOn": [
-                "[concat('Microsoft.Network/networkInterfaces/', parameters('moodleCommon').tikaNicName)]"
+                "[concat('Microsoft.Network/networkInterfaces/', parameters('lampCommon').tikaNicName)]"
             ],
-            "location": "[parameters('moodleCommon').location]",
-            "name": "[parameters('moodleCommon').tikaVmName]",
+            "location": "[parameters('lampCommon').location]",
+            "name": "[parameters('lampCommon').tikaVmName]",
             "properties": {
                 "hardwareProfile": {
-                    "vmSize": "[parameters('moodleCommon').tikaVmSku]"
+                    "vmSize": "[parameters('lampCommon').tikaVmSku]"
                 },
                 "networkProfile": {
                     "networkInterfaces": [
@@ -60,15 +60,15 @@
                     ]
                 },
                 "osProfile": {
-                    "adminUsername": "[parameters('moodleCommon').sshUsername]",
-                    "computerName": "[parameters('moodleCommon').tikaVmName]",
+                    "adminUsername": "[parameters('lampCommon').sshUsername]",
+                    "computerName": "[parameters('lampCommon').tikaVmName]",
                     "linuxConfiguration": {
                         "disablePasswordAuthentication": true,
                         "ssh": {
                             "publicKeys": [
                                 {
-                                    "path": "[concat('/home/', parameters('moodleCommon').sshUsername, '/.ssh/authorized_keys')]",
-                                    "keyData": "[parameters('moodleCommon').sshPublicKey]"
+                                    "path": "[concat('/home/', parameters('lampCommon').sshUsername, '/.ssh/authorized_keys')]",
+                                    "keyData": "[parameters('lampCommon').sshPublicKey]"
                                 }
                             ]
                         }
@@ -76,13 +76,13 @@
                 },
                 "storageProfile": {
                     "dataDisks": [],
-                    "imageReference": "[parameters('moodleCommon').osType]",
+                    "imageReference": "[parameters('lampCommon').osType]",
                     "osDisk": {
                         "createOption": "FromImage",
                         "managedDisk": {
-                            "storageAccountType": "[parameters('moodleCommon').osDiskStorageType]"
+                            "storageAccountType": "[parameters('lampCommon').osDiskStorageType]"
                         },
-                        "name": "[parameters('moodleCommon').tikaVmName]"
+                        "name": "[parameters('lampCommon').tikaVmName]"
                     }
                 }
             },
@@ -91,52 +91,52 @@
             }
         },
         {
-            "condition": "[parameters('moodleCommon').applyScriptsSwitch]",
+            "condition": "[parameters('lampCommon').applyScriptsSwitch]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('moodleCommon').tikaVmName)]"
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('lampCommon').tikaVmName)]"
             ],
-            "name": "[concat(parameters('moodleCommon').tikaVmName,'-ScriptProcessor')]",
+            "name": "[concat(parameters('lampCommon').tikaVmName,'-ScriptProcessor')]",
             "properties": {
                 "mode": "Incremental",
                 "parameters": {
-                    "moodleCommon": {
-                        "value": "[parameters('moodleCommon')]"
+                    "lampCommon": {
+                        "value": "[parameters('lampCommon')]"
                     }
 
                 },
                 "templateLink": {
-                    "uri": "[concat(parameters('moodleCommon').baseTemplateUrl,'tikaconfig.json',parameters('moodleCommon').artifactsSasToken)]"
+                    "uri": "[concat(parameters('lampCommon').baseTemplateUrl,'tikaconfig.json',parameters('lampCommon').artifactsSasToken)]"
                 }
             }
         },
         {
-            "condition": "[parameters('moodleCommon').azureBackupSwitch]",
+            "condition": "[parameters('lampCommon').azureBackupSwitch]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/',parameters('moodleCommon').tikaVmName)]"
+                "[concat('Microsoft.Compute/virtualMachines/',parameters('lampCommon').tikaVmName)]"
             ],
-            "name": "[concat(parameters('moodleCommon').tikaVmName,'-Backup')]",
+            "name": "[concat(parameters('lampCommon').tikaVmName,'-Backup')]",
             "properties": {
                 "mode": "Incremental",
                 "parameters": {
-                    "moodleCommon": {
-                        "value": "[parameters('moodleCommon')]"
+                    "lampCommon": {
+                        "value": "[parameters('lampCommon')]"
                     },
                     "vmName": {
-                        "value": "[parameters('moodleCommon').tikaVmName]"
+                        "value": "[parameters('lampCommon').tikaVmName]"
                     }
                 },
                 "templateLink": {
-                    "uri": "[concat(parameters('moodleCommon').baseTemplateUrl,'recoveryservicesEnlist.json',parameters('moodleCommon').artifactsSasToken)]"
+                    "uri": "[concat(parameters('lampCommon').baseTemplateUrl,'recoveryservicesEnlist.json',parameters('lampCommon').artifactsSasToken)]"
                 }
             }
         }
     ],
     "variables": {
-        "documentation01": "This sub-template drives the tika service which is used as the access-point for moodle VM's when using tika search or azure search",
+        "documentation01": "This sub-template drives the tika service which is used as the access-point for Lamp VM's when using tika search or azure search",
         "documentation02": "It expects certain values in the 'common' datastructure.",
         "documentation03": "    vnetName               - name of the virtual network",
         "documentation04": "    subnetTika             - name of subnet for tika (and vm scale set)",
@@ -146,6 +146,6 @@
         "documentation15": "This sub-template calls other sub-templates",
         "documentation16": "    tikaconfig             - conditionally applies post-deployment script on the VM",
         "documentation17": "    recoveryservicesEnlist - conditionally enlists the VM into the backup regimen",
-        "nicRef": "[resourceId('Microsoft.Network/networkInterfaces', parameters('moodleCommon').tikaNicName)]"
+        "nicRef": "[resourceId('Microsoft.Network/networkInterfaces', parameters('lampCommon').tikaNicName)]"
     }
 }

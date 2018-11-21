@@ -1,15 +1,15 @@
-# Publish a Moodle Based Managed Appliction to Service Catalog
+# Publish a Lamp Based Managed Appliction to Service Catalog
 
-In this document we will look at how to publish a Moodle based Managed
+In this document we will look at how to publish a Lamp based Managed
 Application into your Service Catalog so that you can allow your
 customers to deploy the application into their subscriptions. If you
-are not sure why you would do this you might want to read our [Moodle
+are not sure why you would do this you might want to read our [Lamp
 Based Managed Application Introduction](README.md) first.
 
 ## Prerequisites
 
 In the following sections we demonstrate how to use the Azure CLI to
-work with a Moodle based Managed Application. For convenience these
+work with a Lamp based Managed Application. For convenience these
 commands use a variety of [environment variables](Environment.md) that
 should be configured first.
 
@@ -34,7 +34,7 @@ input for each of the parameters (specified in `mainTemplate.json`).
 
 An initial `createUIDefinition.json` file is provided in
 `managedApplication/creatueUIDefinition.json`. This files is
-sufficient to get you started building your own Moodle based Managed
+sufficient to get you started building your own Lamp based Managed
 Applications.
 
 See [Create UI Definition
@@ -58,26 +58,26 @@ If the Group already exists we don't want to create a new one, so we
 will try to get the Group ID first:
 
 ``` bash
-MOODLE_MANAGED_APP_AD_ID=$(az ad group list --filter="displayName eq '$MOODLE_MANAGED_APP_OWNER_GROUP_NAME'" --query [0].objectId --output tsv)
+Lamp_MANAGED_APP_AD_ID=$(az ad group list --filter="displayName eq '$Lamp_MANAGED_APP_OWNER_GROUP_NAME'" --query [0].objectId --output tsv)
 ```
 
-At this point MOODLE_MANAGED_APP_AD_ID will either be empty or it will have the ID of an existing group. If it is empty we need to create the group and grab its ID:
+At this point Lamp_MANAGED_APP_AD_ID will either be empty or it will have the ID of an existing group. If it is empty we need to create the group and grab its ID:
 
 ``` bash
-if [ -z "$MOODLE_MANAGED_APP_AD_ID" ]; then az ad group create --display-name $MOODLE_MANAGED_APP_OWNER_GROUP_NAME --mail-nickname=$MOODLE_MANAGED_APP_OWNER_NICKNAME; fi
+if [ -z "$Lamp_MANAGED_APP_AD_ID" ]; then az ad group create --display-name $Lamp_MANAGED_APP_OWNER_GROUP_NAME --mail-nickname=$Lamp_MANAGED_APP_OWNER_NICKNAME; fi
 ```
 
 Let's ensure that we have the object ID even if we created a new one.
 
 ``` bash
-MOODLE_MANAGED_APP_AD_ID=$(az ad group list --filter="displayName eq '$MOODLE_MANAGED_APP_OWNER_GROUP_NAME'" --query [0].objectId --output tsv)
+Lamp_MANAGED_APP_AD_ID=$(az ad group list --filter="displayName eq '$Lamp_MANAGED_APP_OWNER_GROUP_NAME'" --query [0].objectId --output tsv)
 ```
 
 You will also need the Role ID for your chosen role, here we will use
 the built-in 'Owner' role:
 
 ``` bash
-MOODLE_MANAGED_APP_ROLE_ID=$(az role definition list --name Owner --query [].name --output tsv)
+Lamp_MANAGED_APP_ROLE_ID=$(az role definition list --name Owner --query [].name --output tsv)
 ```
 
 The Azure documentation has more information on how to work with [Azure Active Directory](https://docs.microsoft.com/en-us/azure/active-directory/manage-access-to-azure-resources).
@@ -85,7 +85,7 @@ The Azure documentation has more information on how to work with [Azure Active D
 ## Create a Resource Group for the Managed Application Service Catalog Entry
 
 ``` bash
-az group create --name $MOODLE_SERVICE_CATALOG_RG_NAME --location $MOODLE_SERVICE_CATALOG_LOCATION
+az group create --name $Lamp_SERVICE_CATALOG_RG_NAME --location $Lamp_SERVICE_CATALOG_LOCATION
 ```
 
 ## Publish to your Service Catalog using Azure CLI
@@ -97,13 +97,13 @@ the authorization configuration from the app and role IDs retrieved
 earlier.
 
 ``` bash
-MOODLE_MANAGED_APP_AUTHORIZATIONS=$MOODLE_MANAGED_APP_AD_ID:$MOODLE_MANAGED_APP_ROLE_ID
+Lamp_MANAGED_APP_AUTHORIZATIONS=$Lamp_MANAGED_APP_AD_ID:$Lamp_MANAGED_APP_ROLE_ID
 ```
 
 The following command will add your managed application definition to the Service Catalog.
 
 ``` bash
-az managedapp definition create --name $MOODLE_MANAGED_APP_NAME --location $MOODLE_SERVICE_CATALOG_LOCATION --resource-group $MOODLE_SERVICE_CATALOG_RG_NAME --lock-level $MOODLE_MANAGED_APP_LOCK_LEVEL --display-name $MOODLE_MANAGED_APP_DISPLAY_NAME --description "$MOODLE_MANAGED_APP_DESCRIPTION" --authorizations="$MOODLE_MANAGED_APP_AUTHORIZATIONS" --main-template=@../azuredeploy.json --create-ui-definition=@createUIDefinition.json
+az managedapp definition create --name $Lamp_MANAGED_APP_NAME --location $Lamp_SERVICE_CATALOG_LOCATION --resource-group $Lamp_SERVICE_CATALOG_RG_NAME --lock-level $Lamp_MANAGED_APP_LOCK_LEVEL --display-name $Lamp_MANAGED_APP_DISPLAY_NAME --description "$Lamp_MANAGED_APP_DESCRIPTION" --authorizations="$Lamp_MANAGED_APP_AUTHORIZATIONS" --main-template=@../azuredeploy.json --create-ui-definition=@createUIDefinition.json
 ```
 
 Results:
@@ -119,7 +119,7 @@ Results:
     {
         "name": "CreateUiDefinition",
         "type": "Custom",
-        "uri": "https://management.azure.com/subscriptions/325e7c34-99fb-4190-aa87-1df746c67705/resourceGroups/MoodleManagedAppServiceCatalogRG/providers/Microsoft.Solutions/applicationDefinitions/MoodleManagedApp/applicationArtifacts/CreateUiDefinition?api-version=2017-09-01"
+        "uri": "https://management.azure.com/subscriptions/325e7c34-99fb-4190-aa87-1df746c67705/resourceGroups/LampManagedAppServiceCatalogRG/providers/Microsoft.Solutions/applicationDefinitions/LampManagedApp/applicationArtifacts/CreateUiDefinition?api-version=2017-09-01"
     }
   ],
   "authorizations": [
@@ -129,18 +129,18 @@ Results:
     }
   ],
   "createUiDefinition": null,
-  "description": "Moodle on Azure as a Managed Application",
-  "displayName": "Moodle",
-  "id": "/subscriptions/325e7c34-99fb-4190-aa87-1df746c67705/resourceGroups/MoodleManagedAppServiceCatalogRG/providers/Microsoft.Solutions/applicationDefinitions/MoodleManagedApp",
+  "description": "Lamp on Azure as a Managed Application",
+  "displayName": "Lamp",
+  "id": "/subscriptions/325e7c34-99fb-4190-aa87-1df746c67705/resourceGroups/LampManagedAppServiceCatalogRG/providers/Microsoft.Solutions/applicationDefinitions/LampManagedApp",
   "identity": null,
   "isEnabled": "True",
   "location": "southcentralus",
   "lockLevel": "ReadOnly",
   "mainTemplate": null,
   "managedBy": null,
-  "name": "MoodleManagedApp",
+  "name": "LampManagedApp",
   "packageFileUri": null,
-  "resourceGroup": "MoodleManagedAppServiceCatalogRG",
+  "resourceGroup": "LampManagedAppServiceCatalogRG",
   "sku": null,
   "tags": null,
   "type": "Microsoft.Solutions/applicationDefinitions"
@@ -161,6 +161,6 @@ a URI for the package using `--package-file-uri` argument.
 
 ## Next Steps
 
-Now that you have published a Moodle based Managed Application on Azure you can:
+Now that you have published a Lamp based Managed Application on Azure you can:
 
-  1. [Deploy Moodle into Customer Subscription](DeployMoodleManagedApp.md)
+  1. [Deploy Lamp into Customer Subscription](DeployLampManagedApp.md)

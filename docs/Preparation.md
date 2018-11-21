@@ -1,7 +1,7 @@
 # Environment Preparation
 
 This document describes how to ensure your environment is configured
-for working with Moodle on Azure.
+for working with Lamp on Azure.
 
 ## Prerequisites
 
@@ -10,7 +10,7 @@ In order to configure our deployment and tools we'll set up some
 
 ## Required software
 
-We'll use a number of tools when working with Moodle on Azure. Let's
+We'll use a number of tools when working with Lamp on Azure. Let's
 ensure they are all installed:
 
 ``` shell
@@ -34,24 +34,24 @@ We use SSH for secure communication with our hosts. The following line
 will check there is a valid SSH key available and, if not, create one.
 
 ```
-if [ ! -f "$MOODLE_SSH_KEY_FILENAME" ]; then ssh-keygen -t rsa -N "" -f $MOODLE_SSH_KEY_FILENAME; fi
+if [ ! -f "$Lamp_SSH_KEY_FILENAME" ]; then ssh-keygen -t rsa -N "" -f $Lamp_SSH_KEY_FILENAME; fi
 ```
-## Checkout the Moodle ARM Template
+## Checkout the Lamp ARM Template
 
-The Moodle Azure Resource Manager template is hosted on GitHub. We'll
+The Lamp Azure Resource Manager template is hosted on GitHub. We'll
 checkout the template into our workspace.
 
 ```
-git clone git@github.com:Azure/Moodle.git $MOODLE_AZURE_WORKSPACE/arm_template
+git clone git@github.com:Azure/Lamp.git $Lamp_AZURE_WORKSPACE/arm_template
 ```
 
 # Validation
 
 After completing these steps we should have, amonst other things, a
-complete checkout of the Moodle templates from GitHub:
+complete checkout of the Lamp templates from GitHub:
 
 ``` bash
-ls $MOODLE_AZURE_WORKSPACE/arm_template
+ls $Lamp_AZURE_WORKSPACE/arm_template
 ```
 
 Results:

@@ -1,7 +1,7 @@
-# Moodle on Azure Parameters
+# Lamp on Azure Parameters
 
 Our goal with these templates is to make it as easy as possible to
-deploy a Moodle on Azure cluster that can be customized to your
+deploy a Lamp on Azure cluster that can be customized to your
 specific needs. To that end we provide a great manay configuration
 options. This document attempts to document all these parameters,
 however, like all documentation it can sometimes fall behind. For a
@@ -31,7 +31,7 @@ Type: string
 
 Possible Values: null
 
-Default: https://raw.githubusercontent.com/Azure/Moodle/master/
+Default: https://raw.githubusercontent.com/Azure/Lamp/master/
 
 
 ### _artifactsLocationSasToken
@@ -69,7 +69,7 @@ Default: false
 
 ### redisDeploySwitch
 
-Switch to deploy a redis cache or not. Note that certain versions of Moodle (e.g., 3.1) don't work well with Redis, so use this only for known well-working Moodle versions (e.g., 3.4).
+Switch to deploy a redis cache or not. Note that certain versions of Lamp (e.g., 3.1) don't work well with Redis, so use this only for known well-working Lamp versions (e.g., 3.4).
 
 Type: bool
 
@@ -91,7 +91,7 @@ Default: false
 
 ### installObjectFsSwitch
 
-Switch to install Moodle Object FS plugins (with Azure Blob storage)
+Switch to install Lamp Object FS plugins (with Azure Blob storage)
 
 Type: bool
 
@@ -102,7 +102,7 @@ Default: false
 
 ### installO365pluginsSwitch
 
-Switch to install Moodle Office 365 plugins. As of May 22, 2018, O365 plugins for Moodle 3.5 haven't been released, so to set this true, you must set the moodleVersion to 3.4 or below.
+Switch to install Lamp Office 365 plugins. As of May 22, 2018, O365 plugins for Lamp 3.5 haven't been released, so to set this true, you must set the LampVersion to 3.4 or below.
 
 Type: bool
 
@@ -113,7 +113,7 @@ Default: false
 
 ### installGdprPluginsSwitch
 
-(Should be used only for Moodle 3.4 & 3.3) Switch to install Moodle GDPR plugins. Note these require Moodle versions 3.4.2+ or 3.3.5+ and these are included by default in Moodle 3.5. So if you choose MOODLE_35_STABLE as your moodleVersion, do not set this to true.
+(Should be used only for Lamp 3.4 & 3.3) Switch to install Lamp GDPR plugins. Note these require Lamp versions 3.4.2+ or 3.3.5+ and these are included by default in Lamp 3.5. So if you choose Lamp_35_STABLE as your LampVersion, do not set this to true.
 
 Type: bool
 
@@ -124,7 +124,7 @@ Default: false
 
 ### htmlLocalCopySwitch
 
-Switch to create a local copy of /moodle/html or not
+Switch to create a local copy of /Lamp/html or not
 
 Type: bool
 
@@ -168,7 +168,7 @@ Default: true
 
 ### httpsTermination
 
-Indicates where https termination occurs. 'VMSS' is for https termination at the VMSS instance VMs (using nginx https proxy). 'AppGw' is for https termination with an Azure Application Gateway. When selecting this, you need to specify all appGw* parameters. 'None' is for testing only with no https. 'None' may not be used with a separately configured https termination layer. If you want to use the 'None' option with your separately configured https termination layer, you'll need to update your Moodle config.php manually for $cfg->wwwroot and $cfg->sslproxy.
+Indicates where https termination occurs. 'VMSS' is for https termination at the VMSS instance VMs (using nginx https proxy). 'AppGw' is for https termination with an Azure Application Gateway. When selecting this, you need to specify all appGw* parameters. 'None' is for testing only with no https. 'None' may not be used with a separately configured https termination layer. If you want to use the 'None' option with your separately configured https termination layer, you'll need to update your Lamp config.php manually for $cfg->wwwroot and $cfg->sslproxy.
 
 Type: string
 
@@ -179,7 +179,7 @@ Default: VMSS
 
 ### siteURL
 
-URL for Moodle site
+URL for Lamp site
 
 Type: string
 
@@ -188,15 +188,15 @@ Possible Values: null
 Default: www.example.org
 
 
-### moodleVersion
+### LampVersion
 
-The Moodle version you want to install.
+The Lamp version you want to install.
 
 Type: string
 
-Possible Values: ["MOODLE_35_STABLE","MOODLE_34_STABLE","v3.4.3","v3.4.2","v3.4.1","MOODLE_33_STABLE","MOODLE_32_STABLE","MOODLE_31_STABLE","MOODLE_30_STABLE","MOODLE_29_STABLE"]
+Possible Values: ["Lamp_35_STABLE","Lamp_34_STABLE","v3.4.3","v3.4.2","v3.4.1","Lamp_33_STABLE","Lamp_32_STABLE","Lamp_31_STABLE","Lamp_30_STABLE","Lamp_29_STABLE"]
 
-Default: MOODLE_35_STABLE
+Default: Lamp_35_STABLE
 
 
 ### sshPublicKey
@@ -597,7 +597,7 @@ Default: 2
 
 ### storageAccountType
 
-Storage Account type. This storage account is only for the Moodle ObjectFS plugin and/or the (currently disabled) Azure Files file share option
+Storage Account type. This storage account is only for the Lamp ObjectFS plugin and/or the (currently disabled) Azure Files file share option
 
 Type: string
 
@@ -608,7 +608,7 @@ Default: Standard_LRS
 
 ### searchType
 
-options of moodle global search
+options of Lamp global search
 
 Type: string
 
@@ -619,7 +619,7 @@ Default: none
 
 ### tikaService
 
-options of enabling tika service for file searching in moodle
+options of enabling tika service for file searching in Lamp
 
 Type: string
 
@@ -696,7 +696,7 @@ Default: Standard_DS2_v2
 
 ### customVnetId
 
-Azure Resource ID of the Azure virtual network where you want to deploy your Moodle resources. A vnet resource ID is of the following format: /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxxxxx/resourceGroups/gggg/providers/Microsoft.Network/virtualNetworks/vvvv. Note that this virtual network must be on the same Azure location as this template deployment location. If this parameter is blank, a new Azure virtual network will be created and used. In that case, the address space of the newly created virtual network will be */16 of the following vNetAddressSpace parameter value below.
+Azure Resource ID of the Azure virtual network where you want to deploy your Lamp resources. A vnet resource ID is of the following format: /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxxxxx/resourceGroups/gggg/providers/Microsoft.Network/virtualNetworks/vvvv. Note that this virtual network must be on the same Azure location as this template deployment location. If this parameter is blank, a new Azure virtual network will be created and used. In that case, the address space of the newly created virtual network will be */16 of the following vNetAddressSpace parameter value below.
 
 Type: string
 
@@ -707,7 +707,7 @@ Default:
 
 ### vNetAddressSpace
 
-Address range for the Moodle virtual network and various subnets - presumed /16 for a newly created vnet in case customVnetId is blank. Further subneting (a number of */24 subnets starting from the xxx.yyy.zzz.0/24 will be created on a newly created vnet or your BYO-vnet (specified in customVnetId parameter).
+Address range for the Lamp virtual network and various subnets - presumed /16 for a newly created vnet in case customVnetId is blank. Further subneting (a number of */24 subnets starting from the xxx.yyy.zzz.0/24 will be created on a newly created vnet or your BYO-vnet (specified in customVnetId parameter).
 
 Type: string
 

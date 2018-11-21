@@ -1,12 +1,12 @@
 # SSL Certificate Management
 
-A valid SSL (TLS) certificate should be used with your domain name for the Moodle/LAMP
+A valid SSL (TLS) certificate should be used with your domain name for the Lamp/LAMP
 site to be deployed using the templates. By default, the templates will configure
 the HTTPS server with a self-signed SSL server certificate/private key, which can
 be manually changed with your own valid SSL server certificate/private key after
 the deployment.
 
-If you'd like to configure the Moodle/LAMP cluster (to be deployed) with your own domain
+If you'd like to configure the Lamp/LAMP cluster (to be deployed) with your own domain
 and your valid SSL server certificate/private key, then you can do so by utilizing
 [Azure Key Vault](https://azure.microsoft.com/en-us/services/key-vault/) and
 configuring the related template parameters as described below. This support is
@@ -15,7 +15,7 @@ and adapted to our situation.
 
 ## Initial deployment
 
-To configure the Moodle/LAMP cluster (to be deployed) with your purchased SSL certificate,
+To configure the Lamp/LAMP cluster (to be deployed) with your purchased SSL certificate,
 currently the related files should be stored in an Azure Key Vault as secrets, so that
 Azure Resource Manager can retrieve them when it deploys VMs as specified in templates.
 
@@ -37,10 +37,10 @@ to create an Azure Key Vault on your subscription and store your SSL certificate
 the intermediate CA certificate:
 
 ``` bash
-$ bash $MOODLE_AZURE_WORKSPACE/arm_template/etc/keyvault.sh <key_vault_name> <resource_group_name> <azure_region> <secret_name> cert.pem key.pem chain.pem
+$ bash $Lamp_AZURE_WORKSPACE/arm_template/etc/keyvault.sh <key_vault_name> <resource_group_name> <azure_region> <secret_name> cert.pem key.pem chain.pem
 ```
 
-Make sure to set `<azure_region>` the same as the Azure region you'll be using to deploy the Moodle template.
+Make sure to set `<azure_region>` the same as the Azure region you'll be using to deploy the Lamp template.
 Assign desired names for `<key_vault_name>`, `<resource_group_name>` (you can use an existing resource group) and `<secret_name>`.
 `<secret_name>` is not very important in our deployment. Then you'll get outputs as follows:
 
@@ -50,15 +50,15 @@ Specified SSL cert/key .pem files are now stored in your Azure Key Vault and rea
 Use the following values for the related template parameters:
 
 - keyVaultResourceId: /subscriptions/206c66fc-a48c-480d-ad06-0d429e82c586/resourceGroups/keyvault/providers/Microsoft.KeyVault/vaults/mdl-kv
-- sslCertKeyVaultURL: https://mdl-kv.vault.azure.net/secrets/mymoodlesitecert/4c88452fe72b4d469253af48348f4944
+- sslCertKeyVaultURL: https://mdl-kv.vault.azure.net/secrets/myLampsitecert/4c88452fe72b4d469253af48348f4944
 - sslCertThumbprint:  56478E4F9555662476E2763D909F50B3DD26FF84
-- caCertKeyVaultURL:  https://mdl-kv.vault.azure.net/secrets/camymoodlesitecert/684efab1f2124e71a2c809457d10808b
+- caCertKeyVaultURL:  https://mdl-kv.vault.azure.net/secrets/camyLampsitecert/684efab1f2124e71a2c809457d10808b
 - caCertThumbprint:   E6A3B45B062D509B3382282D196EFE97D5956CCB
 Done
 ```
 
 This example outputs assumes `"keyvault"` is used for `<resource_group_name>`, `"mdl-kv"` for `<key_vault_name>`,
-and `"mymoodlesitecert"` for `<secret_name>`. Note that `caCertKeyVaultURL` and `caCertThumbprint` will be empty
+and `"myLampsitecert"` for `<secret_name>`. Note that `caCertKeyVaultURL` and `caCertThumbprint` will be empty
 if you didn't specify `chain.pem`. Then you can copy these outputs to the template's corresponding parameters,
 and Azure Resource Manager will install the certificate and the private key on the deployed VMs and the deployed
 HTTPS server will use this certificate and private key.

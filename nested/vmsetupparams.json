@@ -2,9 +2,9 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "moodleCommon": {
+        "lampCommon": {
             "metadata": {
-                "description": "Common Moodle values"
+                "description": "Common Lamp values"
             },
             "type": "object"
         },
@@ -38,52 +38,52 @@
         "documentation01": "This sub-template doesn't create any Azure resource, but just constructs/returns a JSON object that'll be injected to controller & VMSS VMs (through cloud-init) so that VM setup custom script can read/use, instead of receiving these as a long list of cmdline args",
         "vmSetupParamsObj": {
             "siteProfile": {
-                "siteURL": "[parameters('moodleCommon').siteURL]",
-                "httpsTermination": "[parameters('moodleCommon').httpsTermination]",
-                "thumbprintSslCert": "[parameters('moodleCommon').thumbprintSslCert]",
-                "thumbprintCaCert": "[parameters('moodleCommon').thumbprintCaCert]"
+                "siteURL": "[parameters('lampCommon').siteURL]",
+                "httpsTermination": "[parameters('lampCommon').httpsTermination]",
+                "thumbprintSslCert": "[parameters('lampCommon').thumbprintSslCert]",
+                "thumbprintCaCert": "[parameters('lampCommon').thumbprintCaCert]"
             },
-            "moodleProfile": {
-                "version": "[parameters('moodleCommon').moodleVersion]",
-                "dbName": "[parameters('moodleCommon').moodleDbName]",
-                "dbUser": "[parameters('moodleCommon').moodleDbUser]",
-                "dbUserAzure": "[parameters('moodleCommon').moodleDbUserAzure]",
-                "dbPassword": "[parameters('moodleCommon').moodleDbPass]",
-                "adminPassword": "[parameters('moodleCommon').moodleAdminPass]",
-                "storageAccountName": "[parameters('moodleCommon').storageAccountName]",
+            "LampProfile": {
+                "version": "[parameters('lampCommon').LampVersion]",
+                "dbName": "[parameters('lampCommon').LampDbName]",
+                "dbUser": "[parameters('lampCommon').LampDbUser]",
+                "dbUserAzure": "[parameters('lampCommon').LampDbUserAzure]",
+                "dbPassword": "[parameters('lampCommon').LampDbPass]",
+                "adminPassword": "[parameters('lampCommon').LampAdminPass]",
+                "storageAccountName": "[parameters('lampCommon').storageAccountName]",
                 "storageAccountKey": "[parameters('storageAccountKey')]",
-                "redisDns": "[parameters('moodleCommon').redisDns]",
+                "redisDns": "[parameters('lampCommon').redisDns]",
                 "redisKey": "[parameters('redisKey')]",
-                "elasticVm1IP": "[parameters('moodleCommon').elasticVm1IP]",
-                "installO365pluginsSwitch": "[parameters('moodleCommon').installO365pluginsSwitch]",
-                "installObjectFsSwitch": "[parameters('moodleCommon').installObjectFsSwitch]",
-                "installGdprPluginsSwitch": "[parameters('moodleCommon').installGdprPluginsSwitch]",
-                "searchType": "[parameters('moodleCommon').searchType]",
+                "elasticVm1IP": "[parameters('lampCommon').elasticVm1IP]",
+                "installO365pluginsSwitch": "[parameters('lampCommon').installO365pluginsSwitch]",
+                "installObjectFsSwitch": "[parameters('lampCommon').installObjectFsSwitch]",
+                "installGdprPluginsSwitch": "[parameters('lampCommon').installGdprPluginsSwitch]",
+                "searchType": "[parameters('lampCommon').searchType]",
                 "azureSearchKey": "[parameters('azureSearchKey')]",
-                "azureSearchNameHost": "[parameters('moodleCommon').azureSearchNameHost]",
-                "tikaVmIP": "[parameters('moodleCommon').tikaVmIP]",
-                "syslogServer": "[parameters('moodleCommon').ctlrVmName]",
-                "webServerType": "[parameters('moodleCommon').webServerType]",
-                "htmlLocalCopySwitch": "[parameters('moodleCommon').htmlLocalCopySwitch]"
+                "azureSearchNameHost": "[parameters('lampCommon').azureSearchNameHost]",
+                "tikaVmIP": "[parameters('lampCommon').tikaVmIP]",
+                "syslogServer": "[parameters('lampCommon').ctlrVmName]",
+                "webServerType": "[parameters('lampCommon').webServerType]",
+                "htmlLocalCopySwitch": "[parameters('lampCommon').htmlLocalCopySwitch]"
             },
             "dbServerProfile": {
-                "type": "[parameters('moodleCommon').dbServerType]",
+                "type": "[parameters('lampCommon').dbServerType]",
                 "fqdn": "[parameters('dbFQDN')]",
-                "adminLogin": "[parameters('moodleCommon').dbLogin]",
-                "adminLoginAzure": "[concat(parameters('moodleCommon').dbLogin, '@', parameters('moodleCommon').dbServerType, '-', parameters('moodleCommon').resourcesPrefix)]",
-                "adminPassword": "[parameters('moodleCommon').dbLoginPassword]",
-                "mssqlDbServiceObjectiveName": "[parameters('moodleCommon').mssqlDbServiceObjectiveName]",
-                "mssqlDbEdition": "[parameters('moodleCommon').mssqlDbEdition]",
-                "mssqlDbSize": "[parameters('moodleCommon').mssqlDbSize]"
+                "adminLogin": "[parameters('lampCommon').dbLogin]",
+                "adminLoginAzure": "[concat(parameters('lampCommon').dbLogin, '@', parameters('lampCommon').dbServerType, '-', parameters('lampCommon').resourcesPrefix)]",
+                "adminPassword": "[parameters('lampCommon').dbLoginPassword]",
+                "mssqlDbServiceObjectiveName": "[parameters('lampCommon').mssqlDbServiceObjectiveName]",
+                "mssqlDbEdition": "[parameters('lampCommon').mssqlDbEdition]",
+                "mssqlDbSize": "[parameters('lampCommon').mssqlDbSize]"
             },
             "fileServerProfile": {
-                "type": "[parameters('moodleCommon').fileServerType]",
-                "nfsVmName": "[parameters('moodleCommon').ctlrVmName]",
-                "glusterVmName": "[concat(parameters('moodleCommon').gfsNameRoot, '0')]",
+                "type": "[parameters('lampCommon').fileServerType]",
+                "nfsVmName": "[parameters('lampCommon').ctlrVmName]",
+                "glusterVmName": "[concat(parameters('lampCommon').gfsNameRoot, '0')]",
                 "glusterVolName": "data",
-                "nfsByoIpExportPath": "[parameters('moodleCommon').nfsByoIpExportPath]",
-                "nfsHaLbIP": "[parameters('moodleCommon').nfsHaLbIP]",
-                "nfsHaExportPath": "[parameters('moodleCommon').nfsHaExportPath]"
+                "nfsByoIpExportPath": "[parameters('lampCommon').nfsByoIpExportPath]",
+                "nfsHaLbIP": "[parameters('lampCommon').nfsHaLbIP]",
+                "nfsHaExportPath": "[parameters('lampCommon').nfsHaExportPath]"
             }
         }
     },

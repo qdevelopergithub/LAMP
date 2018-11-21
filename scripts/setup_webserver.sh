@@ -24,11 +24,11 @@
 
 set -ex
 
-moodle_on_azure_configs_json_path=${1}
+Lamp_on_azure_configs_json_path=${1}
 
 . ./helper_functions.sh
 
-get_setup_params_from_configs_json $moodle_on_azure_configs_json_path || exit 99
+get_setup_params_from_configs_json $Lamp_on_azure_configs_json_path || exit 99
 
 echo $glusterNode    >> /tmp/vars.txt
 echo $glusterVolume  >> /tmp/vars.txt
@@ -80,7 +80,7 @@ check_fileServerType_param $fileServerType
     sudo apt-get -y install php-fpm
   fi
 
-  # Moodle requirements
+  # Lamp requirements
   sudo apt-get install -y graphviz aspell php-soap php-json php-redis php-bcmath php-gd php-pgsql php-mysql php-xmlrpc php-intl php-xml php-bz2
   if [ "$dbServerType" = "mssql" ]; then
     install_php_mssql_driver
@@ -178,7 +178,7 @@ EOF
     fi
 
     cat <<EOF >> /etc/nginx/nginx.conf
-  log_format moodle_combined '\$remote_addr - \$upstream_http_x_moodleuser [\$time_local] '
+  log_format Lamp_combined '\$remote_addr - \$upstream_http_x_Lampuser [\$time_local] '
                              '"\$request" \$status \$body_bytes_sent '
                              '"\$http_referer" "\$http_user_agent"';
 
@@ -224,7 +224,7 @@ EOF
    sed -i "s/;opcache.memory_consumption.*/opcache.memory_consumption = 256/" $PhpIni
    sed -i "s/;opcache.max_accelerated_files.*/opcache.max_accelerated_files = 8000/" $PhpIni
     
-   # Remove the default site. Moodle is the only site we want
+   # Remove the default site. Lamp is the only site we want
    rm -f /etc/nginx/sites-enabled/default
    if [ "$webServerType" = "apache" ]; then
      rm -f /etc/apache2/sites-enabled/000-default.conf
@@ -265,11 +265,11 @@ EOF
    fi
 
    # Configure varnish startup for 16.04
-   VARNISHSTART="ExecStart=\/usr\/sbin\/varnishd -j unix,user=vcache -F -a :80 -T localhost:6082 -f \/etc\/varnish\/moodle.vcl -S \/etc\/varnish\/secret -s malloc,1024m -p thread_pool_min=200 -p thread_pool_max=4000 -p thread_pool_add_delay=2 -p timeout_linger=100 -p timeout_idle=30 -p send_timeout=1800 -p thread_pools=4 -p http_max_hdr=512 -p workspace_backend=512k"
+   VARNISHSTART="ExecStart=\/usr\/sbin\/varnishd -j unix,user=vcache -F -a :80 -T localhost:6082 -f \/etc\/varnish\/Lamp.vcl -S \/etc\/varnish\/secret -s malloc,1024m -p thread_pool_min=200 -p thread_pool_max=4000 -p thread_pool_add_delay=2 -p timeout_linger=100 -p timeout_idle=30 -p send_timeout=1800 -p thread_pools=4 -p http_max_hdr=512 -p workspace_backend=512k"
    sed -i "s/^ExecStart.*/${VARNISHSTART}/" /lib/systemd/system/varnish.service
 
-   # Configure varnish VCL for moodle
-   cat <<EOF >> /etc/varnish/moodle.vcl
+   # Configure varnish VCL for Lamp
+   cat <<EOF >> /etc/varnish/Lamp.vcl
 vcl 4.0;
 
 import std;
@@ -325,8 +325,8 @@ sub vcl_recv {
       return (pass);
     }
 
-    ### Rules for Moodle and Totara sites ###
-    # Moodle doesn't require Cookie to serve following assets. Remove Cookie header from request, so it will be looked up.
+    ### Rules for Lamp and Totara sites ###
+    # Lamp doesn't require Cookie to serve following assets. Remove Cookie header from request, so it will be looked up.
     if ( req.url ~ "^/altlogin/.+/.+\.(png|jpg|jpeg|gif|css|js|webp)$" ||
          req.url ~ "^/pix/.+\.(png|jpg|jpeg|gif)$" ||
          req.url ~ "^/theme/font.php" ||
@@ -344,7 +344,7 @@ sub vcl_recv {
         return(hash);
     }
 
-    # Perform lookup for selected assets that we know are static but Moodle still needs a Cookie
+    # Perform lookup for selected assets that we know are static but Lamp still needs a Cookie
     if(  req.url ~ "^/theme/.+\.(png|jpg|jpeg|gif|css|js|webp)" ||
          req.url ~ "^/lib/.+\.(png|jpg|jpeg|gif|css|js|webp)" ||
          req.url ~ "^/pluginfile.php/[0-9]+/course/overviewfiles/.+\.(?i)(png|jpg)$"
@@ -356,7 +356,7 @@ sub vcl_recv {
     }
 
     # Serve requests to SCORM checknet.txt from varnish. Have to remove get parameters. Response body always contains "1"
-    if ( req.url ~ "^/lib/yui/build/moodle-core-checknet/assets/checknet.txt" )
+    if ( req.url ~ "^/lib/yui/build/Lamp-core-checknet/assets/checknet.txt" )
     {
         set req.url = regsub(req.url, "(.*)\?.*", "\1");
         unset req.http.Cookie; # Will go to hash anyway at the end of vcl_recv
@@ -369,7 +369,7 @@ sub vcl_recv {
         return (pass);
     }
 
-    # Almost everything in Moodle correctly serves Cache-Control headers, if
+    # Almost everything in Lamp correctly serves Cache-Control headers, if
     # needed, which varnish will honor, but there are some which don't. Rather
     # than explicitly finding them all and listing them here we just fail safe
     # and don't cache unknown urls that get this far.

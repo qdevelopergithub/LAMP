@@ -1,7 +1,7 @@
-# Managing a Scalable Moodle Cluster in Azure
+# Managing a Scalable Lamp Cluster in Azure
 
 This document provides an overview of how to perform various
-management tasks on a scalable Moodle cluster on Azure.
+management tasks on a scalable Lamp cluster on Azure.
 
 ## Prerequisites
 
@@ -9,24 +9,24 @@ In order to configure our deployment and tools we'll set up some
 [environment variables](./Environment-Variables.md) to ensure consistency.
 
 In order to manage a cluster it is clearly necessary to first [deploy
-a scalable Moodle cluster on Azure](./Deploy.md).
+a scalable Lamp cluster on Azure](./Deploy.md).
 
 For convenience and readability this document also assumes that essential [deployment details for your cluster have been assigned to environment variables](./Get-Install-Data.md).
 
-## Updating Moodle code/settings
+## Updating Lamp code/settings
 
-Your controller Virtual Machine has Moodle/LAMP code and data stored in
+Your controller Virtual Machine has Lamp/LAMP code and data stored in
 `/azlamp`. The site code is stored in `/azlamp/html/<yoursitename>/`. If `gluster` or
 `nfs-ha` is selected for the `fileServerType` parameter at the deployment time, this
 data is replicated across dual gluster or NFS-HA nodes to provide high
 availability. This directory is also mounted to your autoscaled
 frontends so all changes to files on the controller VM are immediately
 available to all frontend machines (when the `htmlLocalCopySwitch` in `azuredeploy.json`
-is false--otherwise, see below). Note that any updates on Moodle code/settings
-(e.g., additional plugin installations, Moodle version upgrade) have to be done
+is false--otherwise, see below). Note that any updates on Lamp code/settings
+(e.g., additional plugin installations, Lamp version upgrade) have to be done
 on the controller VM using shell commands, not through a web browser, because the
 HTML directory's permission is read-only for the web frontend VMs (thus any web-based
-Moodle code updates will fail).
+Lamp code updates will fail).
 
 Depending on how large your Gluster/NFS disks are sized, it may be helpful
 to keep multiple older versions (`/azlamp/html/site1`, `/azlamp/html-backups/site1`, etc) to
@@ -38,7 +38,7 @@ parameter. For example, to retrieve a listing of files and directories
 in the `/azlamp` directory use:
 
 ```
-ssh -o StrictHostKeyChecking=no azureadmin@$MOODLE_CONTROLLER_INSTANCE_IP ls -l /azlamp
+ssh -o StrictHostKeyChecking=no azureadmin@$Lamp_CONTROLLER_INSTANCE_IP ls -l /azlamp
 ```
 
 Results:
@@ -74,30 +74,30 @@ not good for web response time. Therefore, we introduced the
 server (apache/nginx)'s server root directory accordingly, when it's set
 to true. This now requires directory sync between `/azlamp/html` and
 `/var/www/html`, and currently it's addressed by simple polling
-(minutely). Therefore, if you are going to update your Moodle
+(minutely). Therefore, if you are going to update your Lamp
 code/settings with the switch set to true, please follow the
 following steps:
 
-* Put your Moodle site to maintenance mode.
+* Put your Lamp site to maintenance mode.
   * This will need to be done on the contoller VM with some shell command.
   * It should be followed by running the following command to propagate the change to all autoscaled web VMs:
     ```bash
-    $ sudo /usr/local/bin/update_last_modified_time.moodle_on_azure.sh
+    $ sudo /usr/local/bin/update_last_modified_time.Lamp_on_azure.sh
     ```
   * Once this command is executed, each autoscaled web VM will pick up (sync) the changes within 1 minute, so wait for one minute.
-* Then you can start updating your Moodle code/settings, like installing/updating plugins or upgrading Moodle version or changing Moodle configurations. Again, note that this should be all done on the controller VM using some shell commands.
-* When you are done updating your Moodle code/settings, run the same command as above to let each autoscaled web VM pick up (sync) the changes (wait for another minute here, for the same reason).
+* Then you can start updating your Lamp code/settings, like installing/updating plugins or upgrading Lamp version or changing Lamp configurations. Again, note that this should be all done on the controller VM using some shell commands.
+* When you are done updating your Lamp code/settings, run the same command as above to let each autoscaled web VM pick up (sync) the changes (wait for another minute here, for the same reason).
 
 Please do let us know on this Github repo's Issues if you encounter any problems with this process.
 
 ## Getting an SQL dump
 
 By default a daily sql dump of your database is taken at 02:22 and
-saved to `/azlamp/data/<your_moodle_site_fqdn>/db-backup.sql.gz`. This file can be retrieved
+saved to `/azlamp/data/<your_Lamp_site_fqdn>/db-backup.sql.gz`. This file can be retrieved
 using SCP or similar. For example:
 
 ``` bash
-scp azureadmin@$MOODLE_CONTROLLER_INSTANCE_IP:/azlamp/data/<your_moodle_site_fqdn>/db-backup.sql.gz /tmp/moodle-db-backup.sql.gz
+scp azureadmin@$Lamp_CONTROLLER_INSTANCE_IP:/azlamp/data/<your_Lamp_site_fqdn>/db-backup.sql.gz /tmp/Lamp-db-backup.sql.gz
 ```
 
 To obtain a more recent SQL dump you run the commands appropriate for
@@ -111,7 +111,7 @@ snapshot of the database via SSH. For example, use the following
 command:
 
 ``` bash
-ssh azureadmin@$MOODLE_CONTROLLER_INSTANCE_IP 'pg_dump -Fc -h $MOODLE_DATABASE_DNS -U $MOODLE_DATABASE_ADMIN_USERNAME moodle > /azlamp/data/<your_moodle_site_fqdn>/db-snapshot.sql'
+ssh azureadmin@$Lamp_CONTROLLER_INSTANCE_IP 'pg_dump -Fc -h $Lamp_DATABASE_DNS -U $Lamp_DATABASE_ADMIN_USERNAME Lamp > /azlamp/data/<your_Lamp_site_fqdn>/db-snapshot.sql'
 ```
 
 See the Postgres documentation for full details of the [`pg_dump`](https://www.postgresql.org/docs/9.5/static/backup-dump.html) command.
@@ -123,14 +123,14 @@ snapshot of the database via SSH. For example, use the following
 command:
 
 ``` bash
-ssh azureadmin@$MOODLE_CONTROLLER_INSTANCE_IP 'mysqldump -h $mysqlIP -u ${azuremoodledbuser} -p'${moodledbpass}' --databases ${moodledbname} | gzip > /azlamp/data/<your_moodle_site_fqdn>/db-backup.sql.gz'
+ssh azureadmin@$Lamp_CONTROLLER_INSTANCE_IP 'mysqldump -h $mysqlIP -u ${azureLampdbuser} -p'${Lampdbpass}' --databases ${Lampdbname} | gzip > /azlamp/data/<your_Lamp_site_fqdn>/db-backup.sql.gz'
 ```
 
 ## Backup and Recovery
 
 If you have set the `azureBackupSwitch` in the input parameters to `1`
 then Azure will provide VM backups of your Gluster node. This is
-recommended as it contains both your Moodle code and your sitedata.
+recommended as it contains both your Lamp code and your sitedata.
 Restoring a backed up VM is outside the scope of this doc, but Azure's
 documentation on Recovery Services can be found here:
 https://docs.microsoft.com/en-us/azure/backup/backup-azure-vms-first-look-arm
@@ -145,19 +145,19 @@ Postgres databases. You can, however, create a new database instance,
 with a different size, and change your config to point to that. To get
 a different size database you'll need to:
 
-  1. [Place your Moodle site into maintenance
-     mode](https://docs.moodle.org/34/en/Maintenance_mode). You can do
+  1. [Place your Lamp site into maintenance
+     mode](https://docs.Lamp.org/34/en/Maintenance_mode). You can do
      this either via the web interface or the command line on the
      controller VM.
   2. Perform an SQL dump of your database. See above for more details.
   3. Create a new Azure database of the size you want inside your
      existing resource group.
-  4. Using the details in your `/azlamp/html/<your_moodle_site_fqdn>/config.php` create a
+  4. Using the details in your `/azlamp/html/<your_Lamp_site_fqdn>/config.php` create a
      new user and database matching the details in config.php. Make
      sure to grant all rights on the db to the user.
   5. On the controller instance, change the db setting in
-     `/azlamp/html/<your_moodle_site_fqdn>/config.php` to point to the new database.
-  6. Take Moodle site out of maintenance mode.
+     `/azlamp/html/<your_Lamp_site_fqdn>/config.php` to point to the new database.
+  6. Take Lamp site out of maintenance mode.
   7. Once confirmed working, delete the previous database instance.
 
 How long this takes depends entirely on the size of your database and
@@ -171,8 +171,8 @@ basic testing, but a public website will want a real cert. After
 purchasing a trusted certificate, it can be copied to the following
 files to be ready immediately:
 
-  - `/azlamp/certs/<your_moodle_site_fqdn>/nginx.key`: Your certificate's private key
-  - `/azlamp/certs/<your_moodle_site_fqdn>/nginx.crt`: Your combined signed certificate and trust chain certificate(s).
+  - `/azlamp/certs/<your_Lamp_site_fqdn>/nginx.key`: Your certificate's private key
+  - `/azlamp/certs/<your_Lamp_site_fqdn>/nginx.crt`: Your combined signed certificate and trust chain certificate(s).
 
 ## Managing Azure DDoS protection
 
