@@ -25,12 +25,6 @@
                 "description": "Redis cache key from the redis deployment ('None' if redis is not selected). This just gets passed through to the controllersetup.json."
             },
             "type": "string"
-        },
-        "azureSearchKey": {
-            "metadata": {
-                "description": "Azure Search primary key from the Azure Search service deployment ('None' if Azure Search service is not selected)"
-            },
-            "type": "string"
         }
     },
     "resources": [],
@@ -58,10 +52,7 @@
                 "installO365pluginsSwitch": "[parameters('lampCommon').installO365pluginsSwitch]",
                 "installObjectFsSwitch": "[parameters('lampCommon').installObjectFsSwitch]",
                 "installGdprPluginsSwitch": "[parameters('lampCommon').installGdprPluginsSwitch]",
-                "searchType": "[parameters('lampCommon').searchType]",
-                "azureSearchKey": "[parameters('azureSearchKey')]",
                 "azureSearchNameHost": "[parameters('lampCommon').azureSearchNameHost]",
-                "tikaVmIP": "[parameters('lampCommon').tikaVmIP]",
                 "syslogServer": "[parameters('lampCommon').ctlrVmName]",
                 "webServerType": "[parameters('lampCommon').webServerType]",
                 "htmlLocalCopySwitch": "[parameters('lampCommon').htmlLocalCopySwitch]"
@@ -71,19 +62,11 @@
                 "fqdn": "[parameters('dbFQDN')]",
                 "adminLogin": "[parameters('lampCommon').dbLogin]",
                 "adminLoginAzure": "[concat(parameters('lampCommon').dbLogin, '@', parameters('lampCommon').dbServerType, '-', parameters('lampCommon').resourcesPrefix)]",
-                "adminPassword": "[parameters('lampCommon').dbLoginPassword]",
-                "mssqlDbServiceObjectiveName": "[parameters('lampCommon').mssqlDbServiceObjectiveName]",
-                "mssqlDbEdition": "[parameters('lampCommon').mssqlDbEdition]",
-                "mssqlDbSize": "[parameters('lampCommon').mssqlDbSize]"
+                "adminPassword": "[parameters('lampCommon').dbLoginPassword]"
             },
             "fileServerProfile": {
-                "type": "[parameters('lampCommon').fileServerType]",
-                "nfsVmName": "[parameters('lampCommon').ctlrVmName]",
                 "glusterVmName": "[concat(parameters('lampCommon').gfsNameRoot, '0')]",
-                "glusterVolName": "data",
-                "nfsByoIpExportPath": "[parameters('lampCommon').nfsByoIpExportPath]",
-                "nfsHaLbIP": "[parameters('lampCommon').nfsHaLbIP]",
-                "nfsHaExportPath": "[parameters('lampCommon').nfsHaExportPath]"
+                "glusterVolName": "data"
             }
         }
     },
