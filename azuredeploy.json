@@ -899,7 +899,6 @@
                 "version": "latest"
             },
             "policyName": "[concat('policy-',variables('resourceprefix'))]",
-            "postgresVersion": "[parameters('postgresVersion')]",
             "redisCacheName": "[concat('redis-',variables('resourceprefix'))]",
             "redisDeploySwitch": "[parameters('redisDeploySwitch')]",
             "redisDns": "[concat('redis-',variables('resourceprefix'),'.redis.cache.windows.net')]",
