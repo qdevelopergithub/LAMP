@@ -747,6 +747,30 @@
             }
         },
         {
+            "condition": "[not(equals(parameters('searchType'), 'none'))]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/networkTemplate",
+                "Microsoft.Resources/deployments/recoveryTemplate"
+            ],
+            "name": "searchTemplate",
+            "properties": {
+                "mode": "Incremental",
+                "parameters": {
+                    "moodleCommon": {
+                        "value": "[variables('lampCommon')]"
+                    },
+                    "subnetIdElastic": {
+                        "value": "[reference('networkTemplate').outputs.subnetIdElastic.value]"
+                    }
+                },
+                "templateLink": {
+                    "uri": "[concat(variables('lampCommon').baseTemplateUrl, 'search-', parameters('searchType'), '.json', parameters('_artifactsLocationSasToken'))]"
+                }
+            }
+        },
+        {
             "condition": "[and(equals(parameters('tikaService'), 'tika'), not(equals(parameters('searchType'), 'none')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
