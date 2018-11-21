@@ -51,7 +51,6 @@
                 "installO365pluginsSwitch": "[parameters('lampCommon').installO365pluginsSwitch]",
                 "installObjectFsSwitch": "[parameters('lampCommon').installObjectFsSwitch]",
                 "installGdprPluginsSwitch": "[parameters('lampCommon').installGdprPluginsSwitch]",
-                "azureSearchNameHost": "[parameters('lampCommon').azureSearchNameHost]",
                 "syslogServer": "[parameters('lampCommon').ctlrVmName]",
                 "webServerType": "[parameters('lampCommon').webServerType]",
                 "htmlLocalCopySwitch": "[parameters('lampCommon').htmlLocalCopySwitch]"
