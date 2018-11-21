@@ -350,14 +350,6 @@
         "subnetIdRedis": {
             "value": "[variables('subnetIdRedis')]",
             "type": "string"
-        },
-        "subnetIdElastic": {
-            "value": "[variables('subnetIdElastic')]",
-            "type": "string"
-        },
-        "subnetIdTika": {
-            "value": "[variables('subnetIdTika')]",
-            "type": "string"
         }
     }
 }

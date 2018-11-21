@@ -620,18 +620,6 @@
                     "subnetId": {
                         "value": "[reference('networkTemplate').outputs.subnetIdSan.value]"
                     },
-                    "node0IPAddr": {
-                        "value": "[variables('lampCommon').nfsHaNode0IP]"
-                    },
-                    "node1IPAddr": {
-                        "value": "[variables('lampCommon').nfsHaNode1IP]"
-                    },
-                    "nfsClientsIPRange": {
-                        "value": "[variables('lampCommon').nfsHaClientsIPRange]"
-                    },
-                    "lbFrontEndIpAddr": {
-                        "value": "[variables('lampCommon').nfsHaLbIP]"
-                    },
                     "enableAccelNwSwitch": {
                         "value": "[parameters('enableAccelNwForOtherVmsSwitch')]"
                     },
