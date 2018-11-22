@@ -295,7 +295,7 @@
             "type": "int"
         },
         "fileServerDiskCount": {
-            "defaultValue": 4,
+            "defaultValue": 2,
             "minValue": 2,
             "maxValue": 8,
             "metadata": {
@@ -847,7 +847,7 @@
             "fileServerDiskCount": "[parameters('fileServerDiskCount')]",
             "fileServerDiskSize": "[parameters('fileServerDiskSize')]",
             "fileServerType": "[parameters('fileServerType')]",
-            "fileServerVmCount": 2,
+            "fileServerVmCount": 1,
             "fileServerVmSku": "[parameters('fileServerVmSku')]",
             "gatewayName": "[concat('vnet-gateway-',variables('resourceprefix'))]",
             "gatewayPublicIPName": "[concat('vnet-gw-ip-',variables('resourceprefix'))]",
