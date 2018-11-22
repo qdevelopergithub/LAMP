@@ -70,28 +70,28 @@ set -ex
 
     export DEBIAN_FRONTEND=noninteractive
 
-    if [ $fileServerType = "gluster" ]; then
+   
         # configure gluster repository & install gluster client
         sudo add-apt-repository ppa:gluster/glusterfs-3.10 -y                 >> /tmp/apt1.log
-    fi
+
 
     sudo apt-get -y update                                                   >> /tmp/apt2.log
     sudo apt-get -y --force-yes install rsyslog git                          >> /tmp/apt3.log
 
-    if [ $fileServerType = "gluster" ]; then
+ 
         sudo apt-get -y --force-yes install glusterfs-client                 >> /tmp/apt3.log
-    fi
+ 
 
     if [ $dbServerType = "mysql" ]; then
         sudo apt-get -y --force-yes install mysql-client >> /tmp/apt3.log
     fi
 
-    if [ $fileServerType = "gluster" ]; then
+    
         # mount gluster files system
         echo -e '\n\rInstalling GlusterFS on '$glusterNode':/'$glusterVolume '/azlamp\n\r' 
         setup_and_mount_gluster_share $glusterNode $glusterVolume /azlamp
    
-    fi
+  
     
     # install pre-requisites
     sudo apt-get install -y --fix-missing python-software-properties unzip
