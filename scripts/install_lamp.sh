@@ -26,7 +26,7 @@ set -ex
 {
     Lamp_on_azure_configs_json_path=${1}
 
-    . ./helper_functions.sh
+    . ./helper_lampfunctions.sh
 
     get_setup_params_from_configs_json $Lamp_on_azure_configs_json_path || exit 99
 
@@ -51,13 +51,12 @@ set -ex
     echo $elasticVm1IP         >> /tmp/vars.txt
     echo $installO365pluginsSwitch    >> /tmp/vars.txt
     echo $dbServerType                >> /tmp/vars.txt
-    echo $fileServerType              >> /tmp/vars.txt
     echo $installObjectFsSwitch >> /tmp/vars.txt
     echo $installGdprPluginsSwitch >> /tmp/vars.txt
     echo $thumbprintSslCert >> /tmp/vars.txt
     echo $thumbprintCaCert >> /tmp/vars.txt
 
-    check_fileServerType_param $fileServerType
+    
 
     # make sure system does automatic updates and fail2ban
     sudo apt-get -y update
@@ -146,7 +145,7 @@ set -ex
 
     # Install scripts for LAMP gen.
     mkdir -p /azlamp/bin
-    cp helper_functions.sh /azlamp/bin/utils.sh
+    cp helper_lampfunctions.sh /azlamp/bin/utils.sh
     chmod +x /azlamp/bin/utils.sh
     cat <<EOF > /azlamp/bin/update-vmss-config
 #!/bin/bash

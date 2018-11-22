@@ -26,7 +26,7 @@ set -ex
 
 Lamp_on_azure_configs_json_path=${1}
 
-. ./helper_functions.sh
+. ./helper_lampfunctions.sh
 
 get_setup_params_from_configs_json $Lamp_on_azure_configs_json_path || exit 99
 
@@ -37,14 +37,11 @@ echo $httpsTermination >> /tmp/vars.txt
 echo $syslogServer >> /tmp/vars.txt
 echo $webServerType >> /tmp/vars.txt
 echo $dbServerType >> /tmp/vars.txt
-echo $fileServerType >> /tmp/vars.txt
 echo $storageAccountName >> /tmp/vars.txt
 echo $storageAccountKey >> /tmp/vars.txt
 echo $nfsVmName >> /tmp/vars.txt
 echo $nfsByoIpExportPath >> /tmp/vars.txt
 echo $htmlLocalCopySwitch >> /tmp/vars.txt
-
-check_fileServerType_param $fileServerType
 
 {
   # make sure the system does automatic update
