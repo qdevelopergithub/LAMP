@@ -30,7 +30,7 @@ set -ex
 
 #     get_setup_params_from_configs_json $Lamp_on_azure_configs_json_path || exit 99
 
-    Lamp_on_azure_configs_json_path=azuredeploy.json
+    Lamp_on_azure_configs_json_path=/var/lib/cloud/instance/Lamp_on_azure_configs.json
     . ./helper_functions_new.sh
     get_setup_params_from_configs_json $Lamp_on_azure_configs_json_path || exit 99
 
