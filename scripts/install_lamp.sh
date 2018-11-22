@@ -24,10 +24,14 @@ set -ex
 
 #parameters 
 {
-    Lamp_on_azure_configs_json_path=${1}
+#     Lamp_on_azure_configs_json_path=${1}
 
-    . ./helper_lampfunctions.sh
+#     . ./helper_lampfunctions.sh
 
+#     get_setup_params_from_configs_json $Lamp_on_azure_configs_json_path || exit 99
+
+    Lamp_on_azure_configs_json_path=azuredeploy.json
+    . ./helper_functions_new.sh
     get_setup_params_from_configs_json $Lamp_on_azure_configs_json_path || exit 99
 
     echo $LampVersion        >> /tmp/vars.txt
