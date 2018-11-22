@@ -14,7 +14,7 @@
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "apiVersion": "2017-03-30",
             "location": "[parameters('lampCommon').location]",
-            "name": "[concat(parameters('lampCommon').ctlrVmName,'/','install_Lamp')]",
+            "name": "[concat(parameters('lampCommon').ctlrVmName,'/','install_moodle')]",
             "properties": {
                 "autoUpgradeMinorVersion": true,
                 "publisher": "Microsoft.Azure.Extensions",
@@ -31,7 +31,7 @@
                 "typeHandlerVersion": "2.0"
             },
             "tags": {
-                "displayName": "install_Lamp"
+                "displayName": "install_moodle"
             }
         }
     ],
