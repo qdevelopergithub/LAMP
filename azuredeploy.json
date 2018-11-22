@@ -870,7 +870,7 @@
             "LampDbPass": "[concat('9#36^', substring(uniqueString(resourceGroup().id, deployment().name), 5, 8), toUpper('ercq'))]",
             "LampDbUser": "Lamp",
             "LampDbUserAzure": "[concat('Lamp', '@', parameters('dbServerType'), '-', variables('resourceprefix'))]",
-            "LampInstallScriptFilename": "install_moodle.sh",
+            "LampInstallScriptFilename": "install_lamp.sh",
             "LampOnAzureConfigsJsonPath": "/var/lib/cloud/instance/Lamp_on_azure_configs.json",
             "LampVersion": "[parameters('LampVersion')]",
             "mysqlPgresSkuHwFamily": "[parameters('mysqlPgresSkuHwFamily')]",
