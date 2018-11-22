@@ -4,7 +4,7 @@
 
 function get_setup_params_from_configs_json
 {
-    local configs_json_path=$Lamp_on_azure_configs_json_path    # E.g., /var/lib/cloud/instance/Lamp_on_azure_configs.json
+    local configs_json_path=/var/lib/cloud/instance/Lamp_on_azure_configs.json    # E.g., /var/lib/cloud/instance/Lamp_on_azure_configs.json
 
     (dpkg -l jq &> /dev/null) || (apt -y update; apt -y install jq)
 
@@ -13,7 +13,7 @@ function get_setup_params_from_configs_json
     while [ ! -f "$configs_json_path" ]; do
         sleep 15
         let "wait_time_sec += 15"
-        if [ "$wait_time_sec" -ge "1800" ]; then
+        if [ "$wait_time_sec" -ge "60" ]; then
             echo "Error: Cloud-init write-files didn't complete in 30 minutes!"
             return 1
         fi
