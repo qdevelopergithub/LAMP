@@ -9,6 +9,7 @@
             "type": "object"
         }
     },
+    "resources": [],
     "variables": {
         "documentation01": "This sub-template applies a specific post-deployment script to the controller vm",
         "documentation02": "It expects certain values in the 'common' datastructure.",
