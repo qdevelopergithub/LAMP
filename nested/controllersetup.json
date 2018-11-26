@@ -51,7 +51,5 @@
         "documentation13": "    mssqlDbServiceObjectiveName - MS SQL porformance tier.",
         "documentation14": "    mssqlDbEdition              - MS SQL edition tier",
         "documentation15": "    mssqlDbSize                 - MS SQL database size",
-
-        "scriptUri": "[concat(parameters('lampCommon').scriptLocation,parameters('lampCommon').LampInstallScriptFilename,parameters('lampCommon').artifactsSasToken)]"
     }
 }
