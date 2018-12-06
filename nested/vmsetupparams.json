@@ -38,7 +38,6 @@
                 "thumbprintCaCert": "[parameters('lampCommon').thumbprintCaCert]"
             },
             "LampProfile": {
-                "version": "[parameters('lampCommon').LampVersion]",
                 "dbName": "[parameters('lampCommon').LampDbName]",
                 "dbUser": "[parameters('lampCommon').LampDbUser]",
                 "dbUserAzure": "[parameters('lampCommon').LampDbUserAzure]",
@@ -48,9 +47,7 @@
                 "storageAccountKey": "[parameters('storageAccountKey')]",
                 "redisDns": "[parameters('lampCommon').redisDns]",
                 "redisKey": "[parameters('redisKey')]",
-                "installO365pluginsSwitch": "[parameters('lampCommon').installO365pluginsSwitch]",
                 "installObjectFsSwitch": "[parameters('lampCommon').installObjectFsSwitch]",
-                "installGdprPluginsSwitch": "[parameters('lampCommon').installGdprPluginsSwitch]",
                 "syslogServer": "[parameters('lampCommon').ctlrVmName]",
                 "webServerType": "[parameters('lampCommon').webServerType]",
                 "htmlLocalCopySwitch": "[parameters('lampCommon').htmlLocalCopySwitch]"

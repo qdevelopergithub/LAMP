@@ -9,7 +9,9 @@
             "type": "object"
         }
     },
-    "resources": [],
+    "resources": [
+        
+    ],
     "variables": {
         "documentation01": "This sub-template applies a specific post-deployment script to the controller vm",
         "documentation02": "It expects certain values in the 'common' datastructure.",
@@ -26,5 +28,6 @@
         "documentation13": "    mssqlDbServiceObjectiveName - MS SQL porformance tier.",
         "documentation14": "    mssqlDbEdition              - MS SQL edition tier",
         "documentation15": "    mssqlDbSize                 - MS SQL database size",
+
     }
 }

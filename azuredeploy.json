@@ -51,20 +51,7 @@
             },
             "type": "bool"
         },
-        "installO365pluginsSwitch": {
-            "defaultValue": false,
-            "metadata": {
-                "description": "Switch to install Lamp Office 365 plugins. As of May 22, 2018, O365 plugins for Lamp 3.5 haven't been released, so to set this true, you must set the LampVersion to 3.4 or below."
-            },
-            "type": "bool"
-        },
-        "installGdprPluginsSwitch": {
-            "defaultValue": false,
-            "metadata": {
-                "description": "(Should be used only for Lamp 3.4 & 3.3) Switch to install Lamp GDPR plugins. Note these require Lamp versions 3.4.2+ or 3.3.5+ and these are included by default in Lamp 3.5. So if you choose Lamp_35_STABLE as your LampVersion, do not set this to true."
-            },
-            "type": "bool"
-        },
+       
         "htmlLocalCopySwitch": {
             "defaultValue": true,
             "metadata": {
@@ -112,25 +99,7 @@
             },
             "type": "string"
         },
-        "LampVersion": {
-            "allowedValues": [
-                "Lamp_35_STABLE",
-                "Lamp_34_STABLE",
-                "v3.4.3",
-                "v3.4.2",
-                "v3.4.1",
-                "Lamp_33_STABLE",
-                "Lamp_32_STABLE",
-                "Lamp_31_STABLE",
-                "Lamp_30_STABLE",
-                "Lamp_29_STABLE"
-            ],
-            "defaultValue": "Lamp_35_STABLE",
-            "metadata": {
-                "description": "The Lamp version you want to install."
-            },
-            "type": "string"
-        },
+        
         "sshPublicKey": {
             "metadata": {
                 "description": "ssh public key"
@@ -295,7 +264,7 @@
             "type": "int"
         },
         "fileServerDiskCount": {
-            "defaultValue": 2,
+            "defaultValue": 4,
             "minValue": 2,
             "maxValue": 8,
             "metadata": {
@@ -360,7 +329,7 @@
             "type": "string"
         },
         "appGwSkuName": {
-            "defaultValue": "Standard_Medium",
+            "defaultValue": "Standard_Large",
             "allowedValues": [
                 "Standard_Small",
                 "Standard_Medium",
@@ -766,7 +735,6 @@
             "autoscaleVmCountMin": "[parameters('autoscaleVmCountMin')]",
             "autoscaleVmSku": "[parameters('autoscaleVmSku')]",
             "azureBackupSwitch": "[parameters('azureBackupSwitch')]",
-            "commonFunctionsScriptUri": "[concat(parameters('_artifactsLocation'),'scripts/helper_lampfunctions.sh',parameters('_artifactsLocationSasToken'))]",
             "controllerVmSku": "[parameters('controllerVmSku')]",
             "customVnetId": "[parameters('customVnetId')]",
             "ctlrNicName": "[concat('controller-vm-nic-',variables('resourceprefix'))]",
@@ -800,8 +768,6 @@
             "glusterScriptFilename": "install_gluster.sh",
             "htmlLocalCopySwitch": "[parameters('htmlLocalCopySwitch')]",
             "httpsTermination": "[parameters('httpsTermination')]",
-            "installGdprPluginsSwitch": "[parameters('installGdprPluginsSwitch')]",
-            "installO365pluginsSwitch": "[parameters('installO365pluginsSwitch')]",
             "installObjectFsSwitch": "[parameters('installObjectFsSwitch')]",
             "lbDns": "[concat('lb-',variables('resourceprefix'),'.',parameters('location'),'.cloudapp.azure.com')]",
             "lbSku": "[parameters('loadBalancerSku')]",
@@ -813,8 +779,8 @@
             "LampDbPass": "[concat('9#36^', substring(uniqueString(resourceGroup().id, deployment().name), 5, 8), toUpper('ercq'))]",
             "LampDbUser": "Lamp",
             "LampDbUserAzure": "[concat('Lamp', '@', parameters('dbServerType'), '-', variables('resourceprefix'))]",
+            "LampInstallScriptFilename": "install_lamp.sh",
             "LampOnAzureConfigsJsonPath": "/var/lib/cloud/instance/Lamp_on_azure_configs.json",
-            "LampVersion": "[parameters('LampVersion')]",
             "mysqlPgresSkuHwFamily": "[parameters('mysqlPgresSkuHwFamily')]",
             "mysqlPgresSkuName": "[concat(if(equals(parameters('mysqlPgresSkuTier'),'Basic'),'B', if(equals(parameters('mysqlPgresSkuTier'),'GeneralPurpose'),'GP', 'MO')), '_', parameters('mysqlPgresSkuHwFamily'), '_', string(parameters('mysqlPgresVcores')))]",
             "mysqlPgresSkuTier": "[parameters('mysqlPgresSkuTier')]",

@@ -33,102 +33,6 @@
             }
         },
         {
-            "type": "Microsoft.Compute/virtualMachineScaleSets",
-            "apiVersion": "2017-03-30",
-            "dependsOn": [
-                "[concat('Microsoft.Storage/storageAccounts/', parameters('lampCommon').vmssdStorageAccounttName)]"
-            ],
-            "location": "[parameters('lampCommon').location]",
-            "name": "[parameters('lampCommon').vmssName]",
-            "properties": {
-                "overprovision": true,
-                "upgradePolicy": {
-                    "mode": "Manual"
-                },
-                "virtualMachineProfile": {
-                    "extensionProfile": {
-                        "extensions": [
-                            {
-                                "name": "setup_Lamp",
-                                "properties": {
-                                    "autoUpgradeMinorVersion": true,
-                                    "publisher": "Microsoft.Azure.Extensions",
-                                    "settings": {
-                                        "fileUris": [
-                                            "[variables('scriptUri')]",
-                                            "[parameters('lampCommon').commonFunctionsScriptUri]"
-                                        ]
-                                    },
-                                    "protectedSettings":{
-                                        "commandToExecute": "[concat('bash ', parameters('lampCommon').webServerSetupScriptFilename, ' ', parameters('lampCommon').LampOnAzureConfigsJsonPath)]"
-                                    },
-                                    "type": "CustomScript",
-                                    "typeHandlerVersion": "2.0"
-                                }
-                            }
-                        ]
-                    },
-                    "networkProfile": {
-                        "networkInterfaceConfigurations": [
-                            {
-                                "name": "vmssnic",
-                                "properties": {
-                                    "ipConfigurations": [
-                                        {
-                                            "name": "ipcfg_lb",
-                                            "properties": {
-                                                "loadBalancerBackendAddressPools": "[take(variables('lbBePoolArray'), variables('lbBePoolArrayTakeCount'))]",
-                                                "applicationGatewayBackendAddressPools": "[take(variables('appGwBePoolArray'), variables('appGwBePoolArrayTakeCount'))]",
-                                                "subnet": {
-                                                    "id": "[parameters('subnetIdWeb')]"
-                                                }
-                                            }
-                                        }
-                                    ],
-                                    "primary": true,
-                                    "enableAcceleratedNetworking": "[parameters('lampCommon').enableAccelNwForOtherVmsSwitch]"
-                                }
-                            }
-                        ]
-                    },
-                    "osProfile": {
-                        "adminUsername": "[parameters('lampCommon').sshUsername]",
-                        "computerNamePrefix": "[parameters('lampCommon').vmssName]",
-                        "customData": "[base64(concat('#cloud-config\nwrite_files:\n- encoding: b64\n  content: ', base64(string(parameters('vmSetupParamsObj'))), '\n  owner: root:root\n  path: ', parameters('lampCommon').LampOnAzureConfigsJsonPath, '\n  permissions: ', variables('singleQuote'), '0400', variables('singleQuote')))]",
-                        "linuxConfiguration": {
-                            "disablePasswordAuthentication": true,
-                            "ssh": {
-                                "publicKeys": [
-                                    {
-                                        "path": "[concat('/home/', parameters('lampCommon').sshUsername, '/.ssh/authorized_keys')]",
-                                        "keyData": "[parameters('lampCommon').sshPublicKey]"
-                                    }
-                                ]
-                            }
-                        }
-                    },
-                    "storageProfile": {
-                        "imageReference": "[parameters('lampCommon').osType]",
-                        "osDisk": {
-                            "caching": "ReadOnly",
-                            "createOption": "FromImage",
-                            "managedDisk": {
-                                "storageAccountType": "[parameters('lampCommon').osDiskStorageType]"
-                            }
-                        }
-                    }
-                }
-            },
-            "sku": {
-                "capacity": 1,
-                "name": "[parameters('lampCommon').autoscaleVmSku]",
-                "tier": "Standard"
-            },
-            "tags": {
-                "displayName": "webfarm"
-            }
-        },
-        {
             "type": "Microsoft.Insights/autoscaleSettings",
             "apiVersion": "2015-04-01",
             "dependsOn": [
@@ -200,7 +104,6 @@
         "extFeID": "[concat(variables('extLbID'),'/frontendIPConfigurations/',parameters('lampCommon').extFeName)]",
         "extLbID": "[resourceId('Microsoft.Network/loadBalancers',parameters('lampCommon').lbName)]",
         "pipID": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('lampCommon').lbPipName)]",
-        "scriptUri": "[concat(parameters('lampCommon').scriptLocation,parameters('lampCommon').webServerSetupScriptFilename,parameters('lampCommon').artifactsSasToken)]",
         "vmssID": "[resourceId('Microsoft.Compute/virtualMachineScaleSets',parameters('lampCommon').vmssName)]",
         "webvmss1NIC": "[concat('Microsoft.Compute/virtualMachineScaleSets/', parameters('lampCommon').vmssName, '/virtualMachines/0/networkInterfaces/vmssnic')]",
         "appGwID": "[resourceId('Microsoft.Network/applicationGateways', parameters('lampCommon').appGwName)]",
