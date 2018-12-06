@@ -24,28 +24,28 @@ set -ex
 
 #parameters 
 {
-    Lamp_on_azure_configs_json_path=${1}
+    moodle_on_azure_configs_json_path=${1}
 
     . ./helper_functions.sh
 
-    get_setup_params_from_configs_json $Lamp_on_azure_configs_json_path || exit 99
+    get_setup_params_from_configs_json $moodle_on_azure_configs_json_path || exit 99
 
-    echo $LampVersion        >> /tmp/vars.txt
+    echo $moodleVersion        >> /tmp/vars.txt
     echo $glusterNode          >> /tmp/vars.txt
     echo $glusterVolume        >> /tmp/vars.txt
     echo $siteFQDN             >> /tmp/vars.txt
     echo $httpsTermination     >> /tmp/vars.txt
     echo $dbIP                 >> /tmp/vars.txt
-    echo $Lampdbname         >> /tmp/vars.txt
-    echo $Lampdbuser         >> /tmp/vars.txt
-    echo $Lampdbpass         >> /tmp/vars.txt
+    echo $moodledbname         >> /tmp/vars.txt
+    echo $moodledbuser         >> /tmp/vars.txt
+    echo $moodledbpass         >> /tmp/vars.txt
     echo $adminpass            >> /tmp/vars.txt
     echo $dbadminlogin         >> /tmp/vars.txt
     echo $dbadminloginazure    >> /tmp/vars.txt
     echo $dbadminpass          >> /tmp/vars.txt
     echo $storageAccountName   >> /tmp/vars.txt
     echo $storageAccountKey    >> /tmp/vars.txt
-    echo $azureLampdbuser    >> /tmp/vars.txt
+    echo $azuremoodledbuser    >> /tmp/vars.txt
     echo $redisDns             >> /tmp/vars.txt
     echo $redisAuth            >> /tmp/vars.txt
     echo $elasticVm1IP         >> /tmp/vars.txt
@@ -143,19 +143,11 @@ set -ex
             --output tsv)
     fi
 
-    if [ $fileServerType = "gluster" ]; then
+    
         # mount gluster files system
         echo -e '\n\rInstalling GlusterFS on '$glusterNode':/'$glusterVolume '/azlamp\n\r' 
         setup_and_mount_gluster_share $glusterNode $glusterVolume /azlamp
-    elif [ $fileServerType = "nfs-ha" ]; then
-        # mount NFS-HA export
-        echo -e '\n\rMounting NFS export from '$nfsHaLbIP' on /azlamp\n\r'
-        configure_nfs_client_and_mount $nfsHaLbIP $nfsHaExportPath /azlamp
-    elif [ $fileServerType = "nfs-byo" ]; then
-        # mount NFS-BYO export
-        echo -e '\n\rMounting NFS export from '$nfsByoIpExportPath' on /azlamp\n\r'
-        configure_nfs_client_and_mount0 $nfsByoIpExportPath /azlamp
-    fi
+    
     
     # install pre-requisites
     sudo apt-get install -y --fix-missing python-software-properties unzip
@@ -169,14 +161,9 @@ set -ex
     sudo apt-get install -y --force-yes graphviz aspell php-common php-soap php-json php-redis > /tmp/apt6.log
     sudo apt-get install -y --force-yes php-bcmath php-gd php-xmlrpc php-intl php-xml php-bz2 php-pear php-mbstring php-dev mcrypt >> /tmp/apt6.log
     PhpVer=$(get_php_version)
-    if [ $dbServerType = "mysql" ]; then
+    
         sudo apt-get install -y --force-yes php-mysql
-    elif [ $dbServerType = "mssql" ]; then
-        sudo apt-get install -y libapache2-mod-php  # Need this because install_php_mssql_driver tries to update apache2-mod-php settings always (which will fail without this)
-        install_php_mssql_driver
-    else
-        sudo apt-get install -y --force-yes php-pgsql
-    fi
+    
 
     # Set up initial LAMP dirs
     mkdir -p /azlamp/html
@@ -188,7 +175,7 @@ set -ex
 
     update_php_config_on_controller
 
-    # Remove the default site. Lamp is the only site we want
+    # Remove the default site. Moodle is the only site we want
     rm -f /etc/nginx/sites-enabled/default
 
     # restart Nginx
@@ -209,28 +196,6 @@ set -ex
     service varnish stop
     service varnishncsa stop
     service varnishlog stop
-
-    if [ $fileServerType = "azurefiles" ]; then
-        # Delayed copy of Lamp installation to the Azure Files share
-
-        # First rename azlamp directory to something else
-        mv /azlamp /azlamp_old_delete_me
-        # Then create the Lamp share
-        echo -e '\n\rCreating an Azure Files share for azlamp'
-        create_azure_files_share azlamp $storageAccountName $storageAccountKey /tmp/wabs.log
-        # Set up and mount Azure Files share. Must be done after nginx is installed because of www-data user/group
-        echo -e '\n\rSetting up and mounting Azure Files share on //'$storageAccountName'.file.core.windows.net/azlamp on /azlamp\n\r'
-        setup_and_mount_azure_files_share azlamp $storageAccountName $storageAccountKey
-        # Move the local installation over to the Azure Files
-        echo -e '\n\rMoving locally installed Lamp over to Azure Files'
-        cp -a /azlamp_old_delete_me/* /azlamp || true # Ignore case sensitive directory copy failure
-        # rm -rf /azlamp_old_delete_me || true # Keep the files just in case
-    fi
-
-    # chmod /azlamp for Azure NetApp Files (its default is 770!)
-    if [ $fileServerType = "nfs-byo" ]; then
-        sudo chmod +rx /azlamp
-    fi
 
     create_last_modified_time_update_script
     run_once_last_modified_time_update_script

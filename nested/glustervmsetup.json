@@ -22,7 +22,28 @@
         }
     },
     "resources": [
-       
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2017-03-30",
+            "location": "[parameters('lampCommon').location]",
+            "name": "[concat(parameters('vmName'),'/','install_gluster')]",
+            "properties": {
+                "publisher": "Microsoft.Azure.Extensions",
+                "settings": {
+                    "fileUris": [
+                        "[variables('scriptUri')]"
+                    ]
+                },
+                "protectedSettings":{
+                    "commandToExecute": "[variables('cmdExec')]"
+                },
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.0"
+            },
+            "tags": {
+                "displayName": "GfsVmExtension"
+            }
+        }
     ],
     "variables": {
         "cmdExec": "[concat('bash ', parameters('lampCommon').glusterScriptFilename, ' ', parameters('lampCommon').gfsNameRoot, ' ', parameters('lampCommon').subnetSanPrefix, ' data ', parameters('vmNumber'), ' ', parameters('lampCommon').fileServerVmCount)]",
@@ -31,6 +52,8 @@
         "documentation03": "    scriptLocation        - partial web URI (equivalent to folder)",
         "documentation04": "    glusterScriptFilename - name of script file",
         "documentation06": "    gfsNameRoot           - nameroot of gluster farm - note that the code applies a vmNumber to get to the specific node",
-        "documentation07": "    fileServerVmCount     - number of gluster VMs"
+        "documentation07": "    fileServerVmCount     - number of gluster VMs",
+        "scriptUri": "[concat(parameters('lampCommon').scriptLocation,parameters('lampCommon').glusterScriptFilename,parameters('lampCommon').artifactsSasToken)]"
+
     }
 }

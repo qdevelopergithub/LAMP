@@ -24,43 +24,48 @@ set -ex
 
 #parameters 
 {
-#     Lamp_on_azure_configs_json_path=${1}
+    moodle_on_azure_configs_json_path=${1}
 
-#     . ./helper_lampfunctions.sh
+    . ./helper_functions.sh
 
-#     get_setup_params_from_configs_json $Lamp_on_azure_configs_json_path || exit 99
+    get_setup_params_from_configs_json $moodle_on_azure_configs_json_path || exit 99
 
-    Lamp_on_azure_configs_json_path=/var/lib/cloud/instance/Lamp_on_azure_configs.json
-    . ./helper_functions_new.sh
-    get_setup_params_from_configs_json $Lamp_on_azure_configs_json_path || exit 99
-
-    echo $LampVersion        >> /tmp/vars.txt
+    echo $moodleVersion        >> /tmp/vars.txt
     echo $glusterNode          >> /tmp/vars.txt
     echo $glusterVolume        >> /tmp/vars.txt
     echo $siteFQDN             >> /tmp/vars.txt
     echo $httpsTermination     >> /tmp/vars.txt
     echo $dbIP                 >> /tmp/vars.txt
-    echo $Lampdbname         >> /tmp/vars.txt
-    echo $Lampdbuser         >> /tmp/vars.txt
-    echo $Lampdbpass         >> /tmp/vars.txt
+    echo $moodledbname         >> /tmp/vars.txt
+    echo $moodledbuser         >> /tmp/vars.txt
+    echo $moodledbpass         >> /tmp/vars.txt
     echo $adminpass            >> /tmp/vars.txt
     echo $dbadminlogin         >> /tmp/vars.txt
     echo $dbadminloginazure    >> /tmp/vars.txt
     echo $dbadminpass          >> /tmp/vars.txt
     echo $storageAccountName   >> /tmp/vars.txt
     echo $storageAccountKey    >> /tmp/vars.txt
-    echo $azureLampdbuser    >> /tmp/vars.txt
+    echo $azuremoodledbuser    >> /tmp/vars.txt
     echo $redisDns             >> /tmp/vars.txt
     echo $redisAuth            >> /tmp/vars.txt
     echo $elasticVm1IP         >> /tmp/vars.txt
     echo $installO365pluginsSwitch    >> /tmp/vars.txt
     echo $dbServerType                >> /tmp/vars.txt
+    echo $fileServerType              >> /tmp/vars.txt
+    echo $mssqlDbServiceObjectiveName >> /tmp/vars.txt
+    echo $mssqlDbEdition	>> /tmp/vars.txt
+    echo $mssqlDbSize	>> /tmp/vars.txt
     echo $installObjectFsSwitch >> /tmp/vars.txt
     echo $installGdprPluginsSwitch >> /tmp/vars.txt
     echo $thumbprintSslCert >> /tmp/vars.txt
     echo $thumbprintCaCert >> /tmp/vars.txt
+    echo $searchType >> /tmp/vars.txt
+    echo $azureSearchKey >> /tmp/vars.txt
+    echo $azureSearchNameHost >> /tmp/vars.txt
+    echo $tikaVmIP >> /tmp/vars.txt
+    echo $nfsByoIpExportPath >> /tmp/vars.txt
 
-    
+    # check_fileServerType_param $fileServerType
 
     # make sure system does automatic updates and fail2ban
     sudo apt-get -y update
@@ -73,28 +78,25 @@ set -ex
 
     export DEBIAN_FRONTEND=noninteractive
 
-   
         # configure gluster repository & install gluster client
         sudo add-apt-repository ppa:gluster/glusterfs-3.10 -y                 >> /tmp/apt1.log
-
+    
 
     sudo apt-get -y update                                                   >> /tmp/apt2.log
     sudo apt-get -y --force-yes install rsyslog git                          >> /tmp/apt3.log
 
- 
         sudo apt-get -y --force-yes install glusterfs-client                 >> /tmp/apt3.log
- 
+  
 
-    if [ $dbServerType = "mysql" ]; then
+  
         sudo apt-get -y --force-yes install mysql-client >> /tmp/apt3.log
-    fi
+   
 
     
         # mount gluster files system
         echo -e '\n\rInstalling GlusterFS on '$glusterNode':/'$glusterVolume '/azlamp\n\r' 
         setup_and_mount_gluster_share $glusterNode $glusterVolume /azlamp
-   
-  
+    
     
     # install pre-requisites
     sudo apt-get install -y --fix-missing python-software-properties unzip
@@ -108,9 +110,9 @@ set -ex
     sudo apt-get install -y --force-yes graphviz aspell php-common php-soap php-json php-redis > /tmp/apt6.log
     sudo apt-get install -y --force-yes php-bcmath php-gd php-xmlrpc php-intl php-xml php-bz2 php-pear php-mbstring php-dev mcrypt >> /tmp/apt6.log
     PhpVer=$(get_php_version)
-    if [ $dbServerType = "mysql" ]; then
+    
         sudo apt-get install -y --force-yes php-mysql
-    fi
+    
 
     # Set up initial LAMP dirs
     mkdir -p /azlamp/html
@@ -122,7 +124,7 @@ set -ex
 
     update_php_config_on_controller
 
-    # Remove the default site. Lamp is the only site we want
+    # Remove the default site. Moodle is the only site we want
     rm -f /etc/nginx/sites-enabled/default
 
     # restart Nginx
@@ -149,7 +151,7 @@ set -ex
 
     # Install scripts for LAMP gen.
     mkdir -p /azlamp/bin
-    cp helper_lampfunctions.sh /azlamp/bin/utils.sh
+    cp helper_functions.sh /azlamp/bin/utils.sh
     chmod +x /azlamp/bin/utils.sh
     cat <<EOF > /azlamp/bin/update-vmss-config
 #!/bin/bash

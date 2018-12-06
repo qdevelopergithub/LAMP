@@ -10,7 +10,30 @@
         }
     },
     "resources": [
-        
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2017-03-30",
+            "location": "[parameters('lampCommon').location]",
+            "name": "[concat(parameters('lampCommon').ctlrVmName,'/','install_lamp')]",
+            "properties": {
+                "autoUpgradeMinorVersion": true,
+                "publisher": "Microsoft.Azure.Extensions",
+                "settings": {
+                    "fileUris": [
+                        "[variables('scriptUri')]",
+                        "[parameters('lampCommon').commonFunctionsScriptUri]"
+                    ]
+                },
+                "protectedSettings":{
+                    "commandToExecute": "[concat('bash ', parameters('lampCommon').lampInstallScriptFilename, ' ', parameters('lampCommon').lampOnAzureConfigsJsonPath)]"
+                },
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.0"
+            },
+            "tags": {
+                "displayName": "install_lamp"
+            }
+        }
     ],
     "variables": {
         "documentation01": "This sub-template applies a specific post-deployment script to the controller vm",
@@ -28,6 +51,6 @@
         "documentation13": "    mssqlDbServiceObjectiveName - MS SQL porformance tier.",
         "documentation14": "    mssqlDbEdition              - MS SQL edition tier",
         "documentation15": "    mssqlDbSize                 - MS SQL database size",
-
+        "scriptUri": "[concat(parameters('lampCommon').scriptLocation,parameters('lampCommon').lampInstallScriptFilename,parameters('lampCommon').artifactsSasToken)]"
     }
 }
