@@ -24,31 +24,29 @@ set -ex
 
 #parameters 
 {
-    moodle_on_azure_configs_json_path=${1}
+    lamp_on_azure_configs_json_path=${1}
 
     . ./helper_functions.sh
 
-    get_setup_params_from_configs_json $moodle_on_azure_configs_json_path || exit 99
+    get_setup_params_from_configs_json $lamp_on_azure_configs_json_path || exit 99
 
-    echo $moodleVersion        >> /tmp/vars.txt
     echo $glusterNode          >> /tmp/vars.txt
     echo $glusterVolume        >> /tmp/vars.txt
     echo $siteFQDN             >> /tmp/vars.txt
     echo $httpsTermination     >> /tmp/vars.txt
     echo $dbIP                 >> /tmp/vars.txt
-    echo $moodledbname         >> /tmp/vars.txt
-    echo $moodledbuser         >> /tmp/vars.txt
-    echo $moodledbpass         >> /tmp/vars.txt
+    echo $lampdbname         >> /tmp/vars.txt
+    echo $lampdbuser         >> /tmp/vars.txt
+    echo $lampdbpass         >> /tmp/vars.txt
     echo $adminpass            >> /tmp/vars.txt
     echo $dbadminlogin         >> /tmp/vars.txt
     echo $dbadminloginazure    >> /tmp/vars.txt
     echo $dbadminpass          >> /tmp/vars.txt
     echo $storageAccountName   >> /tmp/vars.txt
     echo $storageAccountKey    >> /tmp/vars.txt
-    echo $azuremoodledbuser    >> /tmp/vars.txt
+    echo $azurelampdbuser    >> /tmp/vars.txt
     echo $redisDns             >> /tmp/vars.txt
     echo $redisAuth            >> /tmp/vars.txt
-    echo $elasticVm1IP         >> /tmp/vars.txt
     echo $installO365pluginsSwitch    >> /tmp/vars.txt
     echo $dbServerType                >> /tmp/vars.txt
     echo $fileServerType              >> /tmp/vars.txt
@@ -59,11 +57,7 @@ set -ex
     echo $installGdprPluginsSwitch >> /tmp/vars.txt
     echo $thumbprintSslCert >> /tmp/vars.txt
     echo $thumbprintCaCert >> /tmp/vars.txt
-    echo $searchType >> /tmp/vars.txt
-    echo $azureSearchKey >> /tmp/vars.txt
-    echo $azureSearchNameHost >> /tmp/vars.txt
-    echo $tikaVmIP >> /tmp/vars.txt
-    echo $nfsByoIpExportPath >> /tmp/vars.txt
+    
 
     # check_fileServerType_param $fileServerType
 
@@ -124,7 +118,7 @@ set -ex
 
     update_php_config_on_controller
 
-    # Remove the default site. Moodle is the only site we want
+    # Remove the default site. lamp is the only site we want
     rm -f /etc/nginx/sites-enabled/default
 
     # restart Nginx

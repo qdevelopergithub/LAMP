@@ -20,7 +20,6 @@ function get_setup_params_from_configs_json
     done
 
     local json=$(cat $configs_json_path)
-    export LampVersion=$(echo $json | jq -r .LampProfile.version)
     export glusterNode=$(echo $json | jq -r .fileServerProfile.glusterVmName)
     export glusterVolume=$(echo $json | jq -r .fileServerProfile.glusterVolName)
     export siteFQDN=$(echo $json | jq -r .siteProfile.siteURL)
@@ -49,17 +48,10 @@ function get_setup_params_from_configs_json
     export installGdprPluginsSwitch=$(echo $json | jq -r .LampProfile.installGdprPluginsSwitch)
     export thumbprintSslCert=$(echo $json | jq -r .siteProfile.thumbprintSslCert)
     export thumbprintCaCert=$(echo $json | jq -r .siteProfile.thumbprintCaCert)
-    export searchType=$(echo $json | jq -r .LampProfile.searchType)
-    export azureSearchKey=$(echo $json | jq -r .LampProfile.azureSearchKey)
-    export azureSearchNameHost=$(echo $json | jq -r .LampProfile.azureSearchNameHost)
-    export tikaVmIP=$(echo $json | jq -r .LampProfile.tikaVmIP)
     export syslogServer=$(echo $json | jq -r .LampProfile.syslogServer)
     export webServerType=$(echo $json | jq -r .LampProfile.webServerType)
     export htmlLocalCopySwitch=$(echo $json | jq -r .LampProfile.htmlLocalCopySwitch)
-    export nfsVmName=$(echo $json | jq -r .fileServerProfile.nfsVmName)
-    export nfsHaLbIP=$(echo $json | jq -r .fileServerProfile.nfsHaLbIP)
-    export nfsHaExportPath=$(echo $json | jq -r .fileServerProfile.nfsHaExportPath)
-    export nfsByoIpExportPath=$(echo $json | jq -r .fileServerProfile.nfsByoIpExportPath)
+    
 }
 
 function get_php_version {
