@@ -33,6 +33,85 @@
             }
         },
         {
+            "type": "Microsoft.Compute/virtualMachineScaleSets",
+            "apiVersion": "2017-03-30",
+            "dependsOn": [
+                "[concat('Microsoft.Storage/storageAccounts/', parameters('lampCommon').vmssdStorageAccounttName)]"
+            ],
+            "location": "[parameters('lampCommon').location]",
+            "name": "[parameters('lampCommon').vmssName]",
+            "properties": {
+                "overprovision": true,
+                "upgradePolicy": {
+                    "mode": "Manual"
+                },
+                "virtualMachineProfile": {
+                    "extensionProfile": {
+                        "extensions": [
+                            
+                        ]
+                    },
+                    "networkProfile": {
+                        "networkInterfaceConfigurations": [
+                            {
+                                "name": "vmssnic",
+                                "properties": {
+                                    "ipConfigurations": [
+                                        {
+                                            "name": "ipcfg_lb",
+                                            "properties": {
+                                                "loadBalancerBackendAddressPools": "[take(variables('lbBePoolArray'), variables('lbBePoolArrayTakeCount'))]",
+                                                "applicationGatewayBackendAddressPools": "[take(variables('appGwBePoolArray'), variables('appGwBePoolArrayTakeCount'))]",
+                                                "subnet": {
+                                                    "id": "[parameters('subnetIdWeb')]"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "primary": true,
+                                    "enableAcceleratedNetworking": "[parameters('lampCommon').enableAccelNwForOtherVmsSwitch]"
+                                }
+                            }
+                        ]
+                    },
+                    "osProfile": {
+                        "adminUsername": "[parameters('lampCommon').sshUsername]",
+                        "computerNamePrefix": "[parameters('lampCommon').vmssName]",
+                        "customData": "[base64(concat('#cloud-config\nwrite_files:\n- encoding: b64\n  content: ', base64(string(parameters('vmSetupParamsObj'))), '\n  owner: root:root\n  path: ', parameters('lampCommon').lampOnAzureConfigsJsonPath, '\n  permissions: ', variables('singleQuote'), '0400', variables('singleQuote')))]",
+                        "linuxConfiguration": {
+                            "disablePasswordAuthentication": true,
+                            "ssh": {
+                                "publicKeys": [
+                                    {
+                                        "path": "[concat('/home/', parameters('lampCommon').sshUsername, '/.ssh/authorized_keys')]",
+                                        "keyData": "[parameters('lampCommon').sshPublicKey]"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "storageProfile": {
+                        "imageReference": "[parameters('lampCommon').osType]",
+                        "osDisk": {
+                            "caching": "ReadOnly",
+                            "createOption": "FromImage",
+                            "managedDisk": {
+                                "storageAccountType": "[parameters('lampCommon').osDiskStorageType]"
+                            }
+                        }
+                    }
+                }
+            },
+            "sku": {
+                "capacity": 1,
+                "name": "[parameters('lampCommon').autoscaleVmSku]",
+                "tier": "Standard"
+            },
+            "tags": {
+                "displayName": "webfarm"
+            }
+        },
+        {
             "type": "Microsoft.Insights/autoscaleSettings",
             "apiVersion": "2015-04-01",
             "dependsOn": [
