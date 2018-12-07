@@ -44,7 +44,7 @@ echo $nfsVmName >> /tmp/vars.txt
 echo $nfsByoIpExportPath >> /tmp/vars.txt
 echo $htmlLocalCopySwitch >> /tmp/vars.txt
 
-check_fileServerType_param $fileServerType
+# check_fileServerType_param $fileServerType
 
 {
   # make sure the system does automatic update
@@ -56,29 +56,19 @@ check_fileServerType_param $fileServerType
 
   sudo apt-get -y install postgresql-client mysql-client git
 
-  if [ $fileServerType = "gluster" ]; then
     #configure gluster repository & install gluster client
     sudo add-apt-repository ppa:gluster/glusterfs-3.10 -y
     sudo apt-get -y update
     sudo apt-get -y install glusterfs-client
-  elif [ "$fileServerType" = "azurefiles" ]; then
-    sudo apt-get -y install cifs-utils
-  fi
+  
 
   # install the base stack
   sudo apt-get -y install varnish php php-cli php-curl php-zip php-pear php-mbstring php-dev mcrypt
 
-  if [ "$webServerType" = "nginx" -o "$httpsTermination" = "VMSS" ]; then
-    sudo apt-get -y install nginx
-  fi
 
-  if [ "$webServerType" = "apache" ]; then
     # install apache pacakges
     sudo apt-get -y install apache2 libapache2-mod-php
-  else
-    # for nginx-only option
-    sudo apt-get -y install php-fpm
-  fi
+
 
   # Lamp requirements
   sudo apt-get install -y graphviz aspell php-soap php-json php-redis php-bcmath php-gd php-pgsql php-mysql php-xmlrpc php-intl php-xml php-bz2
@@ -87,28 +77,13 @@ check_fileServerType_param $fileServerType
   # PHP Version
   PhpVer=$(get_php_version)
 
-  if [ $fileServerType = "gluster" ]; then
     # Mount gluster fs for /azlamp
     sudo mkdir -p /azlamp
     sudo chown www-data /azlamp
     sudo chmod 770 /azlamp
     sudo echo -e 'Adding Gluster FS to /etc/fstab and mounting it'
     setup_and_mount_gluster_share $glusterNode $glusterVolume /azlamp
-  elif [ $fileServerType = "nfs" ]; then
-    # mount NFS export (set up on controller VM--No HA)
-    echo -e '\n\rMounting NFS export from '$nfsVmName':/azlamp on /azlamp and adding it to /etc/fstab\n\r'
-    configure_nfs_client_and_mount $nfsVmName /azlamp /azlamp
-  elif [ $fileServerType = "nfs-ha" ]; then
-    # mount NFS-HA export
-    echo -e '\n\rMounting NFS export from '$nfsHaLbIP':'$nfsHaExportPath' on /azlamp and adding it to /etc/fstab\n\r'
-    configure_nfs_client_and_mount $nfsHaLbIP $nfsHaExportPath /azlamp
-  elif [ $fileServerType = "nfs-byo" ]; then
-    # mount NFS-BYO export
-    echo -e '\n\rMounting NFS export from '$nfsByoIpExportPath' on /azlamp and adding it to /etc/fstab\n\r'
-    configure_nfs_client_and_mount0 $nfsByoIpExportPath /azlamp
-  else # "azurefiles"
-    setup_and_mount_azure_files_share azlamp $storageAccountName $storageAccountKey
-  fi
+
 
   # Configure syslog to forward
   cat <<EOF >> /etc/rsyslog.conf
@@ -188,26 +163,24 @@ EOF
   fi # if [ "$webServerType" = "nginx" -o "$httpsTermination" = "VMSS" ];
 
   # Set up html dir local copy if specified
-  if [ "$htmlLocalCopySwitch" = "true" ]; then
+
     mkdir -p /var/www/html
     rsync -av --delete /azlamp/html/. /var/www/html
     setup_html_local_copy_cron_job
-  fi
 
-  if [ "$webServerType" = "apache" ]; then
+
+
     # Configure Apache/php
     sed -i "s/Listen 80/Listen 81/" /etc/apache2/ports.conf
     a2enmod rewrite && a2enmod remoteip && a2enmod headers
-  fi
+
 
   config_all_sites_on_vmss $htmlLocalCopySwitch $httpsTermination $webServerType
 
    # php config 
-   if [ "$webServerType" = "apache" ]; then
+
      PhpIni=/etc/php/${PhpVer}/apache2/php.ini
-   else
-     PhpIni=/etc/php/${PhpVer}/fpm/php.ini
-   fi
+  
    sed -i "s/memory_limit.*/memory_limit = 512M/" $PhpIni
    sed -i "s/max_execution_time.*/max_execution_time = 18000/" $PhpIni
    sed -i "s/max_input_vars.*/max_input_vars = 100000/" $PhpIni
@@ -223,44 +196,18 @@ EOF
    sed -i "s/;opcache.max_accelerated_files.*/opcache.max_accelerated_files = 8000/" $PhpIni
     
    # Remove the default site. Lamp is the only site we want
-   rm -f /etc/nginx/sites-enabled/default
-   if [ "$webServerType" = "apache" ]; then
+   rm -f /etc/nginx/sites-enabled/default_type
+
      rm -f /etc/apache2/sites-enabled/000-default.conf
-   fi
 
-   if [ "$webServerType" = "nginx" -o "$httpsTermination" = "VMSS" ]; then
-     # update startup script to wait for certificate in /azlamp mount
-     setup_azlamp_mount_dependency_for_systemd_service nginx || exit 1
-     # restart Nginx
-     sudo service nginx restart 
-   fi
 
-   if [ "$webServerType" = "nginx" ]; then
-     # fpm config - overload this 
-     cat <<EOF > /etc/php/${PhpVer}/fpm/pool.d/www.conf
-[www]
-user = www-data
-group = www-data
-listen = /run/php/php${PhpVer}-fpm.sock
-listen.owner = www-data
-listen.group = www-data
-pm = dynamic
-pm.max_children = 3000 
-pm.start_servers = 20 
-pm.min_spare_servers = 20 
-pm.max_spare_servers = 30 
-EOF
 
-     # Restart fpm
-     service php${PhpVer}-fpm restart
-   fi
+   
 
-   if [ "$webServerType" = "apache" ]; then
-      if [ "$htmlLocalCopySwitch" != "true" ]; then
         setup_azlamp_mount_dependency_for_systemd_service apache2 || exit 1
-      fi
+      
       sudo service apache2 restart
-   fi
+ 
 
    # Configure varnish startup for 16.04
    VARNISHSTART="ExecStart=\/usr\/sbin\/varnishd -j unix,user=vcache -F -a :80 -T localhost:6082 -f \/etc\/varnish\/Lamp.vcl -S \/etc\/varnish\/secret -s malloc,1024m -p thread_pool_min=200 -p thread_pool_max=4000 -p thread_pool_add_delay=2 -p timeout_linger=100 -p timeout_idle=30 -p send_timeout=1800 -p thread_pools=4 -p http_max_hdr=512 -p workspace_backend=512k"

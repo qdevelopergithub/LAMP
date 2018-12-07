@@ -95,19 +95,7 @@ function check_fileServerType_param
     fi
 }
 
-function create_azure_files_share
-{
-    local shareName=$1
-    local storageAccountName=$2
-    local storageAccountKey=$3
-    local logFilePath=$4
 
-    az storage share create \
-        --name $shareName \
-        --account-name $storageAccountName \
-        --account-key $storageAccountKey \
-        --fail-on-exist >> $logFilePath
-}
 
 function setup_and_mount_gluster_share
 {
@@ -160,25 +148,7 @@ function setup_wordpress_on_vm
      rm latest.tar.gz   
 }
 
-function setup_and_mount_azure_files_share
-{
-    local shareName=$1
-    local storageAccountName=$2
-    local storageAccountKey=$3
 
-    cat <<EOF > /etc/azlamp_azure_files.credential
-username=$storageAccountName
-password=$storageAccountKey
-EOF
-    chmod 600 /etc/azlamp_azure_files.credential
-    
-    grep -q -s "^//$storageAccountName.file.core.windows.net/azlamp\s\s*/azlamp\s\s*cifs" /etc/fstab && _RET=$? || _RET=$?
-    if [ $_RET != "0" ]; then
-        echo -e "\n//$storageAccountName.file.core.windows.net/azlamp   /azlamp cifs    credentials=/etc/azlamp_azure_files.credential,uid=www-data,gid=www-data,nofail,vers=3.0,dir_mode=0770,file_mode=0660,serverino,mfsymlinks" >> /etc/fstab
-    fi
-    mkdir -p /azlamp
-    mount /azlamp
-}
 
 function setup_azlamp_mount_dependency_for_systemd_service
 {
@@ -320,45 +290,6 @@ function setup_raid_disk_and_filesystem {
     fi
 }
 
-function configure_nfs_server_and_export {
-    local MOUNTPOINT=${1}     # E.g., /azlamp
-
-    echo "Installing nfs server..."
-    apt install -y nfs-kernel-server
-
-    echo "Exporting ${MOUNTPOINT}..."
-    grep -q -s "^${MOUNTPOINT}" /etc/exports && _RET=$? || _RET=$?
-    if [ $_RET = "0" ]; then
-        echo "${MOUNTPOINT} is already exported. Returning..."
-    else
-        echo -e "\n${MOUNTPOINT}   *(rw,sync,no_root_squash)" >> /etc/exports
-        systemctl restart nfs-kernel-server.service
-    fi
-}
-
-function configure_nfs_client_and_mount0 {
-    local NFS_HOST_EXPORT_PATH=${1}   # E.g., controller-vm-ab12cd:/azlamp or 172.16.3.100:/drbd/data
-    local MOUNTPOINT=${2}             # E.g., /azlamp
-
-    apt install -y nfs-common
-    mkdir -p ${MOUNTPOINT}
-
-    grep -q -s "^${NFS_HOST_EXPORT_PATH}" /etc/fstab && _RET=$? || _RET=$?
-    if [ $_RET = "0" ]; then
-        echo "${NFS_HOST_EXPORT_PATH} already in /etc/fstab... skipping to add"
-    else
-        echo -e "\n${NFS_HOST_EXPORT_PATH}    ${MOUNTPOINT}    nfs    auto    0    0" >> /etc/fstab
-    fi
-    mount ${MOUNTPOINT}
-}
-
-function configure_nfs_client_and_mount {
-    local NFS_SERVER=${1}     # E.g., controller-vm-ab12cd or IP (NFS-HA LB)
-    local NFS_DIR=${2}        # E.g., /azlamp or /drbd/data
-    local MOUNTPOINT=${3}     # E.g., /azlamp
-
-    configure_nfs_client_and_mount0 "${NFS_SERVER}:${NFS_DIR}" ${MOUNTPOINT}
-}
 
 SERVER_TIMESTAMP_FULLPATH="/azlamp/html/.last_modified_time.azlamp"
 LOCAL_TIMESTAMP_FULLPATH="/var/www/html/.last_modified_time.azlamp"
