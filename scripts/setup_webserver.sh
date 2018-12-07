@@ -82,9 +82,7 @@ check_fileServerType_param $fileServerType
 
   # Lamp requirements
   sudo apt-get install -y graphviz aspell php-soap php-json php-redis php-bcmath php-gd php-pgsql php-mysql php-xmlrpc php-intl php-xml php-bz2
-  if [ "$dbServerType" = "mssql" ]; then
-    install_php_mssql_driver
-  fi
+ 
 
   # PHP Version
   PhpVer=$(get_php_version)
