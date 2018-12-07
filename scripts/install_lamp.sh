@@ -107,6 +107,9 @@ set -ex
     
         sudo apt-get install -y --force-yes php-mysql
     
+    #SetUp Of WordPress On Virtual machone
+
+    setup_wordpress_on_vm $lampdbname $lampdbuser $lampdbpass
 
     # Set up initial LAMP dirs
     mkdir -p /azlamp/html
