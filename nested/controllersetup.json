@@ -25,7 +25,7 @@
                     ]
                 },
                 "protectedSettings":{
-                    "commandToExecute": "[concat('bash ', parameters('lampCommon').lampInstallScriptFilename, ' ', parameters('lampCommon').LampOnAzureConfigsJsonPath)]"
+                    "commandToExecute": "[concat('bash ', parameters('lampCommon').LampInstallScriptFilename, ' ', parameters('lampCommon').LampOnAzureConfigsJsonPath)]"
                 },
                 "type": "CustomScript",
                 "typeHandlerVersion": "2.0"
@@ -51,6 +51,6 @@
         "documentation13": "    mssqlDbServiceObjectiveName - MS SQL porformance tier.",
         "documentation14": "    mssqlDbEdition              - MS SQL edition tier",
         "documentation15": "    mssqlDbSize                 - MS SQL database size",
-        "scriptUri": "[concat(parameters('lampCommon').scriptLocation,parameters('lampCommon').lampInstallScriptFilename,parameters('lampCommon').artifactsSasToken)]"
+        "scriptUri": "[concat(parameters('lampCommon').scriptLocation,parameters('lampCommon').LampInstallScriptFilename,parameters('lampCommon').artifactsSasToken)]"
     }
 }
