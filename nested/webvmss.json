@@ -48,7 +48,24 @@
                 "virtualMachineProfile": {
                     "extensionProfile": {
                         "extensions": [
-                            
+                            {
+                                "name": "setup_lamp",
+                                "properties": {
+                                    "autoUpgradeMinorVersion": true,
+                                    "publisher": "Microsoft.Azure.Extensions",
+                                    "settings": {
+                                        "fileUris": [
+                                            "[variables('scriptUri')]",
+                                            "[parameters('lampCommon').commonFunctionsScriptUri]"
+                                        ]
+                                    },
+                                    "protectedSettings":{
+                                        "commandToExecute": "[concat('bash ', parameters('lampCommon').webServerSetupScriptFilename, ' ', parameters('lampCommon').LampOnAzureConfigsJsonPath)]"
+                                    },
+                                    "type": "CustomScript",
+                                    "typeHandlerVersion": "2.0"
+                                }
+                            }
                         ]
                     },
                     "networkProfile": {
@@ -77,7 +94,7 @@
                     "osProfile": {
                         "adminUsername": "[parameters('lampCommon').sshUsername]",
                         "computerNamePrefix": "[parameters('lampCommon').vmssName]",
-                        "customData": "[base64(concat('#cloud-config\nwrite_files:\n- encoding: b64\n  content: ', base64(string(parameters('vmSetupParamsObj'))), '\n  owner: root:root\n  path: ', parameters('lampCommon').lampOnAzureConfigsJsonPath, '\n  permissions: ', variables('singleQuote'), '0400', variables('singleQuote')))]",
+                        "customData": "[base64(concat('#cloud-config\nwrite_files:\n- encoding: b64\n  content: ', base64(string(parameters('vmSetupParamsObj'))), '\n  owner: root:root\n  path: ', parameters('lampCommon').LampOnAzureConfigsJsonPath, '\n  permissions: ', variables('singleQuote'), '0400', variables('singleQuote')))]",
                         "linuxConfiguration": {
                             "disablePasswordAuthentication": true,
                             "ssh": {
@@ -198,7 +215,8 @@
                 "id": "[variables('appGwBePoolId')]"
             }
         ],
-        "appGwBePoolArrayTakeCount": "[if(equals(parameters('lampCommon').httpsTermination, 'AppGw'), 1, 0)]"
+        "appGwBePoolArrayTakeCount": "[if(equals(parameters('lampCommon').httpsTermination, 'AppGw'), 1, 0)]",
+        "scriptUri": "[concat(parameters('lampCommon').scriptLocation,parameters('lampCommon').webServerSetupScriptFilename,parameters('lampCommon').artifactsSasToken)]"
     },
     "outputs": {
         "webvm1IP": {

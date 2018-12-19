@@ -25,7 +25,7 @@
                     ]
                 },
                 "protectedSettings":{
-                    "commandToExecute": "[concat('bash ', parameters('lampCommon').lampInstallScriptFilename, ' ', parameters('lampCommon').lampOnAzureConfigsJsonPath)]"
+                    "commandToExecute": "[concat('bash ', parameters('lampCommon').lampInstallScriptFilename, ' ', parameters('lampCommon').LampOnAzureConfigsJsonPath)]"
                 },
                 "type": "CustomScript",
                 "typeHandlerVersion": "2.0"
