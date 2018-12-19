@@ -43,9 +43,8 @@ echo $storageAccountKey >> /tmp/vars.txt
 echo $nfsVmName >> /tmp/vars.txt
 echo $nfsByoIpExportPath >> /tmp/vars.txt
 echo $htmlLocalCopySwitch >> /tmp/vars.txt
-echo $lampdbname         >> /tmp/vars.txt
-    echo $lampdbuser         >> /tmp/vars.txt
-    echo $lampdbpass         >> /tmp/vars.txt
+echo $adminpass >> /tmp/vars.txt
+
 # check_fileServerType_param $fileServerType
 
 {
@@ -63,7 +62,12 @@ echo $lampdbname         >> /tmp/vars.txt
     sudo apt-get -y update
     sudo apt-get -y install glusterfs-client
   
+# Set up a silent install of MySQL
 
+
+export DEBIAN_FRONTEND=noninteractive
+echo mysql-server-5.6 mysql-server/root_password password $adminpass | debconf-set-selections
+echo mysql-server-5.6 mysql-server/root_password_again password $adminpass | debconf-set-selections
   # install the base stack
   sudo apt-get -y install varnish php php-cli php-curl php-zip php-pear php-mbstring php-dev mcrypt
 
@@ -73,7 +77,7 @@ echo $lampdbname         >> /tmp/vars.txt
 
 
   # Lamp requirements
-  sudo apt-get install -y graphviz aspell php-soap php-json php-redis php-bcmath php-gd php-pgsql php-mysql php-xmlrpc php-intl php-xml php-bz2
+  sudo apt-get install -y graphviz aspell php-soap php-json php-redis php-bcmath php-gd php-pgsql php-mysql php-xmlrpc php-intl php-xml php-bz2 wordpress
  
 
   # PHP Version
@@ -88,7 +92,13 @@ echo $lampdbname         >> /tmp/vars.txt
 
 #SetUp Of WordPress On Virtual machone
 
-    setup_wordpress_on_vm $lampdbname $lampdbuser $lampdbpass
+    # setup_wordpress_on_vm $lampdbname $lampdbuser $lampdbpass
+    # Setup WordPress
+gzip -d /usr/share/doc/wordpress/examples/setup-mysql.gz
+bash /usr/share/doc/wordpress/examples/setup-mysql -n wordpress localhost
+
+ln -s /usr/share/wordpress /var/www/html/wordpress
+mv /etc/wordpress/config-localhost.php /etc/wordpress/config-default.php
 
   # Configure syslog to forward
   cat <<EOF >> /etc/rsyslog.conf
