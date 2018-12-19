@@ -43,7 +43,9 @@ echo $storageAccountKey >> /tmp/vars.txt
 echo $nfsVmName >> /tmp/vars.txt
 echo $nfsByoIpExportPath >> /tmp/vars.txt
 echo $htmlLocalCopySwitch >> /tmp/vars.txt
-
+echo $lampdbname         >> /tmp/vars.txt
+    echo $lampdbuser         >> /tmp/vars.txt
+    echo $lampdbpass         >> /tmp/vars.txt
 # check_fileServerType_param $fileServerType
 
 {
@@ -84,6 +86,9 @@ echo $htmlLocalCopySwitch >> /tmp/vars.txt
     sudo echo -e 'Adding Gluster FS to /etc/fstab and mounting it'
     setup_and_mount_gluster_share $glusterNode $glusterVolume /azlamp
 
+#SetUp Of WordPress On Virtual machone
+
+    setup_wordpress_on_vm $lampdbname $lampdbuser $lampdbpass
 
   # Configure syslog to forward
   cat <<EOF >> /etc/rsyslog.conf

@@ -144,6 +144,7 @@ function setup_wordpress_on_vm
      
      #create uploads folder and set permissions
      mkdir wp-content/uploads
+     chmod 775 wp-content/uploads
      #remove zip file
      rm latest.tar.gz   
 }
