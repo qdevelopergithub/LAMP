@@ -38,6 +38,7 @@
                 "thumbprintCaCert": "[parameters('lampCommon').thumbprintCaCert]"
             },
             "LampProfile": {
+                "siteUrl":"[parameters('lampCommon').siteURL]",
                 "dbName": "[parameters('lampCommon').LampDbName]",
                 "dbUser": "[parameters('lampCommon').LampDbUser]",
                 "dbUserAzure": "[parameters('lampCommon').LampDbUserAzure]",

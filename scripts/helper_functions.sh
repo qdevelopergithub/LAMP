@@ -52,7 +52,7 @@ function get_setup_params_from_configs_json
     export webServerType=$(echo $json | jq -r .LampProfile.webServerType)
     export htmlLocalCopySwitch=$(echo $json | jq -r .LampProfile.htmlLocalCopySwitch)
     export serverName=$(echo $json | jq -r .LampProfile.serverName)
-    
+    export siteURL=$(echo $json | jq -r .LampProfile.siteURL)
 }
 
 function get_php_version {
@@ -118,7 +118,7 @@ function setup_wordpress_on_vm
      echo "Server Name:-"$dbserver
      echo "DB Host:- "$dbhost
 #!/bin/bash -e
-clear
+
 echo "============================================"
 echo "WordPress Install Script"
 echo "============================================"

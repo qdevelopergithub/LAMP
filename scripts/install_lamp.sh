@@ -57,7 +57,7 @@ set -ex
     echo $installGdprPluginsSwitch >> /tmp/vars.txt
     echo $thumbprintSslCert >> /tmp/vars.txt
     echo $thumbprintCaCert >> /tmp/vars.txt
-    
+    echo $siteURL >> /tmp/vars.txt
 
     # check_fileServerType_param $fileServerType
 
