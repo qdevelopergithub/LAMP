@@ -50,7 +50,8 @@
                 "installObjectFsSwitch": "[parameters('lampCommon').installObjectFsSwitch]",
                 "syslogServer": "[parameters('lampCommon').ctlrVmName]",
                 "webServerType": "[parameters('lampCommon').webServerType]",
-                "htmlLocalCopySwitch": "[parameters('lampCommon').htmlLocalCopySwitch]"
+                "htmlLocalCopySwitch": "[parameters('lampCommon').htmlLocalCopySwitch]",
+                "serverName": "[parameters('lampCommon').serverName]"
             },
             "dbServerProfile": {
                 "type": "[parameters('lampCommon').dbServerType]",

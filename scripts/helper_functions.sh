@@ -51,6 +51,7 @@ function get_setup_params_from_configs_json
     export syslogServer=$(echo $json | jq -r .LampProfile.syslogServer)
     export webServerType=$(echo $json | jq -r .LampProfile.webServerType)
     export htmlLocalCopySwitch=$(echo $json | jq -r .LampProfile.htmlLocalCopySwitch)
+    export serverName=$(echo $json | jq -r .LampProfile.serverName)
     
 }
 
@@ -112,41 +113,48 @@ function setup_wordpress_on_vm
      local dbname=$1
      local dbuser=$2
      local dbpass=$3
+     local dbhost=$4
+     local dbserver=$4'.mysql.database.azure.com'
+     echo "Server Name:-"$dbserver
+     echo "DB Host:- "$dbhost
+#!/bin/bash -e
+clear
+echo "============================================"
+echo "WordPress Install Script"
+echo "============================================"
 
-     #download wordpress
-     curl -O https://wordpress.org/latest.tar.gz
-     #unzip wordpress
-     tar -zxvf latest.tar.gz
-     #change dir to wordpress
-     cd wordpress
-     #copy file to parent dir
-     cp -rf . ..
-     #move back to parent dir
-     cd ..
-     #remove files from wordpress folder
-     rm -R wordpress
-     #create wp config
-     cp wp-config-sample.php wp-config.php
-     #set database details with perl find and replace
-     perl -pi -e "s/database_name_here/$dbname/g" wp-config.php
-     perl -pi -e "s/username_here/$dbuser/g" wp-config.php
-     perl -pi -e "s/password_here/$dbpass/g" wp-config.php
-     
-     #set WP salts
-     perl -i -pe'
-       BEGIN {
-         @chars = ("a" .. "z", "A" .. "Z", 0 .. 9);
-         push @chars, split //, "!@#$%^&*()-_ []{}<>~\`+=,.;:/?|";
-         sub salt { join "", map $chars[ rand @chars ], 1 .. 64 }
-       }
-       s/put your unique phrase here/salt()/ge
-     ' wp-config.php
-     
-     #create uploads folder and set permissions
-     mkdir wp-content/uploads
-     chmod 775 wp-content/uploads
-     #remove zip file
-     rm latest.tar.gz   
+		#login to MySQL, add database, add user and grant permissions
+		dbsetup="create database $dbname;GRANT ALL PRIVILEGES ON $dbname.* TO $dbuser@$dbhost IDENTIFIED BY '$dbpass';FLUSH PRIVILEGES;"
+		mysql -h $dbserver -u $dbuser -p$dbpass -e "$dbsetup"
+		
+	echo "============================================"
+	echo "Installing WordPress for you."
+	echo "============================================"
+	#download wordpress
+	echo "Downloading..."
+	curl -O https://wordpress.org/latest.tar.gz
+	#unzip wordpress
+	echo "Unpacking..."
+	tar -zxf latest.tar.gz
+	#move /wordpress/* files to this dir
+	echo "Moving..."
+	mv wordpress/* ./
+	echo "Configuring..."
+	#create wp config
+	cp wp-config-sample.php wp-config.php
+	#set database details with perl find and replace
+	perl -pi -e "s/database_name_here/$dbname/g" wp-config.php
+	perl -pi -e "s/username_here/$dbuser/g" wp-config.php
+	perl -pi -e "s/password_here/$dbpass/g" wp-config.php
+	perl -pi -e "s/wp_/$dbtable/g" wp-config.php
+	#create uploads folder and set permissions
+	mkdir wp-content/uploads
+	chmod 777 wp-content/uploads
+	echo "Cleaning..."
+	#remove wordpress/ dir
+	rmdir wordpress
+	#remove zip file
+	rm latest.tar.gz   
 }
 
 

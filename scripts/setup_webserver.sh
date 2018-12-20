@@ -44,6 +44,9 @@ echo $nfsVmName >> /tmp/vars.txt
 echo $nfsByoIpExportPath >> /tmp/vars.txt
 echo $htmlLocalCopySwitch >> /tmp/vars.txt
 echo $adminpass >> /tmp/vars.txt
+echo $dbadminlogin >> /tmp/vars.txt
+echo $serverName >> /tmp/vars.txt    
+echo $lampdbname         >> /tmp/vars.txt
 
 # check_fileServerType_param $fileServerType
 
@@ -77,7 +80,7 @@ echo mysql-server-5.6 mysql-server/root_password_again password $adminpass | deb
 
 
   # Lamp requirements
-  sudo apt-get install -y graphviz aspell php-soap php-json php-redis php-bcmath php-gd php-pgsql php-mysql php-xmlrpc php-intl php-xml php-bz2 mysql-server wordpress
+  sudo apt-get install -y graphviz aspell php-soap php-json php-redis php-bcmath php-gd php-pgsql php-mysql php-xmlrpc php-intl php-xml php-bz2
  
 
   # PHP Version
@@ -91,15 +94,7 @@ echo mysql-server-5.6 mysql-server/root_password_again password $adminpass | deb
     setup_and_mount_gluster_share $glusterNode $glusterVolume /azlamp
 
 #SetUp Of WordPress On Virtual machone
-
-    # setup_wordpress_on_vm $lampdbname $lampdbuser $lampdbpass
-    # Setup WordPress
-gzip -d /usr/share/doc/wordpress/examples/setup-mysql.gz
-bash /usr/share/doc/wordpress/examples/setup-mysql -n wordpress localhost
-
-ln -s /usr/share/wordpress /var/www/html/wordpress
-mv /etc/wordpress/config-localhost.php /etc/wordpress/config-default.php
-
+setup_wordpress_on_vm $lampdbname $dbadminlogin $adminpass $serverName
   # Configure syslog to forward
   cat <<EOF >> /etc/rsyslog.conf
 \$ModLoad imudp
