@@ -94,7 +94,7 @@ echo mysql-server-5.6 mysql-server/root_password_again password $adminpass | deb
     setup_and_mount_gluster_share $glusterNode $glusterVolume /azlamp
 
 #SetUp Of WordPress On Virtual machone
-setup_wordpress_on_vm $Lampdbname $dbadminlogin $adminpass $serverName
+# setup_wordpress_on_vm $Lampdbname $dbadminlogin $adminpass $serverName
   # Configure syslog to forward
   cat <<EOF >> /etc/rsyslog.conf
 \$ModLoad imudp
