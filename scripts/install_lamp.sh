@@ -35,8 +35,8 @@ set -ex
     echo $siteFQDN             >> /tmp/vars.txt
     echo $httpsTermination     >> /tmp/vars.txt
     echo $dbIP                 >> /tmp/vars.txt
-    echo $lampdbname         >> /tmp/vars.txt
-    echo $lampdbuser         >> /tmp/vars.txt
+    echo $Lampdbname         >> /tmp/vars.txt
+    echo $Lampdbuser         >> /tmp/vars.txt
     echo $lampdbpass         >> /tmp/vars.txt
     echo $adminpass            >> /tmp/vars.txt
     echo $dbadminlogin         >> /tmp/vars.txt
@@ -44,7 +44,7 @@ set -ex
     echo $dbadminpass          >> /tmp/vars.txt
     echo $storageAccountName   >> /tmp/vars.txt
     echo $storageAccountKey    >> /tmp/vars.txt
-    echo $azurelampdbuser    >> /tmp/vars.txt
+    echo $azureLampdbuser    >> /tmp/vars.txt
     echo $redisDns             >> /tmp/vars.txt
     echo $redisAuth            >> /tmp/vars.txt
     echo $installO365pluginsSwitch    >> /tmp/vars.txt
