@@ -119,13 +119,13 @@ function setup_wordpress_on_vm
      echo "DB Host:- "$dbhost
 #!/bin/bash -e
 
-echo "============================================"
-echo "WordPress Install Script"
-echo "============================================"
+# echo "============================================"
+# echo "WordPress Install Script"
+# echo "============================================"
 
-		#login to MySQL, add database, add user and grant permissions
-		dbsetup="create database $dbname;GRANT ALL PRIVILEGES ON $dbname.* TO $dbuser@$dbhost IDENTIFIED BY '$dbpass';FLUSH PRIVILEGES;"
-		mysql -h $dbserver -u $dbuser -p$dbpass -e "$dbsetup"
+# 		#login to MySQL, add database, add user and grant permissions
+# 		dbsetup="create database $dbname;GRANT ALL PRIVILEGES ON $dbname.* TO $dbuser@$dbhost IDENTIFIED BY '$dbpass';FLUSH PRIVILEGES;"
+# 		mysql -h $dbserver -u $dbuser -p $dbpass -e "$dbsetup"
 		
 	echo "============================================"
 	echo "Installing WordPress for you."
