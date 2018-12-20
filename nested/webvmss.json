@@ -200,6 +200,7 @@
         "extFeID": "[concat(variables('extLbID'),'/frontendIPConfigurations/',parameters('lampCommon').extFeName)]",
         "extLbID": "[resourceId('Microsoft.Network/loadBalancers',parameters('lampCommon').lbName)]",
         "pipID": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('lampCommon').lbPipName)]",
+        "scriptUri": "[concat(parameters('lampCommon').scriptLocation,parameters('lampCommon').webServerSetupScriptFilename,parameters('lampCommon').artifactsSasToken)]",
         "vmssID": "[resourceId('Microsoft.Compute/virtualMachineScaleSets',parameters('lampCommon').vmssName)]",
         "webvmss1NIC": "[concat('Microsoft.Compute/virtualMachineScaleSets/', parameters('lampCommon').vmssName, '/virtualMachines/0/networkInterfaces/vmssnic')]",
         "appGwID": "[resourceId('Microsoft.Network/applicationGateways', parameters('lampCommon').appGwName)]",
@@ -215,8 +216,7 @@
                 "id": "[variables('appGwBePoolId')]"
             }
         ],
-        "appGwBePoolArrayTakeCount": "[if(equals(parameters('lampCommon').httpsTermination, 'AppGw'), 1, 0)]",
-        "scriptUri": "[concat(parameters('lampCommon').scriptLocation,parameters('lampCommon').webServerSetupScriptFilename,parameters('lampCommon').artifactsSasToken)]"
+        "appGwBePoolArrayTakeCount": "[if(equals(parameters('lampCommon').httpsTermination, 'AppGw'), 1, 0)]"
     },
     "outputs": {
         "webvm1IP": {

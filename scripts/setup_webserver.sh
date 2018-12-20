@@ -77,7 +77,7 @@ echo mysql-server-5.6 mysql-server/root_password_again password $adminpass | deb
 
 
   # Lamp requirements
-  sudo apt-get install -y graphviz aspell php-soap php-json php-redis php-bcmath php-gd php-pgsql php-mysql php-xmlrpc php-intl php-xml php-bz2 wordpress
+  sudo apt-get install -y graphviz aspell php-soap php-json php-redis php-bcmath php-gd php-pgsql php-mysql php-xmlrpc php-intl php-xml php-bz2 mysql-server wordpress
  
 
   # PHP Version
