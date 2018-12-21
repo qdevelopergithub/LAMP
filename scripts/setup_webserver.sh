@@ -73,7 +73,9 @@ echo mysql-server-5.6 mysql-server/root_password password $adminpass | debconf-s
 echo mysql-server-5.6 mysql-server/root_password_again password $adminpass | debconf-set-selections
   # install the base stack
   sudo apt-get -y install varnish php php-cli php-curl php-zip php-pear php-mbstring php-dev mcrypt
-
+if [ "$webServerType" = "nginx" -o "$httpsTermination" = "VMSS" ]; then
+    sudo apt-get -y install nginx
+  fi
 
     # install apache pacakges
     sudo apt-get -y install apache2 libapache2-mod-php
