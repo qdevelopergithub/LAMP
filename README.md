@@ -180,31 +180,29 @@ At this point, your LAMP application is setup to use in the LAMP cluster. If you
 
 ## Azure deployment Steps
 Step 1: Go to the Azure Portal https://portal.azure.com. Login into the Portal with your credentials.\
-Step 2: Visit the URL https://github.com/qdevelopergithub/lamp.\
-Step 3: Scroll down the page and click on the “Deploy to Azure” button as highlighted below:
+Step 2: Visit the URL https://github.com/qdevelopergithub/lamp. \
+Step 3: Scroll down the page and click on the “Deploy to Azure” button as highlighted below:\
 
 [![Deploy to Azure Fully Configurable](http://azuredeploy.net/deploybutton.png)]
 	
 Step 4: Clicking the button will take you to the Azure Portal page as below:
 
-Step 5: In above page, fill:
-i.Subscription : The subscription you want to use(if you have more than one)
-ii.Resource group: Create a new Resource group. Resource groups are logical grouping units for all related Azure resources.
-iii.Location: Please select a location from drop down, where you want your VM deployed.
-iv._artifacts Location: This field is automatically filled.
-v. _artifacts Location SAS Token: This token is automatically generated when the template is deployed.
-vi.SSH public key: This key is required to access the VM. Below are the steps to generate this key:
-Steps to generate SSH key on Windows
-1.Download the PuTTY software. It can be downloaded from here: https://www.putty.org/
-2.Run the PuTTYGen program from your system.
-3.Click the “Generate” button on the window as shown below. Move the mouse randomly as highlighted(to generate same entropy).
+Step 5: In above page, fill:\
+i.Subscription : The subscription you want to use(if you have more than one)\
+ii.Resource group: Create a new Resource group. Resource groups are logical grouping units for all related Azure resources.\
+iii.Location: Please select a location from drop down, where you want your VM deployed.\
+iv._artifacts Location: This field is automatically filled.\
+v. _artifacts Location SAS Token: This token is automatically generated when the template is deployed.\
+vi.SSH public key: This key is required to access the VM. Below are the steps to generate this key:\
 
-
-4.After key is generated. Click the button “Save public key” and save it on your system.
-5.Provide the passphrase to encrypt the private key on disk.
-
+## Steps to generate SSH key on Windows
+1.Download the PuTTY software. It can be downloaded from here: https://www.putty.org/ \
+2.Run the PuTTYGen program from your system.\
+3.Click the “Generate” button on the window as shown below. Move the mouse randomly as highlighted(to generate same entropy).\
+4.After key is generated. Click the button “Save public key” and save it on your system.\
+5.Provide the passphrase to encrypt the private key on disk.\
 6.Lastly, click “Save private key” button and save the file on your machine.
-Step 6: Copy the SSH key from the public key file and paste it in the SSH field in Azure Portal.
+Step 6: Copy the SSH key from the public key file and paste it in the SSH field in Azure Portal.\
 Step 7: Click the “Purchase” button on the Azure Portal page. It will deploy the VM cluster.
 
 
