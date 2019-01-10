@@ -50,53 +50,42 @@ If you chose Apache as your `webServerType` and `true` for the `htmlLocalCopy` s
 ### Installation Destination
 An example LAMP application (WordPress) is illustrated here for the sake of clarity. The approach is similar to any LAMP application out there. 
 
-First, you'd need to navigate to `/azlamp/html` and create a directory based on a domain name you have in mind. An example domain name is used below:
+Download a latest version of Wordpress. Once that's done and you've downloaded the latest version of WordPress, please follow the instructions here to complete configuring a database and finishing a [WordPress install](https://codex.wordpress.org/Installing_WordPress#Famous_5-Minute_Installation). 
+
+Below is a Full script which will run and install WordPress and Drupal on the cluster. 
+Custom commands to install WordPress
 
 ```
-cd /azlamp/html
-mkdir wpsitename.mydomain.com
-cd /azlamp/html/wpsitename.mydomain.com
-```
-
-Once that's done and you've downloaded the latest version of WordPress, please follow the instructions here to complete configuring a database and finishing a [WordPress install](https://codex.wordpress.org/Installing_WordPress#Famous_5-Minute_Installation). 
-
-```
-wget https://wordpress.org/latest.tar.gz
-tar xvfz latest.tar.gz --strip 1
-```
-
-
-### SSL Certs
-
-The certificates for your LAMP application reside in `/azlamp/certs/yourdomain` or in this instance, `/azlamp/certs/wpsitename.mydomain.com`
+wget -c http://wordpress.org/latest.tar.gz
+tar -xzvf latest.tar.gz
+sudo mkdir -p /var/www/html/
+sudo rsync -av wordpress/* /var/www/html/
+sudo chown -R www-data:www-data /var/www/html/
+sudo chmod -R 755 /var/www/html/
 
 ```
-mkdir /azlamp/certs/wpsitename.mydomain.com
-```
-
-Copy over the .crt and .key files over to `/azlamp/certs/wpsitename.mydomain.com`.
-The file names should be changed to `nginx.crt` and `nginx.key` in order to be recognized by the configured nginx servers. Depending on your local environment,
-you may choose to use the utility *scp* or a tool like [WinSCP](https://winscp.net/eng/download.php) to copy these files over to the cluster controller virtual machine. 
-
-It's recommended that the certificate files be read-only to owner and that these files are owned by *www-data*:
+Custom commands to install Drupal
 
 ```
-chown www-data:www-data /azlamp/certs/wpsitename.mydomain.com/*
-chmod 400 /azlamp/certs/wpsitename.mydomain.com/*
-```
-
-
-### Linking to the content/cluster data location
-
-Navigate to the WordPress content directory and run the following command:
+wget -c https://ftp.drupal.org/files/projects/drupal-7.2.tar.gz
+tar -xzvf drupal-7.2.tar.gz
+sudo mkdir -p /var/www/html/
+sudo rsync -av drupal-7.2/* /var/www/html/
+sudo chown -R www-data:www-data /var/www/html/
+sudo chmod -R 755 /var/www/html/
 
 ```
-mkdir -p /azlamp/data/wpsitename.mydomain.com/wp-content/uploads
-cd /azlamp/html/wpsitename.mydomain.com
-ln -s /azlamp/data/wpsitename.mydomain.com/wp-content/uploads .
-```
+Custom commands to install Joomla
 
-This step is needed because the `<siteroot>/wp-content/uploads` directory need to be shared across all web frontend instances, and Wordpress configuration doesn't allow an external directory to be used as the uploads repository. In fact, Drupal also has a similar design, so a similar symbolic link will be needed for Drupal as well. This is in contrary to Lamp, which allows users to configure any external directory as its file storage location.
+```
+Wget https://downloads.joomla.org/cms/joomla3/3-9-1/joomla_3-9-1-stable-full_package-zip?format=zip
+sudo apt-get install unzip
+sudo mkdir -p /var/www/html/
+sudo unzip Joomla*.zip -d /var/www/html/joomla
+sudo chown -R www-data:www-data /var/www/html/
+sudo chmod -R 755 /var/www/html/
+
+```
 
 ### Update Apache configurations on all web frontend instances
 
@@ -256,28 +245,6 @@ Install PHP manually
 Command to install specific packages for PHP
 sudo apt install php-pear php-fpm php-dev php-zip php-curl php-xmlrpc php-gd   php-mysql php-mbstring php-xml libapache2-mod-php
 
-Below is a Full script which will run and install WordPress and Drupal on the cluster. 
-Custom commands to install WordPress
-wget -c http://wordpress.org/latest.tar.gz
-tar -xzvf latest.tar.gz
-sudo mkdir -p /var/www/html/
-sudo rsync -av wordpress/* /var/www/html/
-sudo chown -R www-data:www-data /var/www/html/
-sudo chmod -R 755 /var/www/html/
-Custom commands to install Drupal
-wget -c https://ftp.drupal.org/files/projects/drupal-7.2.tar.gz
-tar -xzvf drupal-7.2.tar.gz
-sudo mkdir -p /var/www/html/
-sudo rsync -av drupal-7.2/* /var/www/html/
-sudo chown -R www-data:www-data /var/www/html/
-sudo chmod -R 755 /var/www/html/
-Custom commands to install Joomla
-Wget https://downloads.joomla.org/cms/joomla3/3-9-1/joomla_3-9-1-stable-full_package-zip?format=zip
-sudo apt-get install unzip
-sudo mkdir -p /var/www/html/
-sudo unzip Joomla*.zip -d /var/www/html/joomla
-sudo chown -R www-data:www-data /var/www/html/
-sudo chmod -R 755 /var/www/html/
 
 Open your web-browser and open link using IP address of your server. 
 
