@@ -27,6 +27,55 @@ NOTE: Depending on the region you choose to deploy the stack in - the deployment
 
 ## Stack Architecture
 
+-1 Storage account (Details of user account, subscription etc.)
+An Azure Storage Account contains all of your Azure Storage data objects: blobs, files, queues, 	tables, and disks. Data in your Azure storage account is durable and highly available, secure, 	massively scalable, and accessible from anywhere in the world over HTTP or HTTPS.
+-1 Controller for Network Security Group
+You can filter network traffic to and from Azure resources in an Azure virtual network with a network security group. A network security group contains security rules that allow or deny inbound network traffic to, or outbound network traffic from, several types of Azure resources. 
+-1 Controller for managing public IP addresses/all IP addresses
+You can assign IP addresses to Azure resources to communicate with other Azure resources, 	your on-premises network, and the Internet. There are two types of IP addresses you can use in 	Azure:
+Public IP addresses: Used for communication with the Internet, including Azure public-facing 	services.
+Private IP addresses: Used for communication within an Azure virtual network (VNet), and your 	on-premises network, when you use a VPN gateway or ExpressRoute circuit to extend your 	network to Azure.
+
+-1 Virtual disk for Controller
+ 	This is a virtual disk which will be used for Controller VM to store all its data.
+
+-1 VM for Controller 
+This is a virtual machine created for controller with ubuntu server os intalled on it.
+
+-1 NIC for Controller 
+It will link Virtual disk and VM and other components with each other.
+
+-1 MySQL database resource
+Managed MySQL database used by the PHP applications.
+
+-2 Virtual disks for Cluster(Gluster FS with 4 disk per Gluster)
+ It will use for load balance and hence there will be high availability.
+
+-2 NIC(Network interface cards) for Gluster file server
+
+-2 VM (Virtual machine) will make for Gluster Fileserver
+
+-1 security group resource to manage all the file security and authorized access control
+
+-1 Virtual Network Resource which will link all resources with each other
+
+-1 Load Balancer for Cluster( Gluster File server for load balancing) for HA(High availability)
+
+-1 IP address resource for load balancer
+
+-1 resource for Redis Cache
+Managed instance of the Redis key-value storage. Your PHP applications can connect to this to store sessions and other transient data. Redis store data in-memory, so it’s very fast. Azure Cache for Redis is a distributed, managed cache that helps you build highly scalable and responsive applications by providing super-fast access to your data.
+
+-1 VM resource for scale set
+
+-1 Storage Account for VM scale set
+When you create a scale set in the portal, a load balancer is created. Network Address 	Translation (NAT) rules are used to distribute traffic to the scale set instances for remote 	connectivity such as RDP or SSH.
+
+With scale sets, all VM instances are created from the same base OS image and configuration. This approach lets you easily manage hundreds of VMs without additional configuration tasks or network management. When you have many VMs that run your application, it's important to maintain a consistent configuration across your environment. For reliable performance of your application, the VM size, disk configuration, and application installs should match across all VMs. 
+
+NOTE: - There is no additional cost to scale sets. You only pay for the underlying compute resources such as the VM instances, load balancer, or Managed Disk storage.
+
+
 This template set deploys the following infrastructure core to your LAMP instance:
 - Autoscaling web frontend layer (Nginx for https termination, Varnish for caching, Apache/php or nginx/php-fpm)
 - Private virtual network for frontend instances
