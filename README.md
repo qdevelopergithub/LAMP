@@ -26,7 +26,9 @@ Below is a HA (High Availibility) pre-defined/restricted deployment option based
 NOTE: Depending on the region you choose to deploy the stack in - the deployment might fail due to SKUs being hardcoded in the template where they are not available. For example, today our small-mid-size deployment option hard codes Gen-4 Azure MySQL SKUs into the template, and if a region where that is currently not available in (i.e. westus2) is used, your deployment will fail.  If your deployment fails, please revert to the fully configurable template where possible and change the SKU paramater to one that exists in your region (i.e. Gen-5) or alternatively change your deployment region to one in which the SKU is available (i.e. southcentralus).     
 
 ## Stack Architecture
-[!(https://github.com/qdevelopergithub/LAMP/blob/master/images/stack_diagram.png)]
+
+[![Deploy to Azure Fully Configurable](http://azuredeploy.net/deploybutton.png)]
+[![Architecture Diagram](https://github.com/qdevelopergithub/LAMP/blob/master/images/stack_diagram.png)]
 
 This template set deploys the following infrastructure core to your LAMP instance:
 - Autoscaling web frontend layer (Nginx for https termination, Varnish for caching, Apache/php or nginx/php-fpm)
