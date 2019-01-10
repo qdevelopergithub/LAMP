@@ -27,7 +27,7 @@ NOTE: Depending on the region you choose to deploy the stack in - the deployment
 
 ## Stack Architecture
 
-[![](https://github.com/qdevelopergithub/LAMP/blob/master/images/stack_diagram.png)
+[!](https://github.com/qdevelopergithub/LAMP/blob/master/images/stack_diagram.png)
 
 This template set deploys the following infrastructure core to your LAMP instance:
 - Autoscaling web frontend layer (Nginx for https termination, Varnish for caching, Apache/php or nginx/php-fpm)
