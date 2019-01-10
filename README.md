@@ -101,7 +101,6 @@ An example LAMP application (WordPress) is illustrated here for the sake of clar
 Download a latest version of Wordpress. Once that's done and you've downloaded the latest version of WordPress, please follow the instructions here to complete configuring a database and finishing a [WordPress install](https://codex.wordpress.org/Installing_WordPress#Famous_5-Minute_Installation). 
 
 Below is a Full script which will run and install WordPress and Drupal on the cluster. 
-Custom commands to install WordPress
 
 ```
 wget -c http://wordpress.org/latest.tar.gz
@@ -112,7 +111,10 @@ sudo chown -R www-data:www-data /var/www/html/
 sudo chmod -R 755 /var/www/html/
 
 ```
-Custom commands to install Drupal
+
+## Configuring the controller for a specific LAMP application (WordPress)
+
+Below is a Full script which will run and install Drupal on the cluster.
 
 ```
 wget -c https://ftp.drupal.org/files/projects/drupal-7.2.tar.gz
@@ -123,7 +125,9 @@ sudo chown -R www-data:www-data /var/www/html/
 sudo chmod -R 755 /var/www/html/
 
 ```
-Custom commands to install Joomla
+## Configuring the controller for a specific LAMP application (Joomla)
+
+Below is a Full script which will run and install Joomla on the cluster.
 
 ```
 Wget https://downloads.joomla.org/cms/joomla3/3-9-1/joomla_3-9-1-stable-full_package-zip?format=zip
