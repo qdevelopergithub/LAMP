@@ -69,6 +69,24 @@ sudo chown -R www-data:www-data /var/www/html/
 sudo chmod -R 755 /var/www/html/
 
 ```
+## Configuring the controller for a specific LAMP application (Drupal)
+
+
+### Installation Destination
+An example LAMP application (Drupal) is illustrated here for the sake of clarity. The approach is similar to any LAMP application out there. 
+
+Once that's done and you've downloaded the latest version of Drupal, please follow the instructions here to complete configuring a database and finishing a [Drupal install](https://www.drupal.org/docs/8/install). 
+
+```
+wget -c https://ftp.drupal.org/files/projects/drupal-7.2.tar.gz
+tar -xzvf drupal-7.2.tar.gz
+sudo mkdir -p /var/www/html/
+sudo rsync -av drupal-7.2/* /var/www/html/
+sudo chown -R www-data:www-data /var/www/html/
+sudo chmod -R 755 /var/www/html/
+
+```
+
 ### Linking to the content/cluster data location
 
 Navigate to the WordPress content directory and run the following command:
