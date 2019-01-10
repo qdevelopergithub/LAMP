@@ -220,66 +220,16 @@ Step 2: Enter the host name. You will get the hostname after deployment is compl
 Step 3: Click Connection=> SSH=> Auth. Load the private key file which was saved earlier.
 
 Step 4: Click on the “Open” button and this will open the SSH connection to VM.
-Cluster maintenance
-Resources: Below is the list of resources deployed on the cluster:
 
-1)1 Storage account (Details of user account, subscription etc.)
-An Azure Storage Account contains all of your Azure Storage data objects: blobs, files, queues, 	tables, and disks. Data in your Azure storage account is durable and highly available, secure, 	massively scalable, and accessible from anywhere in the world over HTTP or HTTPS.
-2)1 Controller for Network Security Group
-You can filter network traffic to and from Azure resources in an Azure virtual network with a network security group. A network security group contains security rules that allow or deny inbound network traffic to, or outbound network traffic from, several types of Azure resources. 
-3)1 Controller for managing public IP addresses/all IP addresses
-You can assign IP addresses to Azure resources to communicate with other Azure resources, 	your on-premises network, and the Internet. There are two types of IP addresses you can use in 	Azure:
-Public IP addresses: Used for communication with the Internet, including Azure public-facing 	services.
-Private IP addresses: Used for communication within an Azure virtual network (VNet), and your 	on-premises network, when you use a VPN gateway or ExpressRoute circuit to extend your 	network to Azure.
+## Why use of Mulitple NIC’s
 
-4)1 Virtual disk for Controller
- 	This is a virtual disk which will be used for Controller VM to store all its data.
-
-5)1 VM for Controller 
-This is a virtual machine created for controller with ubuntu server os intalled on it.
-
-6)1 NIC for Controller 
-It will link Virtual disk and VM and other components with each other.
-
-7)1 MySQL database resource
-Managed MySQL database used by the PHP applications.
-
-8)2 Virtual disks for Cluster(Gluster FS with 4 disk per Gluster)
- It will use for load balance and hence there will be high availability.
-
-9)2 NIC(Network interface cards) for Gluster file server
-
-10)2 VM (Virtual machine) will make for Gluster Fileserver
-
-11)1 security group resource to manage all the file security and authorized access control
-
-12)1 Virtual Network Resource which will link all resources with each other
-
-13)1 Load Balancer for Cluster( Gluster File server for load balancing) for HA(High availability)
-
-14)1 IP address resource for load balancer
-
-15)1 resource for Redis Cache
-Managed instance of the Redis key-value storage. Your PHP applications can connect to this to store sessions and other transient data. Redis store data in-memory, so it’s very fast. Azure Cache for Redis is a distributed, managed cache that helps you build highly scalable and responsive applications by providing super-fast access to your data.
-
-16)1 VM resource for scale set
-
-17)1 Storage Account for VM scale set
-When you create a scale set in the portal, a load balancer is created. Network Address 	Translation (NAT) rules are used to distribute traffic to the scale set instances for remote 	connectivity such as RDP or SSH.
-
-With scale sets, all VM instances are created from the same base OS image and configuration. This approach lets you easily manage hundreds of VMs without additional configuration tasks or network management. When you have many VMs that run your application, it's important to maintain a consistent configuration across your environment. For reliable performance of your application, the VM size, disk configuration, and application installs should match across all VMs. 
-
-NOTE: - There is no additional cost to scale sets. You only pay for the underlying compute resources such as the VM instances, load balancer, or Managed Disk storage.
-
-Why use of Mulitple NIC’s
 Virtual machines (VMs) in Azure can have multiple virtual network interface cards (NICs) attached to them. A common scenario is to have different subnets for front-end and back-end connectivity. You can associate multiple NICs on a VM to multiple subnets, but those subnets 	must all reside in the same virtual network (vNet).
 
-What is a cluster
+## What is a cluster
 
 A cluster is simply a group of servers. A load balancer distributes the workload between the servers in a cluster. At any point, a new web server can be added to the existing cluster to handle more requests from users accessing your application. The load balancer has a single responsibility: deciding which server from the cluster will receive a request that was intercepted.
 
 A very simple cluster can be deployed with two basic servers (2 CPU’s, 4GB of RAM each, 1 Gigabit network). This is sufficient to have a nice file share or a place to put some nightly backups. Gluster is deployed successfully on all kinds of disks, from the lowliest 5200 RPM SATA to mightiest 1.21 Gigawatt SSD’s.
-
 
 
 Installation: PHP app in Linux OS will be installed by using SSH. The Common PHP apps like PHP language itself, MySQL database and apache server will be installed automatically with the help of template files(JSON file) which will further call the Linux script .SH file where all the settings, Permissions, directory creation all lined up and run one by one. 
@@ -287,19 +237,34 @@ Installation: PHP app in Linux OS will be installed by using SSH. The Common PHP
 Below are the commands to manually install various apps.
 
 Install MySQL server manually
-	sudo apt install mysql-server
+
+```
+sudo apt install mysql-server
+```
 To check if MySQL is installed properly, open mysql on terminal with command 
-	Sudo mysql -uroot
-	If you set the password during installation open with -p parameter -
-	mysql -uroot -p
+
+```
+sudo mysql -uroot
+```
+	If you set the password during installation open with -p parameter -mysql -uroot -p
+	
 Install apache manually
-	sudo apt install apache2
-	sudo service apache2 restart
+```
+sudo apt install apache2
+sudo service apache2 restart
+
+```
 Install PHP manually
+
+```
 	sudo apt install php
+	
+```
 Command to install specific packages for PHP
+```
 sudo apt install php-pear php-fpm php-dev php-zip php-curl php-xmlrpc php-gd   php-mysql php-mbstring php-xml libapache2-mod-php
 
+```
 
 Open your web-browser and open link using IP address of your server. 
 
