@@ -61,31 +61,14 @@ cd /azlamp/html/wpsitename.mydomain.com
 Once that's done and you've downloaded the latest version of WordPress, please follow the instructions here to complete configuring a database and finishing a [WordPress install](https://codex.wordpress.org/Installing_WordPress#Famous_5-Minute_Installation). 
 
 ```
-wget https://wordpress.org/latest.tar.gz
-tar xvfz latest.tar.gz --strip 1
-```
-
-
-### SSL Certs
-
-The certificates for your LAMP application reside in `/azlamp/certs/yourdomain` or in this instance, `/azlamp/certs/wpsitename.mydomain.com`
+wget -c http://wordpress.org/latest.tar.gz
+tar -xzvf latest.tar.gz
+sudo mkdir -p /var/www/html/
+sudo rsync -av wordpress/* /var/www/html/
+sudo chown -R www-data:www-data /var/www/html/
+sudo chmod -R 755 /var/www/html/
 
 ```
-mkdir /azlamp/certs/wpsitename.mydomain.com
-```
-
-Copy over the .crt and .key files over to `/azlamp/certs/wpsitename.mydomain.com`.
-The file names should be changed to `nginx.crt` and `nginx.key` in order to be recognized by the configured nginx servers. Depending on your local environment,
-you may choose to use the utility *scp* or a tool like [WinSCP](https://winscp.net/eng/download.php) to copy these files over to the cluster controller virtual machine. 
-
-It's recommended that the certificate files be read-only to owner and that these files are owned by *www-data*:
-
-```
-chown www-data:www-data /azlamp/certs/wpsitename.mydomain.com/*
-chmod 400 /azlamp/certs/wpsitename.mydomain.com/*
-```
-
-
 ### Linking to the content/cluster data location
 
 Navigate to the WordPress content directory and run the following command:
