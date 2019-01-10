@@ -187,6 +187,8 @@ Step 3: Scroll down the page and click on the “Deploy to Azure” button as hi
 	
 Step 4: Clicking the button will take you to the Azure Portal page as below:
 
+[![Deploy to Azure Fully Configurable](https://github.com/qdevelopergithub/LAMP/blob/master/images/template.png)]
+
 Step 5: In above page, fill:\
 i.Subscription : The subscription you want to use(if you have more than one)\
 ii.Resource group: Create a new Resource group. Resource groups are logical grouping units for all related Azure resources.\
