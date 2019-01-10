@@ -27,8 +27,6 @@ NOTE: Depending on the region you choose to deploy the stack in - the deployment
 
 ## Stack Architecture
 
-[![](https://github.com/qdevelopergithub/LAMP/blob/master/images/stack_diagram.png)
-
 This template set deploys the following infrastructure core to your LAMP instance:
 - Autoscaling web frontend layer (Nginx for https termination, Varnish for caching, Apache/php or nginx/php-fpm)
 - Private virtual network for frontend instances
@@ -36,8 +34,6 @@ This template set deploys the following infrastructure core to your LAMP instanc
 - [Azure Load balancer](https://azure.microsoft.com/en-us/services/load-balancer/) to balance across the autoscaled instances
 - [Azure Database for MySQL](https://azure.microsoft.com/en-us/services/mysql/) or [Azure Database for PostgreSQL](https://azure.microsoft.com/en-us/services/postgresql/) or [Azure SQL Database](https://azure.microsoft.com/en-us/services/sql-database/) 
 - Dual [GlusterFS](https://www.gluster.org/) nodes or NFS for high availability access to LAMP files
-
-
 
 ## Next Steps
 
