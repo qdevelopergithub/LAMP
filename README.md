@@ -21,10 +21,7 @@ Below are a list of pre-defined/restricted deployment options based on typical d
 
 | Deployment Type | Description | Estimated Cost | Launch |
 | --- | --- | --- | ---
-| Minimal  | This deployment will use NFS, Microsoft SQL, and smaller autoscale web frontend VM sku (1 core) that'll give faster deployment time (less than 30 minutes) and requires only 2 VM cores currently that'll fit even in a free trial Azure subscription.|[link](https://azure.com/e/5f9752c934ab41799ae3264dd2ee57d1)|[![Deploy to Azure Minimally](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2FLamp%2Fhs-lampgen%2Fazuredeploy-minimal.json)
-| Small to Mid-Size | Supporting up to 1000 concurrent users.  This deployment will use NFS (no high availability) and MySQL (8 vCores), without other options like elastic search or redis cache.|[link](https://azure.com/e/fd794268d0bf421aa17c626fb88f25bc)|[![Deploy to Azure Minimally](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2FLamp%2Fhs-lampgen%2Fazuredeploy-small2mid-noha.json)
 |Large size deployment (with high availability)| Supporting more than 2000 concurrent users. This deployment will use Gluster (for high availability, requiring 2 VMs), MySQL (16 vCores) and redis cache, without other options like elastic search. |[link](https://azure.com/e/078f7294ab6544e8911ddc2ee28850d7)|[![Deploy to Azure Minimally](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2FLamp%2Fhs-lampgen%2Fazuredeploy-large-ha.json)
-| Maximum |This maximal deployment will use Gluster (for high availability, adding 2 VMs for a Gluster cluster), MySQL with highest SKU, redis cache, elastic search (3 VMs), and pretty large storage sizes (both data disks and DB).|[link](https://azure.com/e/e0f959b93ed84eb891dcc44f7883f5b5)|[![Deploy to Azure Maximally](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2FLamp%2Fhs-lampgen%2Fazuredeploy-maximal.json)
 
 NOTE: Depending on the region you choose to deploy the stack in - the deployment might fail due to SKUs being hardcoded in the template where they are not available. For example, today our small-mid-size deployment option hard codes Gen-4 Azure MySQL SKUs into the template, and if a region where that is currently not available in (i.e. westus2) is used, your deployment will fail.  If your deployment fails, please revert to the fully configurable template where possible and change the SKU paramater to one that exists in your region (i.e. Gen-5) or alternatively change your deployment region to one in which the SKU is available (i.e. southcentralus).     
 
@@ -167,4 +164,256 @@ Privacy information can be found at https://privacy.microsoft.com/en-us/
 Microsoft and any contributors reserve all others rights, whether
 under their respective copyrights, patents, or trademarks, whether by
 implication, estoppel or otherwise.
+
+
+				Azure deployment Steps
+Step 1: Go to the Azure Portal https://portal.azure.com. Login into the Portal with your credentials.
+Step 2: Visit the URL https://github.com/qdevelopergithub/lamp. 
+Step 3: Scroll down the page and click on the “Deploy to Azure” button as highlighted below:
+	
+Step 4: Clicking the button will take you to the Azure Portal page as below:
+
+
+Step 5: In above page, fill:
+i.Subscription : The subscription you want to use(if you have more than one)
+ii.Resource group: Create a new Resource group. Resource groups are logical grouping units for all related Azure resources.
+iii.Location: Please select a location from drop down, where you want your VM deployed.
+iv._artifacts Location: This field is automatically filled.
+v. _artifacts Location SAS Token: This token is automatically generated when the template is deployed.
+vi.SSH public key: This key is required to access the VM. Below are the steps to generate this key:
+Steps to generate SSH key on Windows
+1.Download the PuTTY software. It can be downloaded from here: https://www.putty.org/
+2.Run the PuTTYGen program from your system.
+3.Click the “Generate” button on the window as shown below. Move the mouse randomly as highlighted(to generate same entropy).
+
+
+4.After key is generated. Click the button “Save public key” and save it on your system.
+5.Provide the passphrase to encrypt the private key on disk.
+
+6.Lastly, click “Save private key” button and save the file on your machine.
+Step 6: Copy the SSH key from the public key file and paste it in the SSH field in Azure Portal.
+Step 7: Click the “Purchase” button on the Azure Portal page. It will deploy the VM cluster.
+
+
+
+
+
+
+
+
+ 
+Steps to access VM on Windows
+Step 1: Open the PuTTY software which was installed on your machine.
+Step 2: Enter the host name. You will get the hostname after deployment is completed on azure portal.
+
+Step 3: Click Connection=> SSH=> Auth. Load the private key file which was saved earlier.
+
+Step 4: Click on the “Open” button and this will open the SSH connection to VM.
+Cluster maintenance
+Resources: Below is the list of resources deployed on the cluster:
+
+1)1 Storage account (Details of user account, subscription etc.)
+An Azure Storage Account contains all of your Azure Storage data objects: blobs, files, queues, 	tables, and disks. Data in your Azure storage account is durable and highly available, secure, 	massively scalable, and accessible from anywhere in the world over HTTP or HTTPS.
+2)1 Controller for Network Security Group
+You can filter network traffic to and from Azure resources in an Azure virtual network with a network security group. A network security group contains security rules that allow or deny inbound network traffic to, or outbound network traffic from, several types of Azure resources. 
+3)1 Controller for managing public IP addresses/all IP addresses
+You can assign IP addresses to Azure resources to communicate with other Azure resources, 	your on-premises network, and the Internet. There are two types of IP addresses you can use in 	Azure:
+Public IP addresses: Used for communication with the Internet, including Azure public-facing 	services.
+Private IP addresses: Used for communication within an Azure virtual network (VNet), and your 	on-premises network, when you use a VPN gateway or ExpressRoute circuit to extend your 	network to Azure.
+
+4)1 Virtual disk for Controller
+ 	This is a virtual disk which will be used for Controller VM to store all its data.
+
+5)1 VM for Controller 
+This is a virtual machine created for controller with ubuntu server os intalled on it.
+
+6)1 NIC for Controller 
+It will link Virtual disk and VM and other components with each other.
+
+7)1 MySQL database resource
+Managed MySQL database used by the PHP applications.
+
+8)2 Virtual disks for Cluster(Gluster FS with 4 disk per Gluster)
+ It will use for load balance and hence there will be high availability.
+
+9)2 NIC(Network interface cards) for Gluster file server
+
+10)2 VM (Virtual machine) will make for Gluster Fileserver
+
+11)1 security group resource to manage all the file security and authorized access control
+
+12)1 Virtual Network Resource which will link all resources with each other
+
+13)1 Load Balancer for Cluster( Gluster File server for load balancing) for HA(High availability)
+
+14)1 IP address resource for load balancer
+
+15)1 resource for Redis Cache
+Managed instance of the Redis key-value storage. Your PHP applications can connect to this to store sessions and other transient data. Redis store data in-memory, so it’s very fast. Azure Cache for Redis is a distributed, managed cache that helps you build highly scalable and responsive applications by providing super-fast access to your data.
+
+16)1 VM resource for scale set
+
+17)1 Storage Account for VM scale set
+When you create a scale set in the portal, a load balancer is created. Network Address 	Translation (NAT) rules are used to distribute traffic to the scale set instances for remote 	connectivity such as RDP or SSH.
+
+With scale sets, all VM instances are created from the same base OS image and configuration. This approach lets you easily manage hundreds of VMs without additional configuration tasks or network management. When you have many VMs that run your application, it's important to maintain a consistent configuration across your environment. For reliable performance of your application, the VM size, disk configuration, and application installs should match across all VMs. 
+
+NOTE: - There is no additional cost to scale sets. You only pay for the underlying compute resources such as the VM instances, load balancer, or Managed Disk storage.
+
+Why use of Mulitple NIC’s
+Virtual machines (VMs) in Azure can have multiple virtual network interface cards (NICs) attached to them. A common scenario is to have different subnets for front-end and back-end connectivity. You can associate multiple NICs on a VM to multiple subnets, but those subnets 	must all reside in the same virtual network (vNet).
+
+What is a cluster
+
+A cluster is simply a group of servers. A load balancer distributes the workload between the servers in a cluster. At any point, a new web server can be added to the existing cluster to handle more requests from users accessing your application. The load balancer has a single responsibility: deciding which server from the cluster will receive a request that was intercepted.
+
+A very simple cluster can be deployed with two basic servers (2 CPU’s, 4GB of RAM each, 1 Gigabit network). This is sufficient to have a nice file share or a place to put some nightly backups. Gluster is deployed successfully on all kinds of disks, from the lowliest 5200 RPM SATA to mightiest 1.21 Gigawatt SSD’s.
+
+
+
+Installation: PHP app in Linux OS will be installed by using SSH. The Common PHP apps like PHP language itself, MySQL database and apache server will be installed automatically with the help of template files(JSON file) which will further call the Linux script .SH file where all the settings, Permissions, directory creation all lined up and run one by one. 
+
+Below are the commands to manually install various apps.
+
+Install MySQL server manually
+	sudo apt install mysql-server
+To check if MySQL is installed properly, open mysql on terminal with command 
+	Sudo mysql -uroot
+	If you set the password during installation open with -p parameter -
+	mysql -uroot -p
+Install apache manually
+	sudo apt install apache2
+	sudo service apache2 restart
+Install PHP manually
+	sudo apt install php
+Command to install specific packages for PHP
+sudo apt install php-pear php-fpm php-dev php-zip php-curl php-xmlrpc php-gd   php-mysql php-mbstring php-xml libapache2-mod-php
+
+Below is a Full script which will run and install WordPress and Drupal on the cluster. 
+Custom commands to install WordPress
+wget -c http://wordpress.org/latest.tar.gz
+tar -xzvf latest.tar.gz
+sudo mkdir -p /var/www/html/
+sudo rsync -av wordpress/* /var/www/html/
+sudo chown -R www-data:www-data /var/www/html/
+sudo chmod -R 755 /var/www/html/
+Custom commands to install Drupal
+wget -c https://ftp.drupal.org/files/projects/drupal-7.2.tar.gz
+tar -xzvf drupal-7.2.tar.gz
+sudo mkdir -p /var/www/html/
+sudo rsync -av drupal-7.2/* /var/www/html/
+sudo chown -R www-data:www-data /var/www/html/
+sudo chmod -R 755 /var/www/html/
+Custom commands to install Joomla
+Wget https://downloads.joomla.org/cms/joomla3/3-9-1/joomla_3-9-1-stable-full_package-zip?format=zip
+sudo apt-get install unzip
+sudo mkdir -p /var/www/html/
+sudo unzip Joomla*.zip -d /var/www/html/joomla
+sudo chown -R www-data:www-data /var/www/html/
+sudo chmod -R 755 /var/www/html/
+
+Open your web-browser and open link using IP address of your server. 
+
+PHP app will be installed on Linux OS. But in our scenario everything is virtual, so the cluster is type of server which will store all the files and folders on virtual hard disk. Cluster File server will handle the entire load balancing and see which hard disk is idle or having lesser load and fetch data from that hard disk. This will ensure high availability.
+The other way to install php app on Linux is login into virtual machine and run the particular commands to install any php app. The Linux users know how to install extra apps if required with the help of terminal or SSH.
+
+
+Deploying and Accessing VM on macOS/Linux
+Below are the steps to access VM through LINUX/MAC
+1.Run below command on command prompt:
+ssh-keygen -t rsa
+2.Running above command will ask for file name. Provide the file name.
+3.After 2nd step, it will ask for passphrase to generate private key. Provide same.
+4.This will generate 2 files with name provided by you. One file will have .pub extension and other file with no extension.
+5.Rename the extension less file and provide extension “.pem”. This is the private key file.
+6.Now open the .pub file and copy paste it on “SSH public key” parameter which is asked for at the time of deployment.
+7.To connect with VM, Open the terminal and navigate to the location where you have .pem file.
+8.Write following command in terminal:
+chmod 600 {PrivateKeyFileName}.pem	
+9.Then write the below command on terminal:
+ssh -i {privatekeyname}.pem {username}@{HostnameOfVM}
+
+This will open the VM and you can access same.
+
+OS Patching
+
+Anyone can access the information for OS Patching from the below link:  
+	https://github.com/Azure/azure-linux-extensions/tree/master/OSPatching
+Automate Linux VM OS Updates Using OS Patching Extension:
+Complete information about LINUX VM OS updates can be found at the link:  https://azure.microsoft.com/en-in/blog/automate-linux-vm-os-updates-using-ospatching-extension/
+Manual Linux VM OS Patching:
+The command to update LINUX OS is as below which needs to be put in terminal:
+sudo apt install unattended-upgrades
+To configure unattended-upgrades, edit /etc/apt/apt.conf.d/50unattended-upgrades and adjust the following to fit your needs:
+Unattended-Upgrade::Allowed-Origins {
+        "${distro_id}:${distro_codename}";
+        "${distro_id}:${distro_codename}-security";
+      "${distro_id}:${distro_codename}-updates";
+      "${distro_id}:${distro_codename}-proposed";
+//      "${distro_id}:${distro_codename}-backports";
+};
+Certain packages can also be blacklisted and therefore will not be automatically updated. To blacklist a package, add it to the list:
+Unattended-Upgrade::Package-Blacklist {
+      "vim";
+      "libc6";
+      "libc6-dev";
+//      "libc6-i686";
+};
+The double “//” serve as comments, so whatever follows "//" will not be evaluated.
+To enable automatic updates, edit /etc/apt/apt.conf.d/20auto-upgrades and set the appropriate apt configuration options:
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Download-Upgradeable-Packages "1";
+APT::Periodic::AutocleanInterval "7";
+APT::Periodic::Unattended-Upgrade "1";
+The above configuration updates the package list, downloads, and installs available upgrades every day. The local download archive is cleaned every week. On servers upgraded to newer versions of Ubuntu, depending on your responses, the file listed above may not be there. In this case, creating a new file of this name should also work.
+
+Starting and Stopping Gluster Manually
+
+For complete information about GlusterFS, please follow the below link:
+https://gluster.readthedocs.io/en/latest/Administrator%20Guide/Start%20Stop%20Daemon/
+
+
+Connect linux vm through RDP
+
+Please enter below commands when connected through ssh in below sequence
+
+1)sudo apt-get install xfce4
+2)sudo apt-get install xrdp
+3)sudo systemctl enable xrdp
+4)echo xfce4-session >~/.xsession
+5)sudo service xrdp restart
+6)sudo passwd youradminuser (it will ask for password and set the password 								and save for future usage)
+
+To open Azure CLI, click on the red rectangle area as shown in image then select Bash
+Type "az" to use Azure CLI 2.0
+
+
+
+
+Then go to Azure CLI and enter this command with your resource group name and controller vm name as see in below example
+
+az vm open-port --resource-group lamp --name controller-vm-66tjbz --port 3389
+
+
+
+
+
+Then click the “Download the RDP File” button as shown in image and connect.
+
+The following example shows whether VM is listening on TCP port 3389 as expected. Please use the below command to check same:
+
+sudo netstat -plnt | grep rdp
+
+
+
+If not listening on port then use
+sudo service xrdp restart
+
+Below are the screenshots while connecting to VM GUI.
+
+
+
+
+
+
 
