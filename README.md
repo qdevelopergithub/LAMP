@@ -100,7 +100,7 @@ An example LAMP application (WordPress) is illustrated here for the sake of clar
 
 Download a latest version of Wordpress. Once that's done and you've downloaded the latest version of WordPress, please follow the instructions here to complete configuring a database and finishing a [WordPress install](https://codex.wordpress.org/Installing_WordPress#Famous_5-Minute_Installation). 
 
-Below is a Full script which will run and install WordPress and Drupal on the cluster. 
+Below is a Full script which will run and install WordPress on the cluster. 
 
 ```
 wget -c http://wordpress.org/latest.tar.gz
@@ -112,7 +112,9 @@ sudo chmod -R 755 /var/www/html/
 
 ```
 
-## Configuring the controller for a specific LAMP application (WordPress)
+## Configuring the controller for a specific LAMP application (Drupal)
+
+Download a latest version of Drupal. Once that's done and you've downloaded the latest version of Drupal, please follow the instructions here to complete configuring a database and finishing a [Drupal install](https://www.drupal.org/documentation/install/developers). 
 
 Below is a Full script which will run and install Drupal on the cluster.
 
@@ -126,6 +128,8 @@ sudo chmod -R 755 /var/www/html/
 
 ```
 ## Configuring the controller for a specific LAMP application (Joomla)
+
+Download a latest version of Joomla. Once that's done and you've downloaded the latest version of Joomla, please follow the instructions here to complete configuring a database and finishing a [Joomla install](https://docs.joomla.org/Installing_Joomla_on_Debian_Linux). 
 
 Below is a Full script which will run and install Joomla on the cluster.
 
