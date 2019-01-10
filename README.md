@@ -27,7 +27,7 @@ NOTE: Depending on the region you choose to deploy the stack in - the deployment
 
 ## Stack Architecture
 
--1 Storage account (Details of user account, subscription etc.)
+- 1 Storage account (Details of user account, subscription etc.)
 An Azure Storage Account contains all of your Azure Storage data objects: blobs, files, queues, 	tables, and disks. Data in your Azure storage account is durable and highly available, secure, 	massively scalable, and accessible from anywhere in the world over HTTP or HTTPS.
 - 1 Controller for Network Security Group
 You can filter network traffic to and from Azure resources in an Azure virtual network with a network security group. A network security group contains security rules that allow or deny inbound network traffic to, or outbound network traffic from, several types of Azure resources. 
@@ -73,7 +73,7 @@ When you create a scale set in the portal, a load balancer is created. Network A
 
 With scale sets, all VM instances are created from the same base OS image and configuration. This approach lets you easily manage hundreds of VMs without additional configuration tasks or network management. When you have many VMs that run your application, it's important to maintain a consistent configuration across your environment. For reliable performance of your application, the VM size, disk configuration, and application installs should match across all VMs. 
 
-####NOTE: - 
+#### NOTE: - 
 There is no additional cost to scale sets. You only pay for the underlying compute resources such as the VM instances, load balancer, or Managed Disk storage.
 
 
