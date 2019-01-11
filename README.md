@@ -33,30 +33,30 @@ Step 4: Clicking the button will take you to the Azure Portal page as below:
 
 [![Deploy to Azure Fully Configurable](https://github.com/qdevelopergithub/LAMP/blob/master/images/template.png)]()
 
-Step 5: In above page, fill:\
+Step 5: In above page, fill:
 
 i. Subscription : The subscription you want to use(if you have more than one)\
 ii. Resource group: Create a new Resource group. Resource groups are logical grouping units for all related Azure resources.\
 iii. Location: Please select a location from drop down, where you want your VM deployed.\
 iv. _artifacts Location: This field is automatically filled.\
 v. _artifacts Location SAS Token: This token is automatically generated when the template is deployed.\
-vi. SSH public key: This key is required to access the VM. Below are the steps to generate this key:\
+vi. SSH public key: This key is required to access the VM. Below are the steps to generate this key:
 
 ## Steps to generate SSH key on Windows
 
-- Download the PuTTY software. It can be downloaded from here: https://www.putty.org/ \
+- Download the PuTTY software. It can be downloaded from here: https://www.putty.org/
 - Run the PuTTYGen program from your system.\
-- Click the “Generate” button on the window as shown below. Move the mouse randomly as highlighted(to generate same entropy).\
+- Click the “Generate” button on the window as shown below. Move the mouse randomly as highlighted(to generate same entropy).
 
 [![Putty Key Generate](https://github.com/qdevelopergithub/LAMP/blob/master/images/putty_key_gen.png)]()
 
-- After key is generated. Click the button “Save public key” and save it on your system.\
-- Provide the passphrase to encrypt the private key on disk.\
+- After key is generated. Click the button “Save public key” and save it on your system.
+- Provide the passphrase to encrypt the private key on disk.
 
 [![Putty Key Generate](https://github.com/qdevelopergithub/LAMP/blob/master/images/putty_key_gen2.png)]()
 
 - Lastly, click “Save private key” button and save the file on your machine.
-- Copy the SSH key from the public key file and paste it in the SSH field in Azure Portal.\
+- Copy the SSH key from the public key file and paste it in the SSH field in Azure Portal.
 - Click the “Purchase” button on the Azure Portal page. It will deploy the VM cluster.
 
 
