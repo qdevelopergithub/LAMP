@@ -47,8 +47,14 @@ vi. SSH public key: This key is required to access the VM. Below are the steps t
 - Download the PuTTY software. It can be downloaded from here: https://www.putty.org/ \
 - Run the PuTTYGen program from your system.\
 - Click the “Generate” button on the window as shown below. Move the mouse randomly as highlighted(to generate same entropy).\
+
+[![Putty Key Generate](https://github.com/qdevelopergithub/LAMP/blob/master/images/putty_key_gen.png)]()
+
 - After key is generated. Click the button “Save public key” and save it on your system.\
 - Provide the passphrase to encrypt the private key on disk.\
+
+[![Putty Key Generate](https://github.com/qdevelopergithub/LAMP/blob/master/images/putty_key_gen2.png)]()
+
 - Lastly, click “Save private key” button and save the file on your machine.
 - Copy the SSH key from the public key file and paste it in the SSH field in Azure Portal.\
 - Click the “Purchase” button on the Azure Portal page. It will deploy the VM cluster.
@@ -169,9 +175,14 @@ sudo chmod -R 755 /var/www/html/
 
 Step 1: Open the PuTTY software which was installed on your machine.
 Step 2: Enter the host name. You will get the hostname after deployment is completed on azure portal.
-Step 3: Click Connection=> SSH=> Auth. Load the private key file which was saved earlier.
-Step 4: Click on the “Open” button and this will open the SSH connection to VM.
 
+[![Putty Key Generate](https://github.com/qdevelopergithub/LAMP/blob/master/images/access_vm_ssh.png)]()
+
+Step 3: Click Connection=> SSH=> Auth. Load the private key file which was saved earlier.
+
+[![Putty Key Generate](https://github.com/qdevelopergithub/LAMP/blob/master/images/access_vm_ssh_key.png)]()
+
+Step 4: Click on the “Open” button and this will open the SSH connection to VM.
 
 Installation: PHP app in Linux OS will be installed by using SSH. The Common PHP apps like PHP language itself, MySQL database and apache server will be installed automatically with the help of template files(JSON file). All the settings, Permissions, directory creation all lined up and run one by one. 
 
