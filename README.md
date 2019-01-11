@@ -66,6 +66,8 @@ This template set deploys the following infrastructure core to your LAMP instanc
 
 ## Stack Architecture
 
+[![Resources](https://github.com/qdevelopergithub/LAMP/blob/master/images/resources.png)]()
+
 - 1 Storage account (Details of user account, subscription etc.)
 An Azure Storage Account contains all of your Azure Storage data objects: blobs, files, queues, 	tables, and disks. Data in your Azure storage account is durable and highly available, secure, 	massively scalable, and accessible from anywhere in the world over HTTP or HTTPS.
 - 1 Controller for Network Security Group
@@ -326,12 +328,16 @@ sudo passwd youradminuser
 To open Azure CLI, click on the red rectangle area as shown in image then select Bash
 Type "az" to use Azure CLI 2.0
 
+[![Azure CLI](https://github.com/qdevelopergithub/LAMP/blob/master/images/azure_cli.png)]()
+
 Then go to Azure CLI and enter this command with your resource group name and controller vm name as see in below example
 
 ```
 az vm open-port --resource-group lamp --name controller-vm-66tjbz --port 3389
 
 ```
+
+[![Azure CLI](https://github.com/qdevelopergithub/LAMP/blob/master/images/download_RDP.png)]()
 
 Then click the “Download the RDP File” button as shown in image and connect.
 
@@ -341,12 +347,24 @@ The following example shows whether VM is listening on TCP port 3389 as expected
 sudo netstat -plnt | grep rdp
 
 ```
+[![Netstat](https://github.com/qdevelopergithub/LAMP/blob/master/images/netstat.png)]()
 
 If not listening on port then use
+
+```
 sudo service xrdp restart
+
+```
 
 Below are the screenshots while connecting to VM GUI.
 
+[![XFCE Login](https://github.com/qdevelopergithub/LAMP/blob/master/images/xfce_login.png)]()
+
+
+[![XFCE Login](https://github.com/qdevelopergithub/LAMP/blob/master/images/xfce_after_login.png)]()
+
+
+[![XFCE Login](https://github.com/qdevelopergithub/LAMP/blob/master/images/xfce_terminal.png)]()
 
 ## Code of Conduct
 
