@@ -325,7 +325,8 @@ sudo passwd youradminuser
 ```
 (it will ask for password and set the password and save for future usage)
 
-To open Azure CLI, click on the red rectangle area as shown in image then select Bash
+To open Azure CLI, Click on 1st option next to Search panel \
+Then select Bash\
 Type "az" to use Azure CLI 2.0
 
 [![Azure CLI](https://github.com/qdevelopergithub/LAMP/blob/master/images/azure_cli.png)]()
