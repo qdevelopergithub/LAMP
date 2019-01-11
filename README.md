@@ -68,6 +68,23 @@ This template set deploys the following infrastructure core to your LAMP instanc
 
 [![Resources](https://github.com/qdevelopergithub/LAMP/blob/master/images/resources.png)]()
 
+1.Owner:- Lets you manage everything, including access to resources.
+2.Contributor:- 	Lets you manage everything except access to resources.
+3.Reader:-	Lets you view everything, but not make any changes.
+4.DevTest Labs User:-	Lets you connect, start, restart, and shutdown your virtual machines in your Azure DevTest Labs.
+5.Log Analytics Contributor:-	Log Analytics Contributor can read all monitoring data and edit monitoring settings. Editing monitoring settings includes adding the VM extension to VMs; reading storage account keys to be able to configure collection of logs from Azure Storage; creating and configuring Automation accounts; adding solutions; and configuring Azure diagnostics on all Azure resources.
+6.Log Analytics Reader:-	Log Analytics Reader can view and search all monitoring data as well as and view monitoring settings, including viewing the configuration of Azure diagnostics on all Azure resources.
+7.Managed Application Operator Role:-	Lets you read and perform actions on Managed Application resources
+8.Managed Applications Reader:-	Lets you read resources in a managed app and request JIT access.
+9.Monitoring Contributor:-	Can read all monitoring data and edit monitoring settings. See also Get started with roles, permissions, and security with Azure Monitor.
+10.Monitoring Metrics Publisher:-	Enables publishing metrics against Azure resources
+11.Monitoring Reader:-	Can read all monitoring data (metrics, logs, etc.). See also Get started with roles, permissions, and security with Azure Monitor.
+12.Resource Policy Contributor (Preview):-	(Preview) Backfilled users from EA, with rights to create/modify resource policy, create support ticket and read resources/hierarchy.
+13.User Access Administrator:-	Lets you manage user access to Azure resources.
+14.Virtual Machine Administrator Login:-	View Virtual Machines in the portal and login as administrator
+15.Virtual Machine Contributor:-	Lets you manage virtual machines, but not access to them, and not the virtual network or storage account they're connected to.
+16.Virtual Machine User Login:-	View Virtual Machines in the portal and login as a regular user.
+
 - 1 Storage account (Details of user account, subscription etc.)
 An Azure Storage Account contains all of your Azure Storage data objects: blobs, files, queues, 	tables, and disks. Data in your Azure storage account is durable and highly available, secure, 	massively scalable, and accessible from anywhere in the world over HTTP or HTTPS.
 - 1 Controller for Network Security Group
