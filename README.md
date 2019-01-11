@@ -183,37 +183,29 @@ The last step is to let the `/azlamp/html` directory sync with `/var/www/html` i
 At this point, your LAMP application is setup to use in the LAMP cluster. If you'd like to install a separate LAMP application (WordPress or otherwise), you'll have to repeat the process listed here with a new domain for the new application.
 
 Step 5: In above page, fill:\
-i.Subscription : The subscription you want to use(if you have more than one)\
-ii.Resource group: Create a new Resource group. Resource groups are logical grouping units for all related Azure resources.\
-iii.Location: Please select a location from drop down, where you want your VM deployed.\
-iv._artifacts Location: This field is automatically filled.\
+i. Subscription : The subscription you want to use(if you have more than one)\
+ii. Resource group: Create a new Resource group. Resource groups are logical grouping units for all related Azure resources.\
+iii. Location: Please select a location from drop down, where you want your VM deployed.\
+iv. _artifacts Location: This field is automatically filled.\
 v. _artifacts Location SAS Token: This token is automatically generated when the template is deployed.\
-vi.SSH public key: This key is required to access the VM. Below are the steps to generate this key:\
+vi. SSH public key: This key is required to access the VM. Below are the steps to generate this key:\
 
 ## Steps to generate SSH key on Windows
-1.Download the PuTTY software. It can be downloaded from here: https://www.putty.org/ \
-2.Run the PuTTYGen program from your system.\
-3.Click the “Generate” button on the window as shown below. Move the mouse randomly as highlighted(to generate same entropy).\
-4.After key is generated. Click the button “Save public key” and save it on your system.\
-5.Provide the passphrase to encrypt the private key on disk.\
-6.Lastly, click “Save private key” button and save the file on your machine.
-Step 6: Copy the SSH key from the public key file and paste it in the SSH field in Azure Portal.\
-Step 7: Click the “Purchase” button on the Azure Portal page. It will deploy the VM cluster.
 
+- Download the PuTTY software. It can be downloaded from here: https://www.putty.org/ \
+- Run the PuTTYGen program from your system.\
+- Click the “Generate” button on the window as shown below. Move the mouse randomly as highlighted(to generate same entropy).\
+- After key is generated. Click the button “Save public key” and save it on your system.\
+- Provide the passphrase to encrypt the private key on disk.\
+- Lastly, click “Save private key” button and save the file on your machine.
+- Copy the SSH key from the public key file and paste it in the SSH field in Azure Portal.\
+- Click the “Purchase” button on the Azure Portal page. It will deploy the VM cluster.
 
+## Steps to access VM on Windows
 
-
-
-
-
-
- 
-Steps to access VM on Windows
 Step 1: Open the PuTTY software which was installed on your machine.
 Step 2: Enter the host name. You will get the hostname after deployment is completed on azure portal.
-
 Step 3: Click Connection=> SSH=> Auth. Load the private key file which was saved earlier.
-
 Step 4: Click on the “Open” button and this will open the SSH connection to VM.
 
 ## Why use of Mulitple NIC’s
@@ -240,8 +232,9 @@ To check if MySQL is installed properly, open mysql on terminal with command
 
 ```
 sudo mysql -uroot
+
 ```
-	If you set the password during installation open with -p parameter -mysql -uroot -p
+If you set the password during installation open with -p parameter -mysql -uroot -p
 	
 Install apache manually
 ```
@@ -252,7 +245,7 @@ sudo service apache2 restart
 Install PHP manually
 
 ```
-	sudo apt install php
+sudo apt install php
 	
 ```
 Command to install specific packages for PHP
@@ -267,33 +260,38 @@ PHP app will be installed on Linux OS. But in our scenario everything is virtual
 The other way to install php app on Linux is login into virtual machine and run the particular commands to install any php app. The Linux users know how to install extra apps if required with the help of terminal or SSH.
 
 
-Deploying and Accessing VM on macOS/Linux
+## Deploying and Accessing VM on macOS/Linux
+
 Below are the steps to access VM through LINUX/MAC
-1.Run below command on command prompt:
+- Run below command on command prompt:
 ssh-keygen -t rsa
-2.Running above command will ask for file name. Provide the file name.
-3.After 2nd step, it will ask for passphrase to generate private key. Provide same.
-4.This will generate 2 files with name provided by you. One file will have .pub extension and other file with no extension.
-5.Rename the extension less file and provide extension “.pem”. This is the private key file.
-6.Now open the .pub file and copy paste it on “SSH public key” parameter which is asked for at the time of deployment.
-7.To connect with VM, Open the terminal and navigate to the location where you have .pem file.
-8.Write following command in terminal:
+- Running above command will ask for file name. Provide the file name.
+- After 2nd step, it will ask for passphrase to generate private key. Provide same.
+- This will generate 2 files with name provided by you. One file will have .pub extension and other file with no extension.
+- Rename the extension less file and provide extension “.pem”. This is the private key file.
+- Now open the .pub file and copy paste it on “SSH public key” parameter which is asked for at the time of deployment.
+- To connect with VM, Open the terminal and navigate to the location where you have .pem file.
+- Write following command in terminal:
 chmod 600 {PrivateKeyFileName}.pem	
-9.Then write the below command on terminal:
+- Then write the below command on terminal:
 ssh -i {privatekeyname}.pem {username}@{HostnameOfVM}
 
 This will open the VM and you can access same.
 
-OS Patching
+## OS Patching
 
 Anyone can access the information for OS Patching from the below link:  
 	https://github.com/Azure/azure-linux-extensions/tree/master/OSPatching
 Automate Linux VM OS Updates Using OS Patching Extension:
 Complete information about LINUX VM OS updates can be found at the link:  https://azure.microsoft.com/en-in/blog/automate-linux-vm-os-updates-using-ospatching-extension/
-Manual Linux VM OS Patching:
+
+## Manual Linux VM OS Patching:
+
 The command to update LINUX OS is as below which needs to be put in terminal:
 sudo apt install unattended-upgrades
 To configure unattended-upgrades, edit /etc/apt/apt.conf.d/50unattended-upgrades and adjust the following to fit your needs:
+
+```
 Unattended-Upgrade::Allowed-Origins {
         "${distro_id}:${distro_codename}";
         "${distro_id}:${distro_codename}-security";
@@ -301,19 +299,31 @@ Unattended-Upgrade::Allowed-Origins {
       "${distro_id}:${distro_codename}-proposed";
 //      "${distro_id}:${distro_codename}-backports";
 };
+
+```
+
 Certain packages can also be blacklisted and therefore will not be automatically updated. To blacklist a package, add it to the list:
+
+``` 
 Unattended-Upgrade::Package-Blacklist {
       "vim";
       "libc6";
       "libc6-dev";
-//      "libc6-i686";
+//    "libc6-i686";
 };
+
+```
 The double “//” serve as comments, so whatever follows "//" will not be evaluated.
+
 To enable automatic updates, edit /etc/apt/apt.conf.d/20auto-upgrades and set the appropriate apt configuration options:
+
+```
 APT::Periodic::Update-Package-Lists "1";
 APT::Periodic::Download-Upgradeable-Packages "1";
 APT::Periodic::AutocleanInterval "7";
 APT::Periodic::Unattended-Upgrade "1";
+
+```
 The above configuration updates the package list, downloads, and installs available upgrades every day. The local download archive is cleaned every week. On servers upgraded to newer versions of Ubuntu, depending on your responses, the file listed above may not be there. In this case, creating a new file of this name should also work.
 
 Starting and Stopping Gluster Manually
@@ -321,39 +331,39 @@ Starting and Stopping Gluster Manually
 For complete information about GlusterFS, please follow the below link:
 https://gluster.readthedocs.io/en/latest/Administrator%20Guide/Start%20Stop%20Daemon/
 
-
 Connect linux vm through RDP
 
 Please enter below commands when connected through ssh in below sequence
 
-1)sudo apt-get install xfce4
-2)sudo apt-get install xrdp
-3)sudo systemctl enable xrdp
-4)echo xfce4-session >~/.xsession
-5)sudo service xrdp restart
-6)sudo passwd youradminuser (it will ask for password and set the password 								and save for future usage)
+```
+sudo apt-get install xfce4
+sudo apt-get install xrdp
+sudo systemctl enable xrdp
+echo xfce4-session >~/.xsession
+sudo service xrdp restart
+sudo passwd youradminuser
+
+```
+(it will ask for password and set the password and save for future usage)
 
 To open Azure CLI, click on the red rectangle area as shown in image then select Bash
 Type "az" to use Azure CLI 2.0
 
-
-
-
 Then go to Azure CLI and enter this command with your resource group name and controller vm name as see in below example
 
+```
 az vm open-port --resource-group lamp --name controller-vm-66tjbz --port 3389
 
-
-
-
+```
 
 Then click the “Download the RDP File” button as shown in image and connect.
 
 The following example shows whether VM is listening on TCP port 3389 as expected. Please use the below command to check same:
 
+```
 sudo netstat -plnt | grep rdp
 
-
+```
 
 If not listening on port then use
 sudo service xrdp restart
