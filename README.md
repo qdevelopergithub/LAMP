@@ -173,7 +173,7 @@ sudo chmod -R 755 /var/www/html/
 
 ## Steps to access VM on Windows
 
-Step 1: Open the PuTTY software which was installed on your machine.
+Step 1: Open the PuTTY software which was installed on your machine.\
 Step 2: Enter the host name. You will get the hostname after deployment is completed on azure portal.
 
 [![Putty Key Generate](https://github.com/qdevelopergithub/LAMP/blob/master/images/access_vm_ssh.png)]()
