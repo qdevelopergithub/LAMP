@@ -27,7 +27,6 @@ NOTE: Depending on the region you choose to deploy the stack in - the deployment
 
 ## Azure deployment Steps
 Step 1: Go to the Azure Portal https://portal.azure.com. Login into the Portal with your credentials.\
-Step 2: Visit the URL https://github.com/qdevelopergithub/lamp. \
 Step 3: Scroll down the page and click on the “Deploy to Azure” button as highlighted below:
 
 [![Deploy to Azure Fully Configurable](http://azuredeploy.net/deploybutton.png)]()
