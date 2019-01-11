@@ -45,7 +45,7 @@ vi. SSH public key: This key is required to access the VM. Below are the steps t
 ## Steps to generate SSH key on Windows
 
 - Download the PuTTY software. It can be downloaded from here: https://www.putty.org/
-- Run the PuTTYGen program from your system.\
+- Run the PuTTYGen program from your system.
 - Click the “Generate” button on the window as shown below. Move the mouse randomly as highlighted(to generate same entropy).
 
 [![Putty Key Generate](https://github.com/qdevelopergithub/LAMP/blob/master/images/putty_key_gen.png)]()
