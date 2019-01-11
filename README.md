@@ -114,15 +114,10 @@ There is no additional cost to scale sets. You only pay for the underlying compu
 
 ## Next Steps
 
-# Prepare deployed cluster for LAMP applications
-
-If you chose Apache as your `webServerType` and `true` for the `htmlLocalCopy` switch at your LAMP cluster deployment time, you can install additional LAMP sites on your  cluster, utilizing Apache's VirtualHost feature (we call this "LAMP generalization"). To manage your installed cluster, you'll first need to login to the LAMP cluster controller virtual machine. The directory you'll need to work out of is `/azlamp`. You will need privileged access which means that you'll either need to be root (superuser) or have *sudo* access. 
-
+At this point, your LAMP application is setup to use in the LAMP cluster. If you'd like to install a separate LAMP application (WordPress or otherwise), you'll have to repeat the process listed here with a new domain for the new application.
 
 ## Configuring the controller for a specific LAMP application (WordPress)
 
-
-### Installation Destination
 An example LAMP application (WordPress) is illustrated here for the sake of clarity. The approach is similar to any LAMP application out there. 
 
 Download a latest version of Wordpress. Once that's done and you've downloaded the latest version of WordPress, please follow the instructions here to complete configuring a database and finishing a [WordPress install](https://codex.wordpress.org/Installing_WordPress#Famous_5-Minute_Installation). 
@@ -170,39 +165,6 @@ sudo chmod -R 755 /var/www/html/
 
 ```
 
-### Update Apache configurations on all web frontend instances
-
-Once the correspnding html/data/certs directories are configured, we need to reconfigure all Apache services on web frontend instances, so that newly created sites are added to the Apache VirtualHost configurations and deleted sites are removed from them as well. This is done by the `/azlamp/bin/update-vmss-config` hook (executed every minute on each and every VMSS instance using a cron job), which requires us to provide the commands to run (to reconfigure Apache service) on each VMSS instance. There's already a utility script installed for that, so it's easy to achieve as follows.
-
-On the controller machine, look up the file `/azlamp/bin/update-vmss-config`. If you haven't modified that file, you'll see the following lines in the file:
-
-```
-        #1)
-        #    . /azlamp/bin/utils.sh
-        #    reset_all_sites_on_vmss true VMSS apache
-        #;;
-```
-
-Remove all the leading `#` characters from these lines (uncommenting) and save the file, then wait for a minute. After that, your newly added sites should be available through the domain names specified/used as the directory names (Of course this assumes you set up your DNS records for your new site FQDNs so that their CNAME records point to the deployed Lamp cluster's load balancer DNS name, whis is of the form `lb-xyz123.an_azure_region.cloudapp.azure.com`).
-
-If you are adding sites for the second or later time, you'll already have the above lines commented out. Just create another `case` block, copying the 4 lines, but make sure to change the number so that it's one greater than the last VMSS config version number (you should be able to find that from the script). As an example, the final text would look like:
-
-```
-        1)
-            . /azlamp/bin/utils.sh
-            reset_all_sites_on_vmss true VMSS apache
-        ;;
-        2)
-            . /azlamp/bin/utils.sh
-            reset_all_sites_on_vmss true VMSS apache
-        ;;
-```
-
-
-The last step is to let the `/azlamp/html` directory sync with `/var/www/html` in every VMSS instance. This should be done by running `/usr/local/bin/update_last_modified_time.azlamp.sh` script on the controller machine as root. Once this is run and after a minute, the `/var/www/html` directory on every VMSS instance should be the same as `/azlamp/html`, and the newly added sites should be available.
-
-At this point, your LAMP application is setup to use in the LAMP cluster. If you'd like to install a separate LAMP application (WordPress or otherwise), you'll have to repeat the process listed here with a new domain for the new application.
-
 ## Steps to access VM on Windows
 
 Step 1: Open the PuTTY software which was installed on your machine.
@@ -210,19 +172,11 @@ Step 2: Enter the host name. You will get the hostname after deployment is compl
 Step 3: Click Connection=> SSH=> Auth. Load the private key file which was saved earlier.
 Step 4: Click on the “Open” button and this will open the SSH connection to VM.
 
-## Why use of Mulitple NIC’s
 
-Virtual machines (VMs) in Azure can have multiple virtual network interface cards (NICs) attached to them. A common scenario is to have different subnets for front-end and back-end connectivity. You can associate multiple NICs on a VM to multiple subnets, but those subnets 	must all reside in the same virtual network (vNet).
-
-## What is a cluster
-
-A cluster is simply a group of servers. A load balancer distributes the workload between the servers in a cluster. At any point, a new web server can be added to the existing cluster to handle more requests from users accessing your application. The load balancer has a single responsibility: deciding which server from the cluster will receive a request that was intercepted.
-
-A very simple cluster can be deployed with two basic servers (2 CPU’s, 4GB of RAM each, 1 Gigabit network). This is sufficient to have a nice file share or a place to put some nightly backups. Gluster is deployed successfully on all kinds of disks, from the lowliest 5200 RPM SATA to mightiest 1.21 Gigawatt SSD’s.
+Installation: PHP app in Linux OS will be installed by using SSH. The Common PHP apps like PHP language itself, MySQL database and apache server will be installed automatically with the help of template files(JSON file). All the settings, Permissions, directory creation all lined up and run one by one. 
 
 
-Installation: PHP app in Linux OS will be installed by using SSH. The Common PHP apps like PHP language itself, MySQL database and apache server will be installed automatically with the help of template files(JSON file) which will further call the Linux script .SH file where all the settings, Permissions, directory creation all lined up and run one by one. 
-
+## Manually install various apps
 Below are the commands to manually install various apps.
 
 Install MySQL server manually
@@ -280,6 +234,16 @@ ssh -i {privatekeyname}.pem {username}@{HostnameOfVM}
 
 This will open the VM and you can access same.
 
+## Why use of Mulitple NIC’s
+
+Virtual machines (VMs) in Azure can have multiple virtual network interface cards (NICs) attached to them. A common scenario is to have different subnets for front-end and back-end connectivity. You can associate multiple NICs on a VM to multiple subnets, but those subnets 	must all reside in the same virtual network (vNet).
+
+## What is a cluster
+
+A cluster is simply a group of servers. A load balancer distributes the workload between the servers in a cluster. At any point, a new web server can be added to the existing cluster to handle more requests from users accessing your application. The load balancer has a single responsibility: deciding which server from the cluster will receive a request that was intercepted.
+
+A very simple cluster can be deployed with two basic servers (2 CPU’s, 4GB of RAM each, 1 Gigabit network). This is sufficient to have a nice file share or a place to put some nightly backups. Gluster is deployed successfully on all kinds of disks, from the lowliest 5200 RPM SATA to mightiest 1.21 Gigawatt SSD’s.
+
 ## OS Patching
 
 Anyone can access the information for OS Patching from the below link:  
@@ -295,11 +259,11 @@ To configure unattended-upgrades, edit /etc/apt/apt.conf.d/50unattended-upgrad
 
 ```
 Unattended-Upgrade::Allowed-Origins {
-        "${distro_id}:${distro_codename}";
-        "${distro_id}:${distro_codename}-security";
+      "${distro_id}:${distro_codename}";
+      "${distro_id}:${distro_codename}-security";
       "${distro_id}:${distro_codename}-updates";
       "${distro_id}:${distro_codename}-proposed";
-//      "${distro_id}:${distro_codename}-backports";
+//    "${distro_id}:${distro_codename}-backports";
 };
 
 ```
@@ -328,12 +292,12 @@ APT::Periodic::Unattended-Upgrade "1";
 ```
 The above configuration updates the package list, downloads, and installs available upgrades every day. The local download archive is cleaned every week. On servers upgraded to newer versions of Ubuntu, depending on your responses, the file listed above may not be there. In this case, creating a new file of this name should also work.
 
-Starting and Stopping Gluster Manually
+### Starting and Stopping Gluster Manually
 
 For complete information about GlusterFS, please follow the below link:
 https://gluster.readthedocs.io/en/latest/Administrator%20Guide/Start%20Stop%20Daemon/
 
-Connect linux vm through RDP
+## Connect linux vm through RDP
 
 Please enter below commands when connected through ssh in below sequence
 
