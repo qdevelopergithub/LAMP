@@ -25,7 +25,7 @@ NOTE: Depending on the region you choose to deploy the stack in - the deployment
 
 ## Azure deployment Steps
 Step 1: Go to the Azure Portal https://portal.azure.com. Login into the Portal with your credentials.\
-Step 3: Scroll down the page and click on the “Deploy to Azure” button as highlighted below:
+Step 2: Scroll down the page and click on the “Deploy to Azure” button as highlighted below:
 
 [![Deploy to Azure Fully Configurable](http://azuredeploy.net/deploybutton.png)]()
 	
@@ -35,6 +35,7 @@ NOTE:  All of the deployment options require you to provide a valid SSH protocol
 
 [![Deploy to Azure Fully Configurable](https://github.com/qdevelopergithub/LAMP/blob/master/images/template.png)]()
 
+This template set deploys the following infrastructure core to your LAMP instance:
 
 ## Stack Architecture
 
@@ -56,8 +57,8 @@ This is a virtual machine created for controller with ubuntu server os intalled 
 - 1 NIC for Controller 
 It will link Virtual disk and VM and other components with each other.
 
-- 1 MySQL database resource
-Managed MySQL database used by the PHP applications.
+- [Azure Database for MySQL](https://azure.microsoft.com/en-us/services/mysql/) or [Azure Database for PostgreSQL](https://azure.microsoft.com/en-us/services/postgresql/) or [Azure SQL Database](https://azure.microsoft.com/en-us/services/sql-database/) 
+- 1 MySQL database resource. Managed MySQL database used by the PHP applications.
 
 - 2 Virtual disks for Cluster(Gluster FS with 4 disk per Gluster)
  It will use for load balance and hence there will be high availability.
@@ -66,10 +67,13 @@ Managed MySQL database used by the PHP applications.
 
 - 2 VM (Virtual machine) will make for Gluster Fileserver
 
+- Dual [GlusterFS](https://www.gluster.org/) nodes or NFS for high availability access to LAMP files
+
 - 1 security group resource to manage all the file security and authorized access control
 
 - 1 Virtual Network Resource which will link all resources with each other
 
+- [Azure Load balancer](https://azure.microsoft.com/en-us/services/load-balancer/) to balance across the autoscaled instances
 - 1 Load Balancer for Cluster( Gluster File server for load balancing) for HA(High availability)
 
 - 1 IP address resource for load balancer
@@ -86,15 +90,6 @@ With scale sets, all VM instances are created from the same base OS image and co
 
 #### NOTE: - 
 There is no additional cost to scale sets. You only pay for the underlying compute resources such as the VM instances, load balancer, or Managed Disk storage.
-
-
-This template set deploys the following infrastructure core to your LAMP instance:
-- Autoscaling web frontend layer (Nginx for https termination, Varnish for caching, Apache/php or nginx/php-fpm)
-- Private virtual network for frontend instances
-- Controller instance running cron and handling syslog for the autoscaled site
-- [Azure Load balancer](https://azure.microsoft.com/en-us/services/load-balancer/) to balance across the autoscaled instances
-- [Azure Database for MySQL](https://azure.microsoft.com/en-us/services/mysql/) or [Azure Database for PostgreSQL](https://azure.microsoft.com/en-us/services/postgresql/) or [Azure SQL Database](https://azure.microsoft.com/en-us/services/sql-database/) 
-- Dual [GlusterFS](https://www.gluster.org/) nodes or NFS for high availability access to LAMP files
 
 ## Next Steps
 
