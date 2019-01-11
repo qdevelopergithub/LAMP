@@ -25,6 +25,18 @@ Below is a HA (High Availibility) pre-defined/restricted deployment option based
 
 NOTE: Depending on the region you choose to deploy the stack in - the deployment might fail due to SKUs being hardcoded in the template where they are not available. For example, today our small-mid-size deployment option hard codes Gen-4 Azure MySQL SKUs into the template, and if a region where that is currently not available in (i.e. westus2) is used, your deployment will fail.  If your deployment fails, please revert to the fully configurable template where possible and change the SKU paramater to one that exists in your region (i.e. Gen-5) or alternatively change your deployment region to one in which the SKU is available (i.e. southcentralus).     
 
+## Azure deployment Steps
+Step 1: Go to the Azure Portal https://portal.azure.com. Login into the Portal with your credentials.\
+Step 2: Visit the URL https://github.com/qdevelopergithub/lamp. \
+Step 3: Scroll down the page and click on the “Deploy to Azure” button as highlighted below:
+
+[![Deploy to Azure Fully Configurable](http://azuredeploy.net/deploybutton.png)]()
+	
+Step 4: Clicking the button will take you to the Azure Portal page as below:
+
+[![Deploy to Azure Fully Configurable](https://github.com/qdevelopergithub/LAMP/blob/master/images/template.png)]()
+
+
 ## Stack Architecture
 
 - 1 Storage account (Details of user account, subscription etc.)
@@ -175,19 +187,6 @@ If you are adding sites for the second or later time, you'll already have the ab
 The last step is to let the `/azlamp/html` directory sync with `/var/www/html` in every VMSS instance. This should be done by running `/usr/local/bin/update_last_modified_time.azlamp.sh` script on the controller machine as root. Once this is run and after a minute, the `/var/www/html` directory on every VMSS instance should be the same as `/azlamp/html`, and the newly added sites should be available.
 
 At this point, your LAMP application is setup to use in the LAMP cluster. If you'd like to install a separate LAMP application (WordPress or otherwise), you'll have to repeat the process listed here with a new domain for the new application.
-
-
-
-## Azure deployment Steps
-Step 1: Go to the Azure Portal https://portal.azure.com. Login into the Portal with your credentials.\
-Step 2: Visit the URL https://github.com/qdevelopergithub/lamp. \
-Step 3: Scroll down the page and click on the “Deploy to Azure” button as highlighted below:
-
-[![Deploy to Azure Fully Configurable](http://azuredeploy.net/deploybutton.png)]()
-	
-Step 4: Clicking the button will take you to the Azure Portal page as below:
-
-[![Deploy to Azure Fully Configurable](https://github.com/qdevelopergithub/LAMP/blob/master/images/template.png)]()
 
 Step 5: In above page, fill:\
 i.Subscription : The subscription you want to use(if you have more than one)\
