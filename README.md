@@ -82,6 +82,7 @@ This template set deploys the following infrastructure core to your LAMP instanc
 | 1 VM for Controller | This is a virtual machine created for controller with ubuntu server os intalled on it.
 | 1 NIC for Controller | It will link Virtual disk and VM and other components with each other.
 | 1 MySQL database resource. | Managed MySQL database used by the PHP applications.[Azure Database for MySQL](https://azure.microsoft.com/en-us/services/mysql/)
+| 1 Availibility Set | An Availability Set is a logical grouping capability that you can use in Azure to ensure that the VM resources you place within it are isolated from each other when they are deployed within an Azure datacenter.
 | 2 Virtual disks | For Cluster(Gluster FS with 4 disk per Gluster). It will use for load balance and hence there will be high availability.
 | 2 NIC(Network interface cards) | A network interface (NIC) is the interconnection between a VM and the underlying software network.
 | 2 VM (Virtual machine) | Will make for Gluster Fileserver - Dual [GlusterFS](https://www.gluster.org/) nodes or NFS for high availability access to LAMP files.
