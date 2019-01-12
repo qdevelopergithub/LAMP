@@ -21,6 +21,10 @@ Below is a HA (High Availibility) pre-defined/restricted deployment option based
 | --- | --- | --- | ---
 |Large size deployment (with high availability)| Supporting more than 2000 concurrent users. This deployment will use Gluster (for high availability, requiring 2 VMs), MySQL (16 vCores) and redis cache, without other options like elastic search. |[link](https://azure.com/e/078f7294ab6544e8911ddc2ee28850d7)|[![Deploy to Azure Minimally](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fqdevelopergithub%2FLAMP%2Fmaster%2Fazuredeploy-large-ha.json)
 
+## Stack Architecture
+
+[![Stack Architecture](https://github.com/qdevelopergithub/LAMP/blob/master/images/stack_diagram.png)]()
+
 NOTE: Depending on the region you choose to deploy the stack in - the deployment might fail due to SKUs being hardcoded in the template where they are not available. For example, today our small-mid-size deployment option hard codes Gen-4 Azure MySQL SKUs into the template, and if a region where that is currently not available in (i.e. westus2) is used, your deployment will fail.  If your deployment fails, please revert to the fully configurable template where possible and change the SKU paramater to one that exists in your region (i.e. Gen-5) or alternatively change your deployment region to one in which the SKU is available (i.e. southcentralus).     
 
 ## Azure deployment Steps
@@ -62,12 +66,13 @@ vi. SSH public key: This key is required to access the VM. Below are the steps t
 
 NOTE:  All of the deployment options require you to provide a valid SSH protocol 2 (SSH-2) RSA public-private key pairs with a minimum length of 2048 bits. Other key formats such as ED25519 and ECDSA are not supported. If you are unfamiliar with SSH then you should read this [article](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/mac-create-ssh-keys) which will explain how to generate a key using the Windows Subsystem for Linux (it's easy and takes only a few minutes).  If you are new to SSH, remember SSH is a key pair solution. What this means is you have a public key and a private key, and the one you will be using to deploy your template is the public key.
 
-This template set deploys the following infrastructure core to your LAMP instance:
 
-## Stack Architecture
+This template set deploys the following infrastructure core to your LAMP instance:
 
 [![Resources](https://github.com/qdevelopergithub/LAMP/blob/master/images/resources.png)]()
 
+ ## Resources roles and explanation
+ 
 - 1 Storage account (Details of user account, subscription etc.)
 An Azure Storage Account contains all of your Azure Storage data objects: blobs, files, queues, 	tables, and disks. Data in your Azure storage account is durable and highly available, secure, 	massively scalable, and accessible from anywhere in the world over HTTP or HTTPS.
 - 1 Controller for Network Security Group
