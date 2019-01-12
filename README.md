@@ -337,7 +337,7 @@ This will open the VM and you can access same.
 
 Virtual machines (VMs) in Azure can have multiple virtual network interface cards (NICs) attached to them. A common scenario is to have different subnets for front-end and back-end connectivity. You can associate multiple NICs on a VM to multiple subnets, but those subnets 	must all reside in the same virtual network (vNet).
 
-## What is a cluster
+## Why cluster
 
 A cluster is simply a group of servers. A load balancer distributes the workload between the servers in a cluster. At any point, a new web server can be added to the existing cluster to handle more requests from users accessing your application. The load balancer has a single responsibility: deciding which server from the cluster will receive a request that was intercepted.
 
