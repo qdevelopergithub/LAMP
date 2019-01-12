@@ -76,8 +76,7 @@ This template set deploys the following infrastructure core to your LAMP instanc
 |Resource | Role/Explanation |
 |---|---
 |1 Storage account | (Details of user account, subscription etc.) | An Azure Storage Account contains all of your Azure Storage data objects: blobs, files, queues, tables, and disks. Data in your Azure storage account is durable and highly available, secure, 	massively scalable, and accessible from anywhere in the world over HTTP or HTTPS.|
-
-| 1 Controller for Network Security Group | You can filter network traffic to and from Azure resources in an Azure virtual network with a network security group. A network security group contains security rules that allow or deny inbound network traffic to, or outbound network traffic from, several types of Azure resources.|
+1 Controller for Network Security Group | You can filter network traffic to and from Azure resources in an Azure virtual network with a network security group. A network security group contains security rules that allow or deny inbound network traffic to, or outbound network traffic from, several types of Azure resources.|
 - 1 Controller for managing public IP addresses/all IP addresses
 You can assign IP addresses to Azure resources to communicate with other Azure resources, 	your on-premises network, and the Internet. There are two types of IP addresses you can use in 	Azure:
 Public IP addresses: Used for communication with the Internet, including Azure public-facing 	services.
