@@ -135,7 +135,7 @@ Run this command
 tar -xzvf latest.tar.gz
 
 ```
-Then use below command. which will extract the wordpress files to html directory
+Then use below command. which will copy the wordpress files to html directory
 
 ```
 sudo rsync -av wordpress/* /var/www/html/
@@ -190,7 +190,7 @@ Run this command
 tar -xzvf drupal-7.2.tar.gz
 
 ```
-Then use below command. which will extract the drupal files to html directory
+Then use below command. which will copy the drupal files to html directory
 
 ```
 sudo rsync -av drupal-7.2/* /var/www/html/
