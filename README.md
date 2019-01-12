@@ -121,10 +121,10 @@ sudo chown -R www-data:www-data /var/www/html/
 
 Set Directory permissions
 
-``
+```
 sudo chmod -R 755 /var/www/html/
 
-``
+```
 Then goto path where the latest.tar.gz file downloaded
 
 cd /path/to/downloadfile
@@ -176,10 +176,10 @@ sudo chown -R www-data:www-data /var/www/html/
 
 Set Directory permissions
 
-``
+```
 sudo chmod -R 755 /var/www/html/
 
-``
+```
 Then goto path where the latest.tar.gz file downloaded
 
 cd /path/to/downloadfile
@@ -225,10 +225,10 @@ sudo mkdir -p /var/www/html/
 
 Set Directory permissions
 
-``
+```
 sudo chmod -R 755 /var/www/html/
 
-``
+```
 Then goto path where the joomla zip file downloaded. 
 
 cd /path/to/downloadfile
