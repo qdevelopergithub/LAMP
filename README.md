@@ -74,7 +74,7 @@ This template set deploys the following infrastructure core to your LAMP instanc
  ## Resources roles and explanation
  
 |Resource | Role | Explanation |
-|---|---|---|
+|---|---|
 1 Storage account | (Details of user account, subscription etc.)|
 An Azure Storage Account contains all of your Azure Storage data objects: blobs, files, queues, tables, and disks. Data in your Azure storage account is durable and highly available, secure, 	massively scalable, and accessible from anywhere in the world over HTTP or HTTPS.
 
