@@ -100,6 +100,46 @@ There is no additional cost to scale sets. You only pay for the underlying compu
 
 At this point, your LAMP application is setup to use in the LAMP cluster. If you'd like to install a separate LAMP application (WordPress or otherwise), you'll have to repeat the process listed here with a new domain for the new application.
 
+## Manually install various apps
+
+Install MySQL server manually
+
+```
+sudo apt install mysql-server
+```
+To check if MySQL is installed properly, open mysql on terminal with command 
+
+```
+sudo mysql -uroot
+
+```
+If you set the password during installation open with -p parameter -mysql -uroot -p
+	
+Install apache manually
+```
+sudo apt install apache2
+sudo service apache2 restart
+
+```
+Install PHP manually
+
+```
+sudo apt install php
+	
+```
+Command to install specific packages for PHP
+```
+sudo apt install php-pear php-fpm php-dev php-zip php-curl php-xmlrpc php-gd   php-mysql php-mbstring php-xml libapache2-mod-php
+
+```
+
+Open your web-browser and open link using IP address of your server. 
+
+PHP app will be installed on Linux OS. But in our scenario everything is virtual, so the cluster is type of server which will store all the files and folders on virtual hard disk. Cluster File server will handle the entire load balancing and see which hard disk is idle or having lesser load and fetch data from that hard disk. This will ensure high availability.
+The other way to install php app on Linux is login into virtual machine and run the particular commands to install any php app. The Linux users know how to install extra apps if required with the help of terminal or SSH.
+
+
+
 ## Configuring the controller for a specific LAMP application (WordPress)
 
 An example LAMP application (WordPress) is illustrated here for the sake of clarity. The approach is similar to any LAMP application out there. 
@@ -268,47 +308,6 @@ Step 3: Click Connection=> SSH=> Auth. Load the private key file which was saved
 Step 4: Click on the “Open” button and this will open the SSH connection to VM.
 
 Installation: PHP app in Linux OS will be installed by using SSH. The Common PHP apps like PHP language itself, MySQL database and apache server will be installed automatically with the help of template files(JSON file). All the settings, Permissions, directory creation all lined up and run one by one. 
-
-
-## Manually install various apps
-Below are the commands to manually install various apps.
-
-Install MySQL server manually
-
-```
-sudo apt install mysql-server
-```
-To check if MySQL is installed properly, open mysql on terminal with command 
-
-```
-sudo mysql -uroot
-
-```
-If you set the password during installation open with -p parameter -mysql -uroot -p
-	
-Install apache manually
-```
-sudo apt install apache2
-sudo service apache2 restart
-
-```
-Install PHP manually
-
-```
-sudo apt install php
-	
-```
-Command to install specific packages for PHP
-```
-sudo apt install php-pear php-fpm php-dev php-zip php-curl php-xmlrpc php-gd   php-mysql php-mbstring php-xml libapache2-mod-php
-
-```
-
-Open your web-browser and open link using IP address of your server. 
-
-PHP app will be installed on Linux OS. But in our scenario everything is virtual, so the cluster is type of server which will store all the files and folders on virtual hard disk. Cluster File server will handle the entire load balancing and see which hard disk is idle or having lesser load and fetch data from that hard disk. This will ensure high availability.
-The other way to install php app on Linux is login into virtual machine and run the particular commands to install any php app. The Linux users know how to install extra apps if required with the help of terminal or SSH.
-
 
 ## Deploying and Accessing VM on macOS/Linux
 
