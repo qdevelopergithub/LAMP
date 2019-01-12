@@ -164,9 +164,12 @@ Set Directory permissions
 sudo chmod -R 755 /var/www/html/
 
 ```
-Then goto path where the latest.tar.gz file downloaded
+Then goto path where the latest.tar.gz file downloaded. Usually working directory.
 
+```
 cd /path/to/downloadfile
+
+```
 
 Run this command
 
@@ -174,7 +177,7 @@ Run this command
 tar -xzvf latest.tar.gz
 
 ```
-Then use below command. which will copy the wordpress files to html directory
+Then use below command. which will copy the wordpress files to html directory.
 
 ```
 sudo rsync -av wordpress/* /var/www/html/
@@ -219,10 +222,12 @@ Set Directory permissions
 sudo chmod -R 755 /var/www/html/
 
 ```
-Then goto path where the latest.tar.gz file downloaded
+Then goto path where the latest.tar.gz file downloaded. Usually working directory.
 
+```
 cd /path/to/downloadfile
 
+```
 Run this command
 
 ```
@@ -268,9 +273,12 @@ Set Directory permissions
 sudo chmod -R 755 /var/www/html/
 
 ```
-Then goto path where the joomla zip file downloaded. 
+Then goto path where the joomla zip file downloaded. Usually working directory.
 
+```
 cd /path/to/downloadfile
+
+```
 
 Run this command
 
