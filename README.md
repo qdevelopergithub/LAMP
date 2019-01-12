@@ -81,7 +81,7 @@ This template set deploys the following infrastructure core to your LAMP instanc
 | 1 Virtual disk for Controller. | This is a virtual disk which will be used for Controller VM to store all its data.
 | 1 VM for Controller | This is a virtual machine created for controller with ubuntu server os intalled on it.
 | 1 NIC for Controller | It will link Virtual disk and VM and other components with each other.
-| 1 MySQL database resource. | Managed MySQL database used by the PHP applications.[Azure Database for MySQL](https://azure.microsoft.com/en-us/services/mysql/) or [Azure Database for PostgreSQL](https://azure.microsoft.com/en-us/services/postgresql/) or [Azure SQL Database](https://azure.microsoft.com/en-us/services/sql-database/) 
+| 1 MySQL database resource. | Managed MySQL database used by the PHP applications.[Azure Database for MySQL](https://azure.microsoft.com/en-us/services/mysql/)
 | 2 Virtual disks | For Cluster(Gluster FS with 4 disk per Gluster). It will use for load balance and hence there will be high availability.
 | 2 NIC(Network interface cards) | A network interface (NIC) is the interconnection between a VM and the underlying software network.
 | 2 VM (Virtual machine) | Will make for Gluster Fileserver - Dual [GlusterFS](https://www.gluster.org/) nodes or NFS for high availability access to LAMP files.
@@ -105,6 +105,44 @@ An example LAMP application (WordPress) is illustrated here for the sake of clar
 
 Download a latest version of Wordpress. Once that's done and you've downloaded the latest version of WordPress, please follow the instructions here to complete configuring a database and finishing a [WordPress install](https://codex.wordpress.org/Installing_WordPress#Famous_5-Minute_Installation). 
 
+You can do it manually. Download a latest version of [Wordpress](https://wordpress.org/latest.tar.gz) Make a Directory structure var/www/html if not exist by using below command
+
+```
+sudo mkdir -p /var/www/html/
+
+```
+
+You can also change the owner by using following command
+
+```
+sudo chown -R www-data:www-data /var/www/html/
+
+```
+
+Set Directory permissions
+
+``
+sudo chmod -R 755 /var/www/html/
+
+``
+Then goto path where the latest.tar.gz file downloaded
+
+cd /path/to/downloadfile
+
+Run this command
+
+```
+tar -xzvf latest.tar.gz
+
+```
+Then use below command. which will extract the wordpress files to html directory
+
+```
+sudo rsync -av wordpress/* /var/www/html/
+
+```
+
+You can to do this by using below commands as well.
 Below is a Full script which will run and install WordPress on the cluster. 
 
 ```
@@ -121,7 +159,47 @@ sudo chmod -R 755 /var/www/html/
 
 Download a latest version of Drupal. Once that's done and you've downloaded the latest version of Drupal, please follow the instructions here to complete configuring a database and finishing a [Drupal install](https://www.drupal.org/documentation/install/developers). 
 
-Below is a Full script which will run and install Drupal on the cluster.
+
+You can do it manually. Download a latest version of [Drupal](https://ftp.drupal.org/files/projects/drupal-7.2.tar.gz) Make a Directory structure var/www/html if not exist by using below command
+
+```
+sudo mkdir -p /var/www/html/
+
+```
+
+You can also change the owner by using following command
+
+```
+sudo chown -R www-data:www-data /var/www/html/
+
+```
+
+Set Directory permissions
+
+``
+sudo chmod -R 755 /var/www/html/
+
+``
+Then goto path where the latest.tar.gz file downloaded
+
+cd /path/to/downloadfile
+
+Run this command
+
+```
+tar -xzvf drupal-7.2.tar.gz
+
+```
+Then use below command. which will extract the drupal files to html directory
+
+```
+sudo rsync -av drupal-7.2/* /var/www/html/
+
+```
+
+
+You can to do this by using below commands as well.
+Below is a Full script which will run and install Drupal on the cluster. 
 
 ```
 wget -c https://ftp.drupal.org/files/projects/drupal-7.2.tar.gz
@@ -137,6 +215,33 @@ sudo chmod -R 755 /var/www/html/
 Download a latest version of Joomla. Once that's done and you've downloaded the latest version of Joomla, please follow the instructions here to complete configuring a database and finishing a [Joomla install](https://docs.joomla.org/Installing_Joomla_on_Debian_Linux). 
 
 Below is a Full script which will run and install Joomla on the cluster.
+
+You can do it manually.Download a latest version of joomla. Make a Directory structure var/www/html if not exist by using below command
+
+```
+sudo mkdir -p /var/www/html/
+
+```
+
+Set Directory permissions
+
+``
+sudo chmod -R 755 /var/www/html/
+
+``
+Then goto path where the joomla zip file downloaded. 
+
+cd /path/to/downloadfile
+
+Run this command
+
+```
+sudo unzip Joomla*.zip -d /var/www/html/joomla
+
+```
+
+You can to do this by using below commands as well.
+Below is a Full script which will run and install joomla on the cluster. 
 
 ```
 Wget https://downloads.joomla.org/cms/joomla3/3-9-1/joomla_3-9-1-stable-full_package-zip?format=zip
