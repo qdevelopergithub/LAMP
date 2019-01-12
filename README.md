@@ -75,14 +75,10 @@ This template set deploys the following infrastructure core to your LAMP instanc
  
 |Resource | Role/Explanation |
 |---|---
-|1 Storage account | (Details of user account, subscription etc.) | An Azure Storage Account contains all of your Azure Storage data objects: blobs, files, queues, tables, and disks. Data in your Azure storage account is durable and highly available, secure, 	massively scalable, and accessible from anywhere in the world over HTTP or HTTPS.|
-1 Controller for Network Security Group | You can filter network traffic to and from Azure resources in an Azure virtual network with a network security group. A network security group contains security rules that allow or deny inbound network traffic to, or outbound network traffic from, several types of Azure resources.|
-- 1 Controller for managing public IP addresses/all IP addresses
-You can assign IP addresses to Azure resources to communicate with other Azure resources, 	your on-premises network, and the Internet. There are two types of IP addresses you can use in 	Azure:
-Public IP addresses: Used for communication with the Internet, including Azure public-facing 	services.
-Private IP addresses: Used for communication within an Azure virtual network (VNet), and your 	on-premises network, when you use a VPN gateway or ExpressRoute circuit to extend your 	network to Azure.
-
-- 1 Virtual disk for Controller
+|1 Storage account | (Details of user account, subscription etc.) An Azure Storage Account contains all of your Azure Storage data objects: blobs, files, queues, tables, and disks. Data in your Azure storage account is durable and highly available, secure, 	massively scalable, and accessible from anywhere in the world over HTTP or HTTPS.
+|1 Controller for Network Security Group | You can filter network traffic to and from Azure resources in an Azure virtual network with a network security group. A network security group contains security rules that allow or deny inbound network traffic to, or outbound network traffic from, several types of Azure resources.
+|1 Public IP Address | Controller for managing public IP addresses/all IP addresses You can assign IP addresses to Azure resources to communicate with other Azure resources, 	your on-premises network, and the Internet. Public IP addresses: Used for communication with the Internet, including Azure public-facing services. Private IP addresses: Used for communication within an Azure virtual network (VNet), and your on-premises network, when you use a VPN gateway or ExpressRoute circuit to extend your network to Azure.
+1 Virtual disk for Controller
  	This is a virtual disk which will be used for Controller VM to store all its data.
 
 - 1 VM for Controller 
@@ -103,7 +99,7 @@ It will link Virtual disk and VM and other components with each other.
 
 - Dual [GlusterFS](https://www.gluster.org/) nodes or NFS for high availability access to LAMP files
 
-- 1 security group resource to manage all the file security and authorized access control
+- 1 Network security group resource to manage all the file security and authorized access control
 
 - 1 Virtual Network Resource which will link all resources with each other
 
