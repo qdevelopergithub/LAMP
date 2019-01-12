@@ -98,9 +98,14 @@ There is no additional cost to scale sets. You only pay for the underlying compu
 
 ## Next Steps
 
-At this point, your LAMP application is setup to use in the LAMP cluster. If you'd like to install a separate LAMP application (WordPress or otherwise), you'll have to repeat the process listed here with a new domain for the new application.
+Open your web-browser and open link using IP address of your server. 
+
+PHP app will be installed on Linux OS. But in our scenario everything is virtual, so the cluster is type of server which will store all the files and folders on virtual hard disk. Cluster File server will handle the entire load balancing and see which hard disk is idle or having lesser load and fetch data from that hard disk. This will ensure high availability.
+The other way to install php app on Linux is login into virtual machine and run the particular commands to install any php app. The Linux users know how to install extra apps if required with the help of terminal or SSH.
 
 ## Manually install various apps
+
+At this point, your LAMP application is setup to use in the LAMP cluster. If you'd like to install a separate LAMP application (WordPress or otherwise), Please follow below steps.
 
 Install MySQL server manually
 
@@ -132,13 +137,6 @@ Command to install specific packages for PHP
 sudo apt install php-pear php-fpm php-dev php-zip php-curl php-xmlrpc php-gd   php-mysql php-mbstring php-xml libapache2-mod-php
 
 ```
-
-Open your web-browser and open link using IP address of your server. 
-
-PHP app will be installed on Linux OS. But in our scenario everything is virtual, so the cluster is type of server which will store all the files and folders on virtual hard disk. Cluster File server will handle the entire load balancing and see which hard disk is idle or having lesser load and fetch data from that hard disk. This will ensure high availability.
-The other way to install php app on Linux is login into virtual machine and run the particular commands to install any php app. The Linux users know how to install extra apps if required with the help of terminal or SSH.
-
-
 
 ## Configuring the controller for a specific LAMP application (WordPress)
 
