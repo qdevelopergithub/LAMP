@@ -86,13 +86,12 @@ This template set deploys the following infrastructure core to your LAMP instanc
 | 2 NIC(Network interface cards) | For Gluster file server
 | 2 VM (Virtual machine) | Will make for Gluster Fileserver - Dual [GlusterFS](https://www.gluster.org/) nodes or NFS for high availability access to LAMP files.
 | 1 Network security group | resource to manage all the file security and authorized access control.
-| 1 Virtual Network Resource which will link all resources with each other.
+| 1 Virtual Network | Resource which will link all resources with each other.
 | 1 Load Balancer for Cluster( Gluster File server for load balancing) for HA(High availability) - [Azure Load balancer](https://azure.microsoft.com/en-us/services/load-balancer/) to balance across the autoscaled instances.
 | 1 IP address resource for load balancer.
 | 1 resource for Redis Cache | Managed instance of the Redis key-value storage. Your PHP applications can connect to this to store sessions and other transient data. Redis store data in-memory, so it’s very fast. Azure Cache for Redis is a distributed, managed cache that helps you build highly scalable and responsive applications by providing super-fast access to your data.
-| 1 VM resource for scale set |NA
-| 1 Storage Account for VM scale set | When you create a scale set in the portal, a load balancer is created. Network Address 	Translation (NAT) rules are used to distribute traffic to the scale set instances for remote 	connectivity such as RDP or SSH.
-With scale sets, all VM instances are created from the same base OS image and configuration. This approach lets you easily manage hundreds of VMs without additional configuration tasks or network management. When you have many VMs that run your application, it's important to maintain a consistent configuration across your environment. For reliable performance of your application, the VM size, disk configuration, and application installs should match across all VMs. |
+| 1 VM resource for scale set | NA
+| 1 Storage Account for VM scale set | When you create a scale set in the portal, a load balancer is created. Network Address Translation (NAT) rules are used to distribute traffic to the scale set instances for remote connectivity such as RDP or SSH. With scale sets, all VM instances are created from the same base OS image and configuration. This approach lets you easily manage hundreds of VMs without additional configuration tasks or network management. When you have many VMs that run your application, it's important to maintain a consistent configuration across your environment. For reliable performance of your application, the VM size, disk configuration, and application installs should match across all VMs. |
 
 #### NOTE: - 
 There is no additional cost to scale sets. You only pay for the underlying compute resources such as the VM instances, load balancer, or Managed Disk storage.
