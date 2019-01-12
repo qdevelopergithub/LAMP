@@ -87,7 +87,7 @@ This template set deploys the following infrastructure core to your LAMP instanc
 | 2 VM (Virtual machine) | Will make for Gluster Fileserver - Dual [GlusterFS](https://www.gluster.org/) nodes or NFS for high availability access to LAMP files.
 | 1 Network security group | resource to manage all the file security and authorized access control.
 | 1 Virtual Network | Resource which will link all resources with each other.
-| 1 Load Balancer for Cluster( Gluster File server for load balancing) for HA(High availability) - [Azure Load balancer](https://azure.microsoft.com/en-us/services/load-balancer/) to balance across the autoscaled instances.
+| 1 Load Balancer |  For Cluster( Gluster File server for load balancing) for HA(High availability) - [Azure Load balancer](https://azure.microsoft.com/en-us/services/load-balancer/) to balance across the autoscaled instances.
 | 1 IP address resource for load balancer.
 | 1 resource for Redis Cache | Managed instance of the Redis key-value storage. Your PHP applications can connect to this to store sessions and other transient data. Redis store data in-memory, so it’s very fast. Azure Cache for Redis is a distributed, managed cache that helps you build highly scalable and responsive applications by providing super-fast access to your data.
 | 1 VM resource for scale set | NA
