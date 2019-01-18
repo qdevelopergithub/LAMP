@@ -113,14 +113,15 @@ set -ex
     mkdir -p /azlamp/html
     mkdir -p /azlamp/certs
     mkdir -p /azlamp/data
+
     #Installation of WordPress
-wget -c http://wordpress.org/latest.tar.gz
-tar -xzvf latest.tar.gz
-sudo mkdir -p /var/www/html/
-sudo rsync -av wordpress/* /var/www/html/
-sudo chown -R www-data:www-data /var/www/html/
-sudo chmod -R 755 /var/www/html/
-    # Build nginx config
+#    wget -c http://wordpress.org/latest.tar.gz
+#    tar -xzvf latest.tar.gz
+#    sudo mkdir -p /var/www/html/
+#    sudo rsync -av wordpress/* /azlamp/html/
+#    sudo chown -R www-data:www-data /azlamp/html/
+#    sudo chmod -R 755 /azlamp/html/
+#    # Build nginx config
     create_main_nginx_conf_on_controller $httpsTermination
 
     update_php_config_on_controller
