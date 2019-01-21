@@ -1,4 +1,4 @@
-#!/bin/bash
+    #!/bin/bash
 
 # This script built for Ubuntu Server 16.04 LTS
 # You can customize variables such as MOUNTPOINT, RAIDCHUNKSIZE and so on to your needs.
@@ -40,26 +40,48 @@ sudo apt-get -y install unattended-upgrades
 
 {
         check_os() {
-            grep -q -s ubuntu /proc/version && _RET=$? || _RET=$?
-            isubuntu=$_RET
+#            grep -q -s ubuntu /proc/version && _RET=$? || _RET=$?
+#            isubuntu=$_RET
+
+    grep ubuntu /proc/version > /dev/null 2>&1
+    isubuntu=${?}
+    grep centos /proc/version > /dev/null 2>&1
+    iscentos=${?}
+    grep 'redhat' /proc/version > /dev/null 2>&1
+    isrhel=${?}
         }
 
-        scan_for_new_disks() {
-            # Looks for unpartitioned disks
-            declare -a RET
-            DEVS=($(ls -1 /dev/sd*|egrep -v "${BLACKLIST}"|egrep -v "[0-9]$"))
-            for DEV in "${DEVS[@]}";
-            do
-                # Check each device if there is a "1" partition.  If not,
-                # "assume" it is not partitioned.
-                if [ ! -b ${DEV}1 ];
-                then
-                    RET+="${DEV} "
-                fi
-            done
-            echo "${RET}"
-        }
+#        scan_for_new_disks() {
+#            # Looks for unpartitioned disks
+#            declare -a RET
+#            DEVS=($(ls -1 /dev/sd*|egrep -v "${BLACKLIST}"|egrep -v "[0-9]$"))
+#            for DEV in "${DEVS[@]}";
+#            do
+#                # Check each device if there is a "1" partition.  If not,
+#                # "assume" it is not partitioned.
+#                if [ ! -b ${DEV}1 ];
+#                then
+#                    RET+="${DEV} "
+#                fi
+#            done
+#            echo "${RET}"
+#        }
 
+scan_for_new_disks() {
+    # Looks for unpartitioned disks
+    declare -a RET
+    DEVS=($(ls -1 /dev/sd*|egrep -v "[0-9]$"))
+    for DEV in "${DEVS[@]}";
+    do
+        # Check each device if there is a "1" partition.  If not,
+        # "assume" it is not partitioned.
+        if [ ! -b ${DEV}1 ];
+        then
+            RET+="${DEV} "
+        fi
+    done
+    echo "${RET}"
+}
         get_disk_count() {
             DISKCOUNT=0
             for DISK in "${DISKS[@]}";
@@ -73,8 +95,11 @@ sudo apt-get -y install unattended-upgrades
             dpkg -s mdadm && _RET=$? || _RET=$?
             if [ $_RET -eq 1 ];
             then 
-                echo "installing mdadm"
-                sudo apt-get -y -q install mdadm
+#                echo "installing mdadm"
+#                sudo apt-get -y -q install mdadm
+              echo "installing mdadm"
+        wget --no-cache http://mirrors.cat.pdx.edu/ubuntu/pool/main/m/mdadm/mdadm_3.2.5-5ubuntu4_amd64.deb
+        dpkg -i mdadm_3.2.5-5ubuntu4_amd64.deb
             fi
             echo "Creating raid0"
             udevadm control --stop-exec-queue
@@ -87,9 +112,14 @@ sudo apt-get -y install unattended-upgrades
         do_partition() {
         # This function creates one (1) primary partition on the
         # disk, using all available space
-            DISK=${1}
-            echo "Partitioning disk $DISK"
-            echo -ne "n\np\n1\n\n\nw\n" | fdisk "${DISK}" 
+#            DISK=${1}
+#            echo "Partitioning disk $DISK"
+#            echo -ne "n\np\n1\n\n\nw\n" | fdisk "${DISK}"
+
+     DISK=${1}
+    echo "Partitioning disk $DISK"
+    parted -s ${DISK} mklabel gpt
+    parted -a opt -s ${DISK} mkpart primary 0% 100%
         #> /dev/null 2>&1
 
         #
@@ -103,18 +133,31 @@ sudo apt-get -y install unattended-upgrades
         fi
         }
 
-        add_to_fstab() {
-            UUID=${1}
-            MOUNTPOINT=${2}
-            grep -q -s "${UUID}" /etc/fstab && _RET=$? || _RET=$?
-            if [ $_RET -eq 0 ];
-            then
-                echo "Not adding ${UUID} to fstab again (it's already there!)"
-            else
-                LINE="UUID=${UUID} ${MOUNTPOINT} ext4 defaults,noatime 0 0"
-                echo -e "${LINE}" >> /etc/fstab
-            fi
-        }
+#        add_to_fstab() {
+#            UUID=${1}
+#            MOUNTPOINT=${2}
+#            grep -q -s "${UUID}" /etc/fstab && _RET=$? || _RET=$?
+#            if [ $_RET -eq 0 ];
+#            then
+#                echo "Not adding ${UUID} to fstab again (it's already there!)"
+#            else
+#                LINE="UUID=${UUID} ${MOUNTPOINT} ext4 defaults,noatime 0 0"
+#                echo -e "${LINE}" >> /etc/fstab
+#            fi
+#        }
+
+add_to_fstab() {
+    UUID=${1}
+    MOUNTPOINT=${2}
+    grep "${UUID}" /etc/fstab >/dev/null 2>&1
+    if [ ${?} -eq 0 ];
+    then
+        echo "Not adding ${UUID} to fstab again (it's already there!)"
+    else
+        LINE="UUID=${UUID} ${MOUNTPOINT} ext4 defaults,noatime 0 0"
+        echo -e "${LINE}" >> /etc/fstab
+    fi
+}
 
         configure_disks() {
             ls "${MOUNTPOINT}" && _RET=$? || _RET=$?
@@ -147,26 +190,56 @@ sudo apt-get -y install unattended-upgrades
             mount "${MOUNTPOINT}"
         }
 
-        open_ports() {
-            index=0
-            while [ $index -lt $NODECOUNT ]; do
-			    echo "Node ${index}"
-				thisNode="${PEERNODEIPPREFIX}.$(($index+$AZUREVMOFFSET))"
-			    echo "Node ${thisNode}"
+#        open_ports() {
+#            index=0
+#            while [ $index -lt $NODECOUNT ]; do
+#			    echo "Node ${index}"
+#				thisNode="${PEERNODEIPPREFIX}.$(($index+$AZUREVMOFFSET))"
+#			    echo "Node ${thisNode}"
+#
+#                if [ $index -ne $NODEINDEX ]; then
+#				    echo "Node ${thisNode} is a peer"
+#                    iptables -I INPUT -p all -s "${thisNode}" -j ACCEPT
+#                    echo "${thisNode}    ${thisNode}" >> /etc/hosts
+#                else
+#				    echo "Node ${thisNode} is me"
+#                    echo "127.0.0.1    ${thisNode}" >> /etc/hosts
+#                fi
+#                let index++
+#            done
+#            iptables-save
+#        }
 
-                if [ $index -ne $NODEINDEX ]; then
-				    echo "Node ${thisNode} is a peer"
-                    iptables -I INPUT -p all -s "${thisNode}" -j ACCEPT
-                    echo "${thisNode}    ${thisNode}" >> /etc/hosts
-                else
-				    echo "Node ${thisNode} is me"
-                    echo "127.0.0.1    ${thisNode}" >> /etc/hosts
-                fi
-                let index++
-            done
-            iptables-save
-        }
 
+open_ports() {
+    echo "open_ports"
+    index=0
+    while [ $index -lt $NODECOUNT ]; do
+        if [ $index -ne $NODEINDEX ]; then
+            iptables -I INPUT -p all -s "${PEERNODEIPPREFIX}${index}" -j ACCEPT
+            echo "${PEERNODEIPPREFIX}${index}    ${PEERNODEPREFIX}${index}" >> /etc/hosts
+        else
+            echo "127.0.0.1    ${PEERNODEPREFIX}${index}" >> /etc/hosts
+        fi
+        let index++
+    done
+    iptables-save
+    echo "done open_ports"
+}
+
+activate_secondnic_ubuntu() {
+    if [ -n "$SECONDNIC" ];
+    then
+        echo "" >> /etc/network/interfaces
+        echo "auto $SECONDNIC" >> /etc/network/interfaces
+        echo "iface $SECONDNIC inet dhcp" >> /etc/network/interfaces
+        defaultgw=$(ip route show |sed -n "s/^default via //p")
+        declare -a gateway=(${defaultgw// / })
+        echo "" >> /etc/network/interfaces
+        echo "post-up ip route add default via $gateway" >> /etc/network/interfaces
+        /etc/init.d/networking restart
+    fi
+}
         disable_apparmor_ubuntu() {
             /etc/init.d/apparmor teardown
             update-rc.d -f apparmor remove
@@ -174,7 +247,17 @@ sudo apt-get -y install unattended-upgrades
 
         configure_network() {
             open_ports
-            disable_apparmor_ubuntu
+            if [ $iscentos -eq 0 -o $isrhel -eq 0 ];
+        then
+            activate_secondnic_centos
+            disable_selinux_centos
+            elif [ $isubuntu -eq 0 ];
+        then
+        activate_secondnic_ubuntu
+        disable_apparmor_ubuntu
+    fi
+
+
         }
 
         install_glusterfs_ubuntu() {
@@ -198,81 +281,159 @@ sudo apt-get -y install unattended-upgrades
             return
         }
 
-        configure_gluster() {
-            echo "gluster step1"
+#        configure_gluster() {
+#            echo "gluster step1"
+#
+#            if [ $isubuntu -eq 0 ];
+#            then
+#                /etc/init.d/glusterfs-server status && _RET=$? || _RET=$?
+#                if [ $_RET -ne 0 ];
+#                then
+#                    install_glusterfs_ubuntu
+#                fi
+#                /etc/init.d/glusterfs-server start
+#            fi
+#
+#			echo "gluster step2"
+#            GLUSTERDIR="${MOUNTPOINT}/brick"
+#            ls "${GLUSTERDIR}" && _RET=$? || _RET=$?
+#
+#            if [ $_RET -ne 0 ];
+#            then
+#                mkdir "${GLUSTERDIR}"
+#            fi
+#
+#            if [ $NODEINDEX -lt $(($NODECOUNT-1)) ];
+#            then
+#                return
+#            fi
+#
+#            echo "gluster step3"
+#            allNodes="${NODENAME}:${GLUSTERDIR}"
+#			echo $allNodes
+#            retry=10
+#            failed=1
+#
+#            while [ $retry -gt 0 ] && [ $failed -gt 0 ]; do
+#                failed=0
+#                index=0
+#                echo retrying $retry
+#                while [ $index -lt $(($NODECOUNT-1)) ]; do
+#					glustervm=${PEERNODEPREFIX}${index}
+#					echo $glustervm
+#
+#                    ping -c 3 $glustervm
+#                    gluster peer probe $glustervm && _RET=$? || _RET=$?
+#                    if [ $_RET -ne 0 ];
+#                    then
+#                        failed=1
+#                        echo "gluster peer probe $glustervm failed"
+#                    fi
+#
+#                    gluster peer status
+#                    gluster peer status | grep $glustervm && _RET=$? || _RET=$?
+#
+#                    if [ $_RET -ne 0 ];
+#                    then
+#                        failed=1
+#                        echo "gluster peer status $glustervm failed"
+#                    fi
+#
+#					if [ $retry -eq 10 ]; then
+#                        allNodes="${allNodes} $glustervm:${GLUSTERDIR}"
+#                    fi
+#                    let index++
+#                done
+#                sleep 30
+#                let retry--
+#            done
+#
+#            echo "gluster step4"
+#			echo $allnodes
+#            sleep 60
+#            gluster volume create ${VOLUMENAME} rep 2 transport tcp ${allNodes}
+#            gluster volume info
+#            gluster volume start ${VOLUMENAME}
+#            echo "gluster complete"
+#        }
 
-            if [ $isubuntu -eq 0 ];
+configure_gluster() {
+    if [ $iscentos -eq 0 ];
+    then
+        install_glusterfs_centos
+        systemctl enable glusterd
+        systemctl start glusterd
+
+    elif [ $isrhel -eq 0 ];
+    then
+        echo 'isrhel'
+        install_glusterfs_rhel
+        systemctl enable glusterd
+        systemctl start glusterd
+        firewall-cmd --zone=public --add-port=24007-24008/tcp --permanent
+        firewall-cmd --zone=public --add-port=49152-49251/tcp --permanent
+        firewall-cmd --reload
+
+    elif [ $isubuntu -eq 0 ];
+    then
+        /etc/init.d/glusterfs-server status
+        if [ ${?} -ne 0 ];
+        then
+            install_glusterfs_ubuntu
+        fi
+        /etc/init.d/glusterfs-server start
+    fi
+
+    GLUSTERDIR="${MOUNTPOINT}/brick"
+    ls "${GLUSTERDIR}"
+    if [ ${?} -ne 0 ];
+    then
+        mkdir "${GLUSTERDIR}"
+    fi
+
+    if [ $NODEINDEX -lt $(($NODECOUNT-1)) ];
+    then
+        return
+    fi
+
+    allNodes="${NODENAME}:${GLUSTERDIR}"
+    retry=10
+    failed=1
+    while [ $retry -gt 0 ] && [ $failed -gt 0 ]; do
+        failed=0
+        index=0
+        echo retrying $retry >> /tmp/error
+        while [ $index -lt $(($NODECOUNT-1)) ]; do
+            ping -c 3 "${PEERNODEPREFIX}${index}" > /tmp/error
+            gluster peer probe "${PEERNODEPREFIX}${index}" >> /tmp/error
+            if [ ${?} -ne 0 ];
             then
-                /etc/init.d/glusterfs-server status && _RET=$? || _RET=$?
-                if [ $_RET -ne 0 ];
-                then
-                    install_glusterfs_ubuntu
-                fi
-                /etc/init.d/glusterfs-server start
+                failed=1
+                echo "gluster peer probe ${PEERNODEPREFIX}${index} failed"
             fi
-
-			echo "gluster step2"
-            GLUSTERDIR="${MOUNTPOINT}/brick"
-            ls "${GLUSTERDIR}" && _RET=$? || _RET=$?
-
-            if [ $_RET -ne 0 ];
+            gluster peer status >> /tmp/error
+            gluster peer status | grep "${PEERNODEPREFIX}${index}" >> /tmp/error
+            if [ ${?} -ne 0 ];
             then
-                mkdir "${GLUSTERDIR}"
+                failed=1
+                echo "gluster peer status ${PEERNODEPREFIX}${index} failed"
             fi
-
-            if [ $NODEINDEX -lt $(($NODECOUNT-1)) ];
-            then
-                return
+            if [ $retry -eq 10 ]; then
+                allNodes="${allNodes} ${PEERNODEPREFIX}${index}:${GLUSTERDIR}"
             fi
-            
-            echo "gluster step3"
-            allNodes="${NODENAME}:${GLUSTERDIR}"
-			echo $allNodes
-            retry=10
-            failed=1
+            let index++
+        done
+        sleep 30
+        let retry--
+    done
 
-            while [ $retry -gt 0 ] && [ $failed -gt 0 ]; do
-                failed=0
-                index=0
-                echo retrying $retry 
-                while [ $index -lt $(($NODECOUNT-1)) ]; do
-					glustervm=${PEERNODEPREFIX}${index}
-					echo $glustervm
-
-                    ping -c 3 $glustervm
-                    gluster peer probe $glustervm && _RET=$? || _RET=$?
-                    if [ $_RET -ne 0 ];
-                    then
-                        failed=1
-                        echo "gluster peer probe $glustervm failed"
-                    fi
-
-                    gluster peer status
-                    gluster peer status | grep $glustervm && _RET=$? || _RET=$?
-                    
-                    if [ $_RET -ne 0 ];
-                    then
-                        failed=1
-                        echo "gluster peer status $glustervm failed"
-                    fi
-                    
-					if [ $retry -eq 10 ]; then
-                        allNodes="${allNodes} $glustervm:${GLUSTERDIR}"
-                    fi
-                    let index++
-                done
-                sleep 30
-                let retry--
-            done
-
-            echo "gluster step4"
-			echo $allnodes
-            sleep 60
-            gluster volume create ${VOLUMENAME} rep 2 transport tcp ${allNodes} 
-            gluster volume info 
-            gluster volume start ${VOLUMENAME} 
-            echo "gluster complete"
-        }
+    sleep 60
+    echo "creating gluster volume"
+    gluster volume create ${VOLUMENAME} rep 2 transport tcp ${allNodes} 2>> /tmp/error
+    gluster volume info 2>> /tmp/error
+    gluster volume start ${VOLUMENAME} 2>> /tmp/error
+    echo "done creating gluster volume"
+}
 
         # "main routine"
         check_os
