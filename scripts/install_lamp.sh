@@ -74,24 +74,24 @@ set -ex
 
         # configure gluster repository & install gluster client
         sudo add-apt-repository ppa:gluster/glusterfs-3.10 -y                 >> /tmp/apt1.log
-    
+
 
     sudo apt-get -y update                                                   >> /tmp/apt2.log
     sudo apt-get -y --force-yes install rsyslog git                          >> /tmp/apt3.log
 
         sudo apt-get -y --force-yes install glusterfs-client                 >> /tmp/apt3.log
-  
 
-  
+
+
         sudo apt-get -y --force-yes install mysql-client >> /tmp/apt3.log
-   
 
-    
+
+
         # mount gluster files system
-        echo -e '\n\rInstalling GlusterFS on '$glusterNode':/'$glusterVolume '/azlamp\n\r' 
+        echo -e '\n\rInstalling GlusterFS on '$glusterNode':/'$glusterVolume '/azlamp\n\r'
         setup_and_mount_gluster_share $glusterNode $glusterVolume /azlamp
-    
-    
+
+
     # install pre-requisites
     sudo apt-get install -y --fix-missing python-software-properties unzip
 
@@ -104,10 +104,10 @@ set -ex
     sudo apt-get install -y --force-yes graphviz aspell php-common php-soap php-json php-redis > /tmp/apt6.log
     sudo apt-get install -y --force-yes php-bcmath php-gd php-xmlrpc php-intl php-xml php-bz2 php-pear php-mbstring php-dev mcrypt >> /tmp/apt6.log
     PhpVer=$(get_php_version)
-    
+
         sudo apt-get install -y --force-yes php-mysql
-    
-    
+
+
 
     # Set up initial LAMP dirs
     mkdir -p /azlamp/html
