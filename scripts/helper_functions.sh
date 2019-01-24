@@ -132,13 +132,10 @@ function setup_wordpress_on_vm
 	echo "============================================"
 	#download wordpress
 	echo "Downloading..."
-	wget -c http://wordpress.org/latest.tar.gz
-
-#	curl -O https://wordpress.org/latest.tar.gz
+	curl -O https://wordpress.org/latest.tar.gz
 	#unzip wordpress
 	echo "Unpacking..."
-	tar -xzvf latest.tar.gz
-#	tar -zxf latest.tar.gz
+	tar -zxf latest.tar.gz
 	#move /wordpress/* files to this dir
 	echo "Moving..."
 	mv wordpress/* ./
@@ -155,7 +152,7 @@ function setup_wordpress_on_vm
 	chmod 777 wp-content/uploads
 	echo "Cleaning..."
 	#remove wordpress/ dir
-	rm wordpress
+	rmdir wordpress
 	#remove zip file
 	rm latest.tar.gz   
 }
