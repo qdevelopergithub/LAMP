@@ -46,6 +46,8 @@ iv. _artifacts Location: This field is automatically filled.\
 v. _artifacts Location SAS Token: This token is automatically generated when the template is deployed.\
 vi. SSH public key: This key is required to access the VM. Below are the steps to generate this key:
 
+NOTE:  All of the deployment options require you to provide a valid SSH protocol 2 (SSH-2) RSA public-private key pairs with a minimum length of 2048 bits. Other key formats such as ED25519 and ECDSA are not supported. If you are unfamiliar with SSH then you should read this [article](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/mac-create-ssh-keys) which will explain how to generate a key using the Windows Subsystem for Linux (it's easy and takes only a few minutes).  If you are new to SSH, remember SSH is a key pair solution. What this means is you have a public key and a private key, and the one you will be using to deploy your template is the public key.
+
 ## Steps to generate SSH key on Windows
 
 - Download the PuTTY software. It can be downloaded from here: https://www.putty.org/
@@ -457,7 +459,6 @@ Below are the screenshots while connecting to VM GUI.
 
 [![XFCE Login](https://github.com/qdevelopergithub/LAMP/blob/master/images/xfce_terminal.png)]()
 
-NOTE:  All of the deployment options require you to provide a valid SSH protocol 2 (SSH-2) RSA public-private key pairs with a minimum length of 2048 bits. Other key formats such as ED25519 and ECDSA are not supported. If you are unfamiliar with SSH then you should read this [article](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/mac-create-ssh-keys) which will explain how to generate a key using the Windows Subsystem for Linux (it's easy and takes only a few minutes).  If you are new to SSH, remember SSH is a key pair solution. What this means is you have a public key and a private key, and the one you will be using to deploy your template is the public key.
 ## Next Steps
 
 # Prepare deployed cluster for LAMP applications
