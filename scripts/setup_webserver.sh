@@ -48,7 +48,7 @@ echo $dbadminlogin >> /tmp/vars.txt
 echo $serverName >> /tmp/vars.txt    
 echo $Lampdbname >> /tmp/vars.txt
 
-# check_fileServerType_param $fileServerType
+ check_fileServerType_param $fileServerType
 
 {
   # make sure the system does automatic update
@@ -96,7 +96,7 @@ if [ "$webServerType" = "nginx" -o "$httpsTermination" = "VMSS" ]; then
     setup_and_mount_gluster_share $glusterNode $glusterVolume /azlamp
 
 #SetUp Of WordPress On Virtual machone
-# setup_wordpress_on_vm $Lampdbname $dbadminlogin $adminpass $serverName
+ setup_wordpress_on_vm $Lampdbname $dbadminlogin $adminpass $serverName
   # Configure syslog to forward
   cat <<EOF >> /etc/rsyslog.conf
 \$ModLoad imudp
