@@ -93,7 +93,7 @@
             "type": "string"
         },
         "siteURL": {
-            "defaultValue": "www.example.org",
+            "defaultValue": "www.merenear.com",
             "metadata": {
                 "description": "URL for Lamp site"
             },
