@@ -127,8 +127,8 @@ cd /azlamp 		go inside azlamp directory (mountpoint is azlamp)
 ls 			(will show you the directory list) bin certs data html
 cd html			(go inside html directory)
 
-Inside html directory where you will create your wordpress, drupal or any php site which will sync to cluster for HA(High Availability)
-For testing purpose create any directory inside html directory
+Inside html directory where you will create your wordpress, drupal or any php site which will sync to cluster for HA(High Availability).
+For testing purpose create any directory inside html directory.
 
 ```
 sudo mkdir abc
@@ -136,16 +136,14 @@ sudo mkdir abc
 ```
 After creating directory
 
-Open a putty client on you PC and start new session
-Login into controller vm 
-Then use below on your controller vm terminal to login into your private gluster vm.
+Open a putty client on you PC and start new session.Login into controller vm. Then use below on your controller vm terminal to login into your private gluster vm.
 
 ```
 ssh username@you.ip.add.ress
 
 ```
 
-After login into gluster vm
+After login into gluster vm \
 
 Use below command to see the gluster status and volume info
 
@@ -169,7 +167,7 @@ ls
 You should now see the abc directory you created
 
 ### Note:-
-We will logout now (Mandatory step without logout we are not able to login from gluster vm 1 to gluster vm 2 or vice versa) Type 
+We will logout now from gluster vm (Mandatory step without logout we are not able to login from gluster vm 1 to gluster vm 2 or vice versa).
 
 ```
 logout
