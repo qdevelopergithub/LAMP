@@ -220,7 +220,32 @@ cd /datadrive/brick/html
 ls
 
 ```
-You should now see the abc directory you created
+You should now see the abc directory you created. \
+If you want to mount and sync all data acroos vms with controller vm with some other directory for eg: /var/www/ \
+Type the following command in gluster vm (not in controller) : if the directory not exist. \
+
+```
+sudo mkdir /var/www/
+sudo mount -t glusterfs myglustervmname:/data /var/www/
+
+```
+Above command will mount the data volume on /var/www/ directory \
+Update the /etc/fstab file on all gluster vm's using below commands \
+
+```
+sudo nano /etc/fstab
+
+```
+use below format to paste in fstab file \
+
+myglustervmname:/data /var/www/ glusterfs defaults,_netdev 0 0
+
+After adding above line \
+press CTRL + O if using nano editor will save the file contents \
+press Enter \
+CTRL + X will back to terminal. \
+
+Do above steps on every gluster vm and make sure use the correct gluster vm name \
 
 ### Note:-
 We will logout now from gluster vm (Mandatory step without logout we are not able to login from gluster vm 1 to gluster vm 2 or vice versa).
