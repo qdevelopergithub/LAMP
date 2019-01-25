@@ -50,7 +50,7 @@ NOTE:  All of the deployment options require you to provide a valid SSH protocol
 
 ## Steps to generate SSH key on Windows
 
-### Please follow below link to create a SSH-2 keys with for advanced options
+### Please follow below link to create a SSH-2 key with more advanced options
 https://www.howtogeek.com/125364/how-to-ssh-hop-with-key-forwarding-from-windows/
 
 - Download the PuTTY software. It can be downloaded from here: https://www.putty.org/
