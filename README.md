@@ -50,6 +50,9 @@ NOTE:  All of the deployment options require you to provide a valid SSH protocol
 
 ## Steps to generate SSH key on Windows
 
+### Please follow below link to create a SSH-2 keys with for advanced options
+https://www.howtogeek.com/125364/how-to-ssh-hop-with-key-forwarding-from-windows/
+
 - Download the PuTTY software. It can be downloaded from here: https://www.putty.org/
 - Run the PuTTYGen program from your system.
 - Click the “Generate” button on the window as shown below. Move the mouse randomly as highlighted(to generate same entropy).
@@ -67,7 +70,6 @@ NOTE:  All of the deployment options require you to provide a valid SSH protocol
 
 
 NOTE:  All of the deployment options require you to provide a valid SSH protocol 2 (SSH-2) RSA public-private key pairs with a minimum length of 2048 bits. Other key formats such as ED25519 and ECDSA are not supported. If you are unfamiliar with SSH then you should read this [article](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/mac-create-ssh-keys) which will explain how to generate a key using the Windows Subsystem for Linux (it's easy and takes only a few minutes).  If you are new to SSH, remember SSH is a key pair solution. What this means is you have a public key and a private key, and the one you will be using to deploy your template is the public key.
-
 
 This template set deploys the following infrastructure core to your LAMP instance:
 
