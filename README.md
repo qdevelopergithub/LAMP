@@ -235,14 +235,20 @@ Update the /etc/fstab file on all gluster vm's using below commands.
 sudo nano /etc/fstab
 
 ```
-use below format to paste in fstab file\
+use below format to paste in fstab file.
 
 myglustervmname:/data /var/www/ glusterfs defaults,_netdev 0 0
 
-After adding above line\
+After adding above line.
 press CTRL + O if using nano editor will save the file contents.
 press Enter.
 CTRL + X will back to terminal.
+
+```
+sudo mount -a
+df -H
+
+```
 
 Do above steps on every gluster vm and make sure use the correct gluster vm name.
 
@@ -253,9 +259,9 @@ We will logout now from gluster vm (Mandatory step without logout we are not abl
 logout
 
 ```
-on terminal you will now be in controller vm
+on terminal you will now be in controller vm.
 
-Repeat same process for 2nd gluster vm as we used for 1st gluster vm.
+Repeat same process for other gluster vm as we used for 1st gluster vm.
 
 Open your web-browser and open link using IP address of your server. 
 
