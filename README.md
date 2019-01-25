@@ -30,9 +30,6 @@ NOTE: Depending on the region you choose to deploy the stack in - the deployment
 ## Azure deployment Steps
 Step 1: Go to the Azure Portal https://portal.azure.com. Login into the Portal with your credentials.\
 Step 2: Scroll down the page and click on the “Deploy to Azure” button as highlighted below:
-
-[![Deploy to Azure Fully Configurable](http://azuredeploy.net/deploybutton.png)]()
-	
 Step 3: Clicking the button will take you to the Azure Portal page as below:
 
 [![Deploy to Azure Fully Configurable](https://github.com/qdevelopergithub/LAMP/blob/master/images/template.png)]()
@@ -106,6 +103,67 @@ This template set deploys the following infrastructure core to your LAMP instanc
 There is no additional cost to scale sets. You only pay for the underlying compute resources such as the VM instances, load balancer, or Managed Disk storage.
 
 ## Next Steps
+
+After successfull deployment We should be able to login to controller vm and gluster vm's as well.
+1st we need to login to controller vm with ssh key using putty which we generated earlier.
+
+After login to Controller vm use below commands:-
+
+cd /azlamp 		go inside azlamp directory (mountpoint is azlamp)
+ls 			(will show you the directory list) bin certs data html
+cd html			(go inside html directory)
+
+Inside html directory where you will create your wordpress, drupal or any php site which will sync to cluster for HA(High Availability)
+For testing purpose create any directory inside html directory
+
+```
+sudo mkdir abc
+
+```
+After creating directory
+
+Open a putty client on you PC and start new session
+Login into controller vm 
+Then use below on your controller vm terminal to login into your private gluster vm.
+
+```
+ssh username@you.ip.add.ress
+
+```
+
+After login into gluster vm
+
+Use below command to see the gluster status and volume info
+
+```
+sudo gluster peer status
+
+sudo gluster volume info
+
+cd /datadrive/brick/ 
+
+```
+You will now able to see all the folders which were available on controller vm inside /azlamp directory.
+
+Now verify the abc directory we created earlier on controller vm inside /azlamp/html
+
+```
+cd /datadrive/brick/html
+ls
+
+```
+You should now see the abc directory you created
+
+### Note:-
+We will logout now (Mandatory step without logout we are not able to login from gluster vm 1 to gluster vm 2 or vice versa) Type 
+
+```
+logout
+
+```
+on terminal you will now be in controller vm
+
+Repeat same process for 2nd gluster vm as we used for 1st gluster vm.
 
 Open your web-browser and open link using IP address of your server. 
 
