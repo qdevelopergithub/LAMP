@@ -53,6 +53,21 @@ https://www.howtogeek.com/125364/how-to-ssh-hop-with-key-forwarding-from-windows
 - Download the PuTTY software. It can be downloaded from here: https://www.putty.org/
 - Run the PuTTYGen program from your system.
 
+## Steps to access VM on Windows
+
+Step 1: Open the PuTTY software which was installed on your machine.\
+Step 2: Enter the host name. You will get the hostname after deployment is completed on azure portal.
+
+[![Putty Key Generate](https://github.com/qdevelopergithub/LAMP/blob/master/images/access_vm_ssh.png)]()
+
+Step 3: Click Connection=> SSH=> Auth. Load the private key file which was saved earlier.
+
+[![Putty Key Generate](https://github.com/qdevelopergithub/LAMP/blob/master/images/access_vm_ssh_key.png)]()
+
+Step 4: Click on the “Open” button and this will open the SSH connection to VM.
+
+Installation: PHP app in Linux OS will be installed by using SSH. The Common PHP apps like PHP language itself, MySQL database and apache server will be installed automatically with the help of template files(JSON file). All the settings, Permissions, directory creation all lined up and run one by one. 
+
 ### Important:- Please select the option ssh-2 rsa key as below 
 
 [![Putty select ssh-2 option](https://github.com/qdevelopergithub/LAMP/blob/master/images/ssh2.png)]()
@@ -106,7 +121,26 @@ There is no additional cost to scale sets. You only pay for the underlying compu
 After successfull deployment We should be able to login to controller vm and gluster vm's as well.
 1st we need to login to controller vm with ssh key using putty which we generated earlier.
 
-## Note:- Before login to controller vm the key must be in Pageant
+## Deploying and Accessing VM on macOS/Linux
+
+Below are the steps to access VM through LINUX/MAC
+- Run below command on command prompt:
+ssh-keygen -t rsa
+- Running above command will ask for file name. Provide the file name.
+- After 2nd step, it will ask for passphrase to generate private key. Provide same.
+- This will generate 2 files with name provided by you. One file will have .pub extension and other file with no extension.
+- Rename the extension less file and provide extension “.pem”. This is the private key file.
+- Now open the .pub file and copy paste it on “SSH public key” parameter which is asked for at the time of deployment.
+- To connect with VM, Open the terminal and navigate to the location where you have .pem file.
+- Write following command in terminal:
+chmod 600 {PrivateKeyFileName}.pem	
+- Then write the below command on terminal:
+ssh -i {privatekeyname}.pem {username}@{HostnameOfVM}
+
+This will open the VM and you can access same.
+
+
+## Note:- Before login to controller vm the key must be in Pageant (windows)
 
 The “Pageant” program that was installed as part of the PuTTY package, can store your key's and give them to mRemote, WinSCP and PuTTY as required.
 
@@ -119,7 +153,16 @@ If it has run off to the system tray, double click it, to bring up the main wind
 Click “Add Key” and give it your saved Key Pair.
 If need be, provide the passphrase.
 
+For login to controller vm. use putty client 
 
+You can get the ip address or host name inside your azure portal. Click on Virtual machines on left side bar. You will see all the vm's.
+Click on controller vm. Then click on Connect as in below screen. Use the IP address field as your hostname.
+
+For eg:- controller-pubip-abcdesx.location.cloudapp.azure.com
+
+[![Connect controller](https://github.com/qdevelopergithub/LAMP/blob/master/images/connect_to_controller.png)]()
+
+controller-pubip-udujzx.centralus.cloudapp.azure.com
 
 After login to Controller vm use below commands:-
 
@@ -198,14 +241,6 @@ The other way to install php app on Linux is login into virtual machine and run 
 ## Manually install various apps
 
 At this point, your LAMP application is setup to use in the LAMP cluster. If you'd like to install a separate LAMP application (WordPress or otherwise), Please follow below steps.
-
-To check if MySQL is installed properly, open mysql on terminal with command 
-
-```
-sudo mysql -uroot
-
-```
-If you set the password during installation open with -p parameter -mysql -uroot -p
 	
 Install apache manually
 ```
@@ -386,39 +421,6 @@ sudo chown -R www-data:www-data /var/www/html/
 sudo chmod -R 755 /var/www/html/
 
 ```
-
-## Steps to access VM on Windows
-
-Step 1: Open the PuTTY software which was installed on your machine.\
-Step 2: Enter the host name. You will get the hostname after deployment is completed on azure portal.
-
-[![Putty Key Generate](https://github.com/qdevelopergithub/LAMP/blob/master/images/access_vm_ssh.png)]()
-
-Step 3: Click Connection=> SSH=> Auth. Load the private key file which was saved earlier.
-
-[![Putty Key Generate](https://github.com/qdevelopergithub/LAMP/blob/master/images/access_vm_ssh_key.png)]()
-
-Step 4: Click on the “Open” button and this will open the SSH connection to VM.
-
-Installation: PHP app in Linux OS will be installed by using SSH. The Common PHP apps like PHP language itself, MySQL database and apache server will be installed automatically with the help of template files(JSON file). All the settings, Permissions, directory creation all lined up and run one by one. 
-
-## Deploying and Accessing VM on macOS/Linux
-
-Below are the steps to access VM through LINUX/MAC
-- Run below command on command prompt:
-ssh-keygen -t rsa
-- Running above command will ask for file name. Provide the file name.
-- After 2nd step, it will ask for passphrase to generate private key. Provide same.
-- This will generate 2 files with name provided by you. One file will have .pub extension and other file with no extension.
-- Rename the extension less file and provide extension “.pem”. This is the private key file.
-- Now open the .pub file and copy paste it on “SSH public key” parameter which is asked for at the time of deployment.
-- To connect with VM, Open the terminal and navigate to the location where you have .pem file.
-- Write following command in terminal:
-chmod 600 {PrivateKeyFileName}.pem	
-- Then write the below command on terminal:
-ssh -i {privatekeyname}.pem {username}@{HostnameOfVM}
-
-This will open the VM and you can access same.
 
 ## Why use of Mulitple NIC’s
 
