@@ -55,6 +55,11 @@ https://www.howtogeek.com/125364/how-to-ssh-hop-with-key-forwarding-from-windows
 
 - Download the PuTTY software. It can be downloaded from here: https://www.putty.org/
 - Run the PuTTYGen program from your system.
+
+### Important:- Please select the option ssh-2 rsa key as below 
+
+[![Putty select ssh-2 option](https://github.com/qdevelopergithub/LAMP/blob/master/images/ssh2.png)]()
+
 - Click the “Generate” button on the window as shown below. Move the mouse randomly as highlighted(to generate same entropy).
 
 [![Putty Key Generate](https://github.com/qdevelopergithub/LAMP/blob/master/images/putty_key_gen.png)]()
