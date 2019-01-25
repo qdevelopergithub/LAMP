@@ -185,7 +185,7 @@ Open a putty client on you PC and start new session.Login into controller vm. Th
 ssh username@you.ip.add.ress
 
 ```
-If you are not able to login into gluster vm please follow below steps to reset your ssh key. \
+If you are not able to login into gluster vm please follow below steps to reset your ssh key.\
 Go to portal.azure.com. Login into your account where deployment was done. On left bar click on Virtual machines.
 
 You will see the controller vm with gluster vm's 
@@ -199,9 +199,8 @@ Default username:-  azureadmin
 
 Repeat same process on all gluster vm's one by one. Now try to login again. You should able to login now.
 
-After login into gluster vm \
-
-Use below command to see the gluster status and volume info
+After login into gluster vm\
+Use below command to see the gluster status and volume info\
 
 ```
 sudo gluster peer status
@@ -220,28 +219,28 @@ cd /datadrive/brick/html
 ls
 
 ```
-You should now see the abc directory you created. \
-If you want to mount and sync all data acroos vms with controller vm with some other directory for eg: /var/www/ \
-Type the following command in gluster vm (not in controller) : if the directory not exist. \
+You should now see the abc directory you created.\
+If you want to mount and sync all data acroos vms with controller vm with some other directory for eg: /var/www/\
+Type the following command in gluster vm (not in controller) : if the directory not exist.\
 
 ```
 sudo mkdir /var/www/
 sudo mount -t glusterfs myglustervmname:/data /var/www/
 
 ```
-Above command will mount the data volume on /var/www/ directory \
-Update the /etc/fstab file on all gluster vm's using below commands \
+Above command will mount the data volume on /var/www/ directory\
+Update the /etc/fstab file on all gluster vm's using below commands\
 
 ```
 sudo nano /etc/fstab
 
 ```
-use below format to paste in fstab file \
+use below format to paste in fstab file\
 
 myglustervmname:/data /var/www/ glusterfs defaults,_netdev 0 0
 
-After adding above line \
-press CTRL + O if using nano editor will save the file contents \
+After adding above line\
+press CTRL + O if using nano editor will save the file contents\
 press Enter \
 CTRL + X will back to terminal. \
 
