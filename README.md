@@ -116,11 +116,6 @@ The other way to install php app on Linux is login into virtual machine and run 
 
 At this point, your LAMP application is setup to use in the LAMP cluster. If you'd like to install a separate LAMP application (WordPress or otherwise), Please follow below steps.
 
-Install MySQL server manually
-
-```
-sudo apt install mysql-server
-```
 To check if MySQL is installed properly, open mysql on terminal with command 
 
 ```
