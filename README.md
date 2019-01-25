@@ -67,7 +67,7 @@ https://www.howtogeek.com/125364/how-to-ssh-hop-with-key-forwarding-from-windows
 - After key is generated. Click the button “Save public key” and save it on your system.
 - Provide the passphrase to encrypt the private key on disk.
 
-[![Putty Key Generate](https://github.com/qdevelopergithub/LAMP/blob/master/images/ssh2.png)]()
+[![Putty Key Generate](https://github.com/qdevelopergithub/LAMP/blob/master/images/putty_key_gen2.png)]()
 
 - Lastly, click “Save private key” button and save the file on your machine.
 - Copy the SSH key from the public key file and paste it in the SSH field in Azure Portal.
