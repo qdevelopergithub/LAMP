@@ -142,6 +142,19 @@ Open a putty client on you PC and start new session.Login into controller vm. Th
 ssh username@you.ip.add.ress
 
 ```
+If you are not able to login into gluster vm please follow below steps to reset your ssh key. \
+Go to portal.azure.com. Login into your account where deployment was done. On left bar click on Virtual machines.
+
+You will see the controller vm with gluster vm's 
+
+Click on Controller vm. Then scroll down to Reset password option. Below screen will display where you can enter the user name 
+and ssh key we generated earlier.
+
+Default username:-  azureadmin
+
+[![reset ssh](https://github.com/qdevelopergithub/LAMP/blob/master/images/reset_ssh.png)]()
+
+Repeat same process on all gluster vm's one by one. Now try to login again. You should able to login now.
 
 After login into gluster vm \
 
