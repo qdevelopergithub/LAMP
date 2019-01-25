@@ -70,7 +70,6 @@ https://www.howtogeek.com/125364/how-to-ssh-hop-with-key-forwarding-from-windows
 - Copy the SSH key from the public key file and paste it in the SSH field in Azure Portal.
 - Click the “Purchase” button on the Azure Portal page. It will deploy the VM cluster.
 
-
 NOTE:  All of the deployment options require you to provide a valid SSH protocol 2 (SSH-2) RSA public-private key pairs with a minimum length of 2048 bits. Other key formats such as ED25519 and ECDSA are not supported. If you are unfamiliar with SSH then you should read this [article](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/mac-create-ssh-keys) which will explain how to generate a key using the Windows Subsystem for Linux (it's easy and takes only a few minutes).  If you are new to SSH, remember SSH is a key pair solution. What this means is you have a public key and a private key, and the one you will be using to deploy your template is the public key.
 
 This template set deploys the following infrastructure core to your LAMP instance:
@@ -106,6 +105,21 @@ There is no additional cost to scale sets. You only pay for the underlying compu
 
 After successfull deployment We should be able to login to controller vm and gluster vm's as well.
 1st we need to login to controller vm with ssh key using putty which we generated earlier.
+
+## Note:- Before login to controller vm the key must be in Pageant
+
+The “Pageant” program that was installed as part of the PuTTY package, can store your key's and give them to mRemote, WinSCP and PuTTY as required.
+
+Open “Pageant” from the start menu. (Note: it may run off to the system tray)
+
+If it has run off to the system tray, double click it, to bring up the main window.
+
+[![Pageant](https://github.com/qdevelopergithub/LAMP/blob/master/images/pageant.png)]()
+
+Click “Add Key” and give it your saved Key Pair.
+If need be, provide the passphrase.
+
+
 
 After login to Controller vm use below commands:-
 
