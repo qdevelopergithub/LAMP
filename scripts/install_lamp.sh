@@ -62,8 +62,8 @@ set -ex
     # check_fileServerType_param $fileServerType
 
     # make sure system does automatic updates and fail2ban
-    sudo apt-get -y update
-    sudo apt-get -y install unattended-upgrades fail2ban
+    apt-get -y update
+    apt-get -y install unattended-upgrades fail2ban
 
     config_fail2ban
 
@@ -72,81 +72,63 @@ set -ex
 
     export DEBIAN_FRONTEND=noninteractive
 
-        # configure gluster repository & install gluster client
-        sudo add-apt-repository ppa:gluster/glusterfs-3.10 -y                 >> /tmp/apt1.log
-    
-
-    sudo apt-get -y update                                                   >> /tmp/apt2.log
-    sudo apt-get -y --force-yes install rsyslog git                          >> /tmp/apt3.log
-
-        sudo apt-get -y --force-yes install glusterfs-client                 >> /tmp/apt3.log
+    # configure gluster repository & install gluster client
+    add-apt-repository ppa:gluster/glusterfs-3.10 -y                >> /tmp/apt1.log
+    apt-get -y update                                               >> /tmp/apt2.log
+    apt-get -y --force-yes install rsyslog git                      >> /tmp/apt3.log
+    apt-get -y --force-yes install glusterfs-client                 >> /tmp/apt4.log
   
-
-  
-        sudo apt-get -y --force-yes install mysql-client >> /tmp/apt3.log
-   
-
+    # install client for MySQL
+    apt-get -y --force-yes install mysql-client                     >> /tmp/apt5.log
     
-        # mount gluster files system
-        echo -e '\n\rInstalling GlusterFS on '$glusterNode':/'$glusterVolume '/azlamp\n\r' 
-        setup_and_mount_gluster_share $glusterNode $glusterVolume /azlamp
-    
+    # mount gluster files system
+    echo -e '\n\rInstalling GlusterFS on '$glusterNode':/'$glusterVolume '/azlamp\n\r' 
+    setup_and_mount_gluster_share $glusterNode $glusterVolume /azlamp
     
     # install pre-requisites
-    sudo apt-get install -y --fix-missing python-software-properties unzip
+    apt-get install -y --fix-missing python-software-properties unzip
 
     # install the entire stack
-    sudo apt-get -y  --force-yes install nginx php-fpm varnish >> /tmp/apt5a.log
-    sudo apt-get -y  --force-yes install php php-cli php-curl php-zip >> /tmp/apt5b.log
+    apt-get -y --force-yes install nginx php-fpm varnish >> /tmp/apt6a.log
+    apt-get -y --force-yes install php php-cli php-curl php-zip >> /tmp/apt6b.log
 
     # LAMP requirements
-    sudo apt-get -y update > /dev/null
-    sudo apt-get install -y --force-yes graphviz aspell php-common php-soap php-json php-redis > /tmp/apt6.log
-    sudo apt-get install -y --force-yes php-bcmath php-gd php-xmlrpc php-intl php-xml php-bz2 php-pear php-mbstring php-dev mcrypt >> /tmp/apt6.log
+    apt-get update > /dev/null
+    apt-get install -y --force-yes graphviz aspell php-common php-soap php-json php-redis > /tmp/apt7.log
+    apt-get install -y --force-yes php-bcmath php-gd php-xmlrpc php-intl php-xml php-bz2 php-pear php-mbstring php-dev php-mysql mcrypt >> /tmp/apt7.log
     PhpVer=$(get_php_version)
     
-        sudo apt-get install -y --force-yes php-mysql
-    
-    
-
     # Set up initial LAMP dirs
     mkdir -p /azlamp/html
     mkdir -p /azlamp/certs
     mkdir -p /azlamp/data
 
-    #Installation of WordPress
-#    wget -c http://wordpress.org/latest.tar.gz
-#    tar -xzvf latest.tar.gz
-#    sudo mkdir -p /var/www/html/
-#    sudo rsync -av wordpress/* /azlamp/html/
-#    sudo chown -R www-data:www-data /azlamp/html/
-#    sudo chmod -R 755 /azlamp/html/
-#    # Build nginx config
+    # Build nginx config
     create_main_nginx_conf_on_controller $httpsTermination
 
     update_php_config_on_controller
 
-    # Remove the default site. lamp is the only site we want
+    # Remove the default site
     rm -f /etc/nginx/sites-enabled/default
 
     # restart Nginx
-    sudo service nginx restart
+    systemctl restart nginx
 
+    # Varnish
     configure_varnish_on_controller
-    # Restart Varnish
     systemctl daemon-reload
-    service varnish restart
+    systemctl restart varnish
 
     # Master config for syslog
     config_syslog_on_controller
     service rsyslog restart
 
     # Turning off services we don't need the controller running
-    service nginx stop
-    service php${PhpVer}-fpm stop
-    service varnish stop
-    service varnishncsa stop
-    service varnishlog stop
+    systemctl stop nginx
+    systemctl stop php${PhpVer}-fpm
+    systemctl stop varnish
+    systemctl stop varnishncsa
+    systemctl stop varnishlog
 
     create_last_modified_time_update_script
     run_once_last_modified_time_update_script
