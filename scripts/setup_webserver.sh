@@ -30,8 +30,8 @@ Lamp_on_azure_configs_json_path=${1}
 
 get_setup_params_from_configs_json $Lamp_on_azure_configs_json_path || exit 99
 
-echo $glusterNode    >> /tmp/vars.txt
-echo $glusterVolume  >> /tmp/vars.txt
+echo $glusterNode >> /tmp/vars.txt
+echo $glusterVolume >> /tmp/vars.txt
 echo $siteFQDN >> /tmp/vars.txt
 echo $httpsTermination >> /tmp/vars.txt
 echo $syslogServer >> /tmp/vars.txt

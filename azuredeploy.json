@@ -252,7 +252,7 @@
         "fileServerType": {
             "defaultValue": "gluster",
             "metadata": {
-                "description": "File server type: GlusterFS, NFS, and NFS-HA (2-VM highly available NFS cluster)"
+                "description": "File server type: GlusterFS"
             },
             "type": "string"
         },

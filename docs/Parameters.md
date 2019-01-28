@@ -168,35 +168,24 @@ Default: true
 
 ### httpsTermination
 
-Indicates where https termination occurs. 'VMSS' is for https termination at the VMSS instance VMs (using nginx https proxy). 'AppGw' is for https termination with an Azure Application Gateway. When selecting this, you need to specify all appGw* parameters. 'None' is for testing only with no https. 'None' may not be used with a separately configured https termination layer. If you want to use the 'None' option with your separately configured https termination layer, you'll need to update your Lamp config.php manually for $cfg->wwwroot and $cfg->sslproxy.
+Indicates where https termination occurs. 'VMSS' is for https termination at the VMSS instance VMs (using nginx https proxy). 'None' is for testing only with no https. 'None' may not be used with a separately configured https termination layer.
 
 Type: string
 
-Possible Values: ["VMSS","AppGw","None"]
+Possible Values: ["VMSS",,"None"]
 
 Default: VMSS
 
 
 ### siteURL
 
-URL for Lamp site
+URL for the site
 
 Type: string
 
 Possible Values: null
 
 Default: www.example.org
-
-
-### LampVersion
-
-The Lamp version you want to install.
-
-Type: string
-
-Possible Values: ["Lamp_35_STABLE","Lamp_34_STABLE","v3.4.3","v3.4.2","v3.4.1","Lamp_33_STABLE","Lamp_32_STABLE","Lamp_31_STABLE","Lamp_30_STABLE","Lamp_29_STABLE"]
-
-Default: Lamp_35_STABLE
 
 
 ### sshPublicKey
@@ -432,24 +421,14 @@ Default: 12.0
 
 ### fileServerType
 
-File server type: GlusterFS, NFS, and NFS-HA (2-VM highly available NFS cluster)
+File server type: GlusterFS
 
 Type: string
 
-Possible Values: ["gluster","nfs","nfs-ha","nfs-byo"]
+Possible Values: ["gluster"]
 
-Default: nfs
+Default: gluster
 
-
-### nfsByoIpExportPath
-
-IP address and export path of the BYO-NFS share when fileServerType == nfs-byo. E.g., 172.16.1.8:/msazure
-
-Type: string
-
-Possible Values: null
-
-Default: 
 
 
 ### fileServerDiskSize
